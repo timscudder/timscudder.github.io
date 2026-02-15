@@ -275,27 +275,37 @@
             statusEl.classList.toggle('success', isSuccess);
         }
 
-        function showSuccessBanner() {
-            // Remove any existing banner
-            const existing = document.querySelector('.form-success-banner');
+        function showSuccessState() {
+            const contactIntro = document.querySelector('.contact-intro');
+            const contactCard = document.querySelector('.contact-card');
+
+            // Hide the intro text and the form card
+            contactIntro.hidden = true;
+            contactCard.hidden = true;
+
+            // Remove any existing success view
+            const existing = document.querySelector('.form-success-view');
             if (existing) existing.remove();
 
-            const banner = document.createElement('div');
-            banner.className = 'form-success-banner';
-            banner.setAttribute('role', 'status');
-            banner.innerHTML = '<strong>Message sent</strong> — thank you for getting in touch! I\'ll get back to you soon.';
+            const successView = document.createElement('div');
+            successView.className = 'form-success-view';
+            successView.setAttribute('role', 'status');
+            successView.innerHTML =
+                '<p class="success-heading">Message sent!</p>' +
+                '<p class="success-body">Thank you for getting in touch. I\'ll get back to you soon.</p>' +
+                '<button type="button" class="send-another-btn">Send another one</button>';
 
-            const contactCard = document.querySelector('.contact-card');
-            contactCard.parentNode.insertBefore(banner, contactCard);
+            contactCard.parentNode.insertBefore(successView, contactCard);
 
             // Trigger reflow so the transition plays
-            banner.offsetHeight;
-            banner.classList.add('visible');
+            successView.offsetHeight;
+            successView.classList.add('visible');
 
-            setTimeout(() => {
-                banner.classList.remove('visible');
-                banner.addEventListener('transitionend', () => banner.remove());
-            }, 6000);
+            successView.querySelector('.send-another-btn').addEventListener('click', () => {
+                successView.remove();
+                contactIntro.hidden = false;
+                contactCard.hidden = false;
+            });
         }
 
         function showFieldError(field, errorEl, shouldShow) {
@@ -347,7 +357,7 @@
                     contactForm.reset();
                     updateMessageCount();
                     setStatus('');
-                    showSuccessBanner();
+                    showSuccessState();
                 } else {
                     setStatus('Something went wrong. Please try again.');
                 }
