@@ -1,88 +1,900 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tim Scudder - Thoughts on Product</title>
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="favicon-16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
 
-		Writing
-		Contact
-		LinkedIn
-Tim Scudder, Thoughts on Product
-I'm a product leader with extensive experience shaping strategy and delivering high-impact products in complex industries. I've led AI/ML products from discovery to launch, built high-performing teams, led transformations and implemented product operating models at scale.
-Here are my periodic writings on product. Enjoy.
-Writing
-2026
-Lean thinking for Evals
-A practical mental model for AI product quality.
-Read article
-2024
-A matter of opinions
-Great products can feel inevitable. There’s no one size fits all approach to getting there, but what’s crucial is that product strategy manifests itself through opinionated product design
-Read article
-2023
-Go faster: driving delivery performance with product thinking
-Strong teams use retros and other rituals to turbo-charge continuous improvement and achieve better outcomes. Make them an engine for success by leveraging product techniques.
-Read article
-2023
-Unicorn, Horse & Donkey: three species of ‘discovery’
-Even compromised discoveries offer the opportunity to deliver value and utilise product craft. Here's how.
-Read article
-2023
-Learning from developments in AI
-Beyond the hype, the methods used to develop AI technologies are a case study for those interested in great product practice
-Read article
-2023
-Misaligned metrics and crap maps
-How to spot and mitigate inefficient team topologies and poor models through data, focus, and aligned incentives.
-Read article
-2023
-Plate spinners, jugglers and firefighters
-How can we develop and maintain amazing product management chops in a world where multi-task management is the surest path to career advancement?
-Read article
-2023
-Focus on the Negatives
-Looking for problems to solve is central to the product process. Combine optimism for the future with dissatisfaction in the present to push things forwards.
-Read article
-2023
-Are you performing Product Theatre?
-Four (and a bit) ways to avoid the horror of playing 'Product'.
-Read article
-2023
-Digital Product Pulses, Heartbeats and stakeholder meetings
-Product Pulse meetings: what they are, why they matter, and how to run them effectively
-Read article
-2023
-Rapid product discovery and data visualisation techniques
-Learn how to combine smart surveys with high-impact charts to move everyone's understanding of your product forward, fast.
-Read article
-2023
-The RAVE Model: prioritising for return and strategy
-This updated version of the RICE model will help you make decisions now, without compromising your long-term approach.
-Read article
-2023
-How to create your first, simple roadmap
-Compromise on best practice. Introducing starter roadmaps to your organisation will support conversation and foster a wider product mindset.
-Read article
-2023
-Please don’t say… ’The Business’
-For businesses to succeed, 'The Business' must die. Product Managers must wield the knife.
-Read article
-2023
-Journey Walks: bringing it all together
-Regular, whole-team walkthroughs of the customer journey help build quality experiences. Here's how to run the sessions
-Read article
-2023
-Please don’t say… ‘I own the customer’
-Access to customers is too often weaponised by assholes. Let's break free
-Read article
-2022
-What’s so hard about teams?
-Project teams vs Product teams. The different outcomes are stark. Why is this?
-Read article
-2022
-Saved by testing, again
-Feedback always adds value. Here, some late stage user testing transformed a team's design in small and simple ways.
-Read article
-Get in contact
-Want to chat product? I'd love to hear from you!
-Name *
-Email *
-Message *
-0/2000
-Send message
+    <!-- SEO & Social Sharing -->
+    <meta name="description" content="Tim Scudder — Product leader writing about product strategy, discovery, delivery, and AI. Thoughts on building high-impact products in complex industries.">
+    <meta name="author" content="Tim Scudder">
 
+    <!-- Open Graph (LinkedIn, Facebook, etc.) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Tim Scudder — Thoughts on Product">
+    <meta property="og:description" content="Product leader writing about product strategy, discovery, delivery, and AI. Thoughts on building high-impact products in complex industries.">
+    <meta property="og:url" content="https://timscudder.github.io/">
+    <meta property="og:image" content="https://timscudder.github.io/og-image.png">
+    <meta property="og:locale" content="en_GB">
+
+    <!-- Twitter/X Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tim Scudder — Thoughts on Product">
+    <meta name="twitter:description" content="Product leader writing about product strategy, discovery, delivery, and AI.">
+    <meta name="twitter:image" content="https://timscudder.github.io/og-image.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --off-white: #FAF9F6;
+            --teal: #0A8080;
+            --teal-dark: #065858;
+            --teal-light: #E5F4F4;
+            --charcoal: #2B2B2B;
+            --grey-medium: #6B6B6B;
+            --grey-light: #DEDEDE;
+            --accent: #C85A54;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--off-white);
+            color: var(--charcoal);
+            font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+            font-weight: 300;
+            line-height: 1.7;
+            font-size: 16px;
+            padding-top: 72px;
+        }
+
+        .page-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100vh;
+            background: linear-gradient(180deg, var(--teal) 0%, var(--teal-dark) 100%);
+            z-index: 1000;
+        }
+
+        header {
+            padding: 4rem 2rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .header-content {
+            display: block;
+            max-width: 900px;
+        }
+
+        h1 {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 400;
+            line-height: 1.05;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+        }
+
+        .title-accent {
+            color: var(--teal);
+        }
+
+        .title-name {
+            color: var(--charcoal);
+        }
+
+        .tagline {
+            font-size: 1.25rem;
+            color: var(--grey-medium);
+            font-weight: 400;
+            margin-bottom: 2rem;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .contact-links a {
+            color: var(--teal);
+            text-decoration: none;
+            font-weight: 400;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .contact-links a:hover {
+            border-bottom-color: var(--teal);
+            color: var(--teal-dark);
+        }
+
+        .cta-button {
+            text-decoration: none !important;
+
+            background: var(--teal) !important;
+            color: white !important;
+            padding: 0.75rem 1.5rem !important;
+            border-radius: 2px;
+            border: none !important;
+            border-bottom: none !important;
+            font-weight: 500 !important;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background: var(--teal-dark) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(10, 128, 128, 0.2);
+            border-bottom: none !important;
+        }
+
+        .profile-summary {
+            margin-top: 1.5rem;
+            max-width: 700px;
+        }
+
+        .profile-summary p {
+            color: var(--grey-medium);
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .profile-summary p + p {
+            margin-top: 1rem;
+        }
+
+        .header-cta {
+            display: none;
+        }
+
+        nav {
+            background: white;
+            border-top: 1px solid var(--grey-light);
+            border-bottom: 1px solid var(--grey-light);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            padding: 0;
+        }
+
+        nav li {
+            margin: 0;
+        }
+
+        nav a {
+            display: block;
+            padding: 1.25rem 2rem;
+            text-decoration: none;
+            color: var(--charcoal);
+            font-weight: 500;
+            font-size: 1rem;
+            font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+            letter-spacing: 0.02em;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+
+        nav a:hover,
+        nav a.active {
+            color: var(--teal);
+            border-bottom-color: var(--teal);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 2rem;
+        }
+
+        section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 96px;
+        }
+
+        h2.section-title {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            margin-bottom: 2.5rem;
+            color: var(--charcoal);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        h2.section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--teal);
+        }
+
+        /* Blog Articles Grid */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .article-card {
+            background: white;
+            border-left: 3px solid var(--teal-light);
+            padding: 2rem;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-card:hover {
+            border-left-color: var(--teal);
+            box-shadow: 0 4px 20px rgba(10, 128, 128, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .article-date {
+            font-size: 0.85rem;
+            color: var(--grey-medium);
+            margin-bottom: 0.75rem;
+            font-weight: 400;
+        }
+
+        .article-card h3 {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--charcoal);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .article-card h3 a {
+            color: var(--charcoal);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .article-card h3 a:hover {
+            color: var(--teal);
+        }
+
+        .article-excerpt {
+            color: var(--grey-medium);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .read-more {
+            color: var(--teal);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .read-more:hover {
+            gap: 0.75rem;
+            color: var(--teal-dark);
+        }
+
+        .read-more::after {
+            content: '→';
+        }
+
+        .contact-intro {
+            max-width: 680px;
+            color: var(--grey-medium);
+            font-size: 1.05rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-card {
+            padding: 0;
+            max-width: 720px;
+        }
+
+        .contact-card p {
+            margin-bottom: 2rem;
+            color: var(--grey-medium);
+        }
+
+        .form-field {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+
+        label.form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--grey-light);
+            border-radius: 2px;
+            font-family: inherit;
+            font-size: 1rem;
+            background: var(--off-white);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--teal);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(10, 128, 128, 0.15);
+        }
+
+        input.is-invalid,
+        textarea.is-invalid {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(200, 90, 84, 0.15);
+        }
+
+        textarea {
+            min-height: 160px;
+            resize: vertical;
+        }
+
+        .form-meta {
+            color: var(--grey-medium);
+            font-size: 0.9rem;
+            margin-top: 0.4rem;
+        }
+
+        .field-error {
+            display: block;
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-top: 0.4rem;
+        }
+
+        .field-error[hidden] {
+            display: none;
+        }
+
+        .char-count {
+            display: block;
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--grey-medium);
+            margin-top: 0.4rem;
+        }
+
+        .char-count.limit {
+            color: var(--accent);
+        }
+
+        .submit-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-submit {
+            background: var(--teal);
+            color: white;
+            border: none;
+            padding: 0.85rem 1.75rem;
+            font-weight: 500;
+            font-size: 1rem;
+            font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .contact-submit:hover {
+            background: var(--teal-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(10, 128, 128, 0.2);
+        }
+
+        .form-status {
+            font-size: 0.95rem;
+            color: var(--accent);
+        }
+
+        .form-status.success {
+            color: var(--teal-dark);
+        }
+
+
+        .nav-toggle {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 1rem 2rem;
+            margin-left: auto;
+            gap: 0.5rem;
+            font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--charcoal);
+        }
+
+        .nav-toggle-icon {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            width: 20px;
+        }
+
+        .nav-toggle-icon span {
+            display: block;
+            height: 2px;
+            background: var(--charcoal);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-toggle[aria-expanded="true"] .nav-toggle-icon span:nth-child(1) {
+            transform: rotate(45deg) translate(4px, 4px);
+        }
+
+        .nav-toggle[aria-expanded="true"] .nav-toggle-icon span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-toggle[aria-expanded="true"] .nav-toggle-icon span:nth-child(3) {
+            transform: rotate(-45deg) translate(4px, -4px);
+        }
+
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Mobile hamburger nav */
+            .nav-bar {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 0;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            nav ul {
+                display: none;
+                flex-direction: column;
+                padding: 0;
+                border-top: 1px solid var(--grey-light);
+            }
+
+            nav ul.nav-open {
+                display: flex;
+            }
+
+            nav a {
+                padding: 1rem 2rem;
+                border-bottom: 1px solid var(--grey-light);
+                border-left: 3px solid transparent;
+            }
+
+            nav a:hover,
+            nav a.active {
+                border-bottom: 1px solid var(--grey-light);
+                border-left-color: var(--teal);
+            }
+
+        }
+    </style>
+</head>
+<body>
+    <div class="page-decoration"></div>
+
+    <nav>
+        <div class="nav-bar">
+            <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle navigation">
+                <span>Menu</span>
+                <div class="nav-toggle-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+            <ul id="nav-menu">
+                <li><a href="#writing">Writing</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="https://www.linkedin.com/in/timothyscudder/" target="_blank">LinkedIn</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <div class="header-content">
+            <h1><span class="title-accent">Tim Scudder,</span><br><span class="title-name">Thoughts on Product</span></h1>
+            <div class="profile-summary">
+                <p>I'm a product leader with extensive experience shaping strategy and delivering high-impact products in complex industries. I've led AI/ML products from discovery to launch, built high-performing teams, led transformations and implemented product operating models at scale.</p>
+                <p>Here are my periodic writings on product. Enjoy.</p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+                        <section id="writing">
+            <h2 class="section-title">Writing</h2>
+            
+            <div class="articles-grid">
+<div class="article-card">
+    <div class="article-date">2026</div>
+    <h3><a href="articles/encoding-organisational-decisions-for-the-agentic-age.html">Encoding organisational decisions for the agentic age</a></h3>
+    <p class="article-excerpt">How agentic AI makes strategy a runtime input. Most organisations tolerate ambiguity because humans fill the gaps — agents cannot.</p>
+    <a href="articles/encoding-organisational-decisions-for-the-agentic-age.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2026</div>
+    <h3><a href="articles/lean-thinking-for-evals.html">Lean thinking for Evals</a></h3>
+    <p class="article-excerpt">A practical mental model for AI product quality.</p>
+    <a href="articles/lean-thinking-for-evals.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2024</div>
+    <h3><a href="articles/a-matter-of-opinions.html">A matter of opinions</a></h3>
+    <p class="article-excerpt">Great products can feel inevitable. There’s no one size fits all approach to getting there, but what’s crucial is that product strategy manifests itself through opinionated product design</p>
+    <a href="articles/a-matter-of-opinions.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2023</div>
+    <h3><a href="articles/go-faster-applying-product-practice.html">Go faster: driving delivery performance with product thinking</a></h3>
+    <p class="article-excerpt">Strong teams use retros and other rituals to turbo-charge continuous improvement and achieve better outcomes. Make them an engine for success by leveraging product techniques.</p>
+    <a href="articles/go-faster-applying-product-practice.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2023</div>
+    <h3><a href="articles/three-breeds-of-discovery.html">Unicorn, Horse & Donkey: three species of ‘discovery’</a></h3>
+    <p class="article-excerpt">Even compromised discoveries offer the opportunity to deliver value and utilise product craft. Here's how.</p>
+    <a href="articles/three-breeds-of-discovery.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2023</div>
+    <h3><a href="articles/what-we-can-learn-from-developments.html">Learning from developments in AI</a></h3>
+    <p class="article-excerpt">Beyond the hype, the methods used to develop AI technologies are a case study for those interested in great product practice</p>
+    <a href="articles/what-we-can-learn-from-developments.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2023</div>
+    <h3><a href="articles/misaligned-metrics-and-crap-maps.html">Misaligned metrics and crap maps</a></h3>
+    <p class="article-excerpt">How to spot and mitigate inefficient team topologies and poor models through data, focus, and aligned incentives.</p>
+    <a href="articles/misaligned-metrics-and-crap-maps.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2023</div>
+    <h3><a href="articles/plate-spinners-jugglers-and-firefighters.html">Plate spinners, jugglers and firefighters</a></h3>
+    <p class="article-excerpt">How can we develop and maintain amazing product management chops in a world where multi-task management is the surest path to career advancement?</p>
+    <a href="articles/plate-spinners-jugglers-and-firefighters.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2023</div>
+    <h3><a href="articles/focus-on-the-negatives.html">Focus on the Negatives</a></h3>
+    <p class="article-excerpt">Looking for problems to solve is central to the product process. Combine optimism for the future with dissatisfaction in the present to push things forwards.</p>
+    <a href="articles/focus-on-the-negatives.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2023</div>
+    <h3><a href="articles/are-you-performing-product-theatre.html">Are you performing Product Theatre?</a></h3>
+    <p class="article-excerpt">Four (and a bit) ways to avoid the horror of playing 'Product'.</p>
+    <a href="articles/are-you-performing-product-theatre.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2023</div>
+    <h3><a href="articles/get-into-the-groove.html">Digital Product Pulses, Heartbeats and stakeholder meetings</a></h3>
+    <p class="article-excerpt">Product Pulse meetings: what they are, why they matter, and how to run them effectively</p>
+    <a href="articles/get-into-the-groove.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2023</div>
+    <h3><a href="articles/rapid-discovery-and-data-visualisation.html">Rapid product discovery and data visualisation techniques</a></h3>
+    <p class="article-excerpt">Learn how to combine smart surveys with high-impact charts to move everyone's understanding of your product forward, fast.</p>
+    <a href="articles/rapid-discovery-and-data-visualisation.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2023</div>
+    <h3><a href="articles/the-rave-model-prioritising-for-return-strategy.html">The RAVE Model: prioritising for return and strategy</a></h3>
+    <p class="article-excerpt">This updated version of the RICE model will help you make decisions now, without compromising your long-term approach.</p>
+    <a href="articles/the-rave-model-prioritising-for-return-strategy.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2023</div>
+    <h3><a href="articles/how-to-create-your-first-simple-roadmap.html">How to create your first, simple roadmap</a></h3>
+    <p class="article-excerpt">Compromise on best practice. Introducing starter roadmaps to your organisation will support conversation and foster a wider product mindset.</p>
+    <a href="articles/how-to-create-your-first-simple-roadmap.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2023</div>
+    <h3><a href="articles/please-dont-say-the-business.html">Please don’t say… ’The Business’</a></h3>
+    <p class="article-excerpt">For businesses to succeed, 'The Business' must die. Product Managers must wield the knife.</p>
+    <a href="articles/please-dont-say-the-business.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2023</div>
+    <h3><a href="articles/journey-walks-bringing-it-all-together.html">Journey Walks: bringing it all together</a></h3>
+    <p class="article-excerpt">Regular, whole-team walkthroughs of the customer journey help build quality experiences. Here's how to run the sessions</p>
+    <a href="articles/journey-walks-bringing-it-all-together.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2023</div>
+    <h3><a href="articles/please-dont-say-i-own-the-customer.html">Please don’t say… ‘I own the customer’</a></h3>
+    <p class="article-excerpt">Access to customers is too often weaponised by assholes. Let's break free</p>
+    <a href="articles/please-dont-say-i-own-the-customer.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2022</div>
+    <h3><a href="articles/whats-so-hard-about-teams.html">What’s so hard about teams?</a></h3>
+    <p class="article-excerpt">Project teams vs Product teams. The different outcomes are stark. Why is this?</p>
+    <a href="articles/whats-so-hard-about-teams.html" class="read-more">Read article</a>
+</div>
+
+<div class="article-card">
+    <div class="article-date">2022</div>
+    <h3><a href="articles/saved-by-testing.html">Saved by testing, again</a></h3>
+    <p class="article-excerpt">Feedback always adds value. Here, some late stage user testing transformed a team's design in small and simple ways.</p>
+    <a href="articles/saved-by-testing.html" class="read-more">Read article</a>
+</div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2 class="section-title">Get in contact</h2>
+            <p class="contact-intro">Want to chat product? I'd love to hear from you!</p>
+            <div class="contact-card">
+                <form id="contact-form" novalidate>
+                    <input type="hidden" name="access_key" value="6a2d8240-5874-4e6d-9200-2f6cf7b9deef">
+                    <input type="hidden" name="subject" value="Contact from Tim Scudder website">
+                    <input type="hidden" name="from_name" value="timscudder.github.io">
+                    <input type="checkbox" name="botcheck" style="display: none;">
+                    <div class="form-field">
+                        <label class="form-label" for="contact-name">Name *</label>
+                        <input id="contact-name" name="name" type="text" required minlength="2" maxlength="80" autocomplete="name" />
+                        <span class="field-error" id="name-error" hidden>Please complete this field</span>
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label" for="contact-email">Email *</label>
+                        <input id="contact-email" name="email" type="email" required maxlength="120" autocomplete="email" />
+                        <span class="field-error" id="email-error" hidden>Please complete this field</span>
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label" for="contact-message">Message *</label>
+                        <textarea id="contact-message" name="message" required minlength="10" maxlength="2000" autocomplete="off"></textarea>
+                        <span class="field-error" id="message-error" hidden>Please complete this field</span>
+                        <span class="char-count" id="message-count">0/2000</span>
+                    </div>
+                    <div class="submit-row">
+                        <button class="contact-submit form-label" type="submit">Send message</button>
+                        <span class="form-status" id="form-status" role="status" aria-live="polite"></span>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        /* ── Mobile nav toggle ── */
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.getElementById('nav-menu');
+
+        navToggle.addEventListener('click', () => {
+            const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+            navToggle.setAttribute('aria-expanded', !isOpen);
+            navMenu.classList.toggle('nav-open', !isOpen);
+        });
+
+        // Close mobile nav when a link is tapped
+        navMenu.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', () => {
+                navToggle.setAttribute('aria-expanded', 'false');
+                navMenu.classList.remove('nav-open');
+            });
+        });
+
+        /* ── Contact form (Web3Forms) ── */
+        const contactForm = document.getElementById('contact-form');
+        const statusEl = document.getElementById('form-status');
+        const nameField = document.getElementById('contact-name');
+        const emailField = document.getElementById('contact-email');
+        const messageField = document.getElementById('contact-message');
+        const messageCount = document.getElementById('message-count');
+        const nameError = document.getElementById('name-error');
+        const emailError = document.getElementById('email-error');
+        const messageError = document.getElementById('message-error');
+        const submitBtn = contactForm.querySelector('.contact-submit');
+        const lastSentKey = 'contactFormLastSentAt';
+        const minIntervalMs = 2 * 60 * 1000;
+
+        function setStatus(message, isSuccess = false) {
+            statusEl.textContent = message;
+            statusEl.classList.toggle('success', isSuccess);
+        }
+
+        function showFieldError(field, errorEl, shouldShow) {
+            field.classList.toggle('is-invalid', shouldShow);
+            field.setAttribute('aria-invalid', shouldShow ? 'true' : 'false');
+            errorEl.hidden = !shouldShow;
+        }
+
+        function validateField(field, errorEl) {
+            const value = field.value.trim();
+            const isValid = value.length > 0 && field.checkValidity();
+            showFieldError(field, errorEl, !isValid);
+            return isValid;
+        }
+
+        contactForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const nameOk = validateField(nameField, nameError);
+            const emailOk = validateField(emailField, emailError);
+            const messageOk = validateField(messageField, messageError);
+            if (!nameOk || !emailOk || !messageOk) {
+                setStatus('Please complete all required fields.');
+                return;
+            }
+
+            const lastSentAt = Number(localStorage.getItem(lastSentKey));
+            const now = Date.now();
+            if (lastSentAt && now - lastSentAt < minIntervalMs) {
+                const waitSeconds = Math.ceil((minIntervalMs - (now - lastSentAt)) / 1000);
+                setStatus(`Please wait ${waitSeconds} seconds before sending another message.`);
+                return;
+            }
+
+            // Disable button while sending
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            setStatus('');
+
+            try {
+                const formData = new FormData(contactForm);
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    localStorage.setItem(lastSentKey, String(Date.now()));
+                    setStatus('Message sent — thank you!', true);
+                    contactForm.reset();
+                    updateMessageCount();
+                } else {
+                    setStatus('Something went wrong. Please try again.');
+                }
+            } catch (error) {
+                setStatus('Could not send message. Please check your connection and try again.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send message';
+            }
+        });
+
+        function updateMessageCount() {
+            const currentLength = messageField.value.length;
+            messageCount.textContent = `${currentLength}/2000`;
+            messageCount.classList.toggle('limit', currentLength >= 2000);
+        }
+
+        updateMessageCount();
+        messageField.addEventListener('input', () => {
+            updateMessageCount();
+            validateField(messageField, messageError);
+        });
+
+        nameField.addEventListener('input', () => validateField(nameField, nameError));
+        emailField.addEventListener('input', () => validateField(emailField, emailError));
+
+        /* ── Smooth scroll & active section tracking ── */
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    document.querySelectorAll('nav a').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            let activeId = '';
+
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 140 && rect.bottom > 140) {
+                    activeId = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                link.classList.toggle('active', href === `#${activeId}`);
+            });
+        });
+    </script>
+</body>
+</html>
