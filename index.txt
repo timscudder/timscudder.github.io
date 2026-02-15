@@ -1,0 +1,88 @@
+
+		Writing
+		Contact
+		LinkedIn
+Tim Scudder, Thoughts on Product
+I'm a product leader with extensive experience shaping strategy and delivering high-impact products in complex industries. I've led AI/ML products from discovery to launch, built high-performing teams, led transformations and implemented product operating models at scale.
+Here are my periodic writings on product. Enjoy.
+Writing
+2026
+Lean thinking for Evals
+A practical mental model for AI product quality.
+Read article
+2024
+A matter of opinions
+Great products can feel inevitable. There’s no one size fits all approach to getting there, but what’s crucial is that product strategy manifests itself through opinionated product design
+Read article
+2023
+Go faster: driving delivery performance with product thinking
+Strong teams use retros and other rituals to turbo-charge continuous improvement and achieve better outcomes. Make them an engine for success by leveraging product techniques.
+Read article
+2023
+Unicorn, Horse & Donkey: three species of ‘discovery’
+Even compromised discoveries offer the opportunity to deliver value and utilise product craft. Here's how.
+Read article
+2023
+Learning from developments in AI
+Beyond the hype, the methods used to develop AI technologies are a case study for those interested in great product practice
+Read article
+2023
+Misaligned metrics and crap maps
+How to spot and mitigate inefficient team topologies and poor models through data, focus, and aligned incentives.
+Read article
+2023
+Plate spinners, jugglers and firefighters
+How can we develop and maintain amazing product management chops in a world where multi-task management is the surest path to career advancement?
+Read article
+2023
+Focus on the Negatives
+Looking for problems to solve is central to the product process. Combine optimism for the future with dissatisfaction in the present to push things forwards.
+Read article
+2023
+Are you performing Product Theatre?
+Four (and a bit) ways to avoid the horror of playing 'Product'.
+Read article
+2023
+Digital Product Pulses, Heartbeats and stakeholder meetings
+Product Pulse meetings: what they are, why they matter, and how to run them effectively
+Read article
+2023
+Rapid product discovery and data visualisation techniques
+Learn how to combine smart surveys with high-impact charts to move everyone's understanding of your product forward, fast.
+Read article
+2023
+The RAVE Model: prioritising for return and strategy
+This updated version of the RICE model will help you make decisions now, without compromising your long-term approach.
+Read article
+2023
+How to create your first, simple roadmap
+Compromise on best practice. Introducing starter roadmaps to your organisation will support conversation and foster a wider product mindset.
+Read article
+2023
+Please don’t say… ’The Business’
+For businesses to succeed, 'The Business' must die. Product Managers must wield the knife.
+Read article
+2023
+Journey Walks: bringing it all together
+Regular, whole-team walkthroughs of the customer journey help build quality experiences. Here's how to run the sessions
+Read article
+2023
+Please don’t say… ‘I own the customer’
+Access to customers is too often weaponised by assholes. Let's break free
+Read article
+2022
+What’s so hard about teams?
+Project teams vs Product teams. The different outcomes are stark. Why is this?
+Read article
+2022
+Saved by testing, again
+Feedback always adds value. Here, some late stage user testing transformed a team's design in small and simple ways.
+Read article
+Get in contact
+Want to chat product? I'd love to hear from you!
+Name *
+Email *
+Message *
+0/2000
+Send message
+
