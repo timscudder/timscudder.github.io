@@ -478,6 +478,29 @@ textarea {
     color: var(--teal-dark);
 }
 
+.form-success-banner {
+    background: var(--teal-light);
+    border-left: 3px solid var(--teal);
+    color: var(--charcoal);
+    padding: 1rem 1.25rem;
+    border-radius: 2px;
+    font-size: 1rem;
+    max-width: 720px;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.form-success-banner.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.form-success-banner strong {
+    color: var(--teal-dark);
+}
+
 
 /* ══════════════════════════════════════════════
    Article pages  (body.page-article)
