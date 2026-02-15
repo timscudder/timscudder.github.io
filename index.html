@@ -275,6 +275,29 @@
             statusEl.classList.toggle('success', isSuccess);
         }
 
+        function showSuccessBanner() {
+            // Remove any existing banner
+            const existing = document.querySelector('.form-success-banner');
+            if (existing) existing.remove();
+
+            const banner = document.createElement('div');
+            banner.className = 'form-success-banner';
+            banner.setAttribute('role', 'status');
+            banner.innerHTML = '<strong>Message sent</strong> — thank you for getting in touch! I\'ll get back to you soon.';
+
+            const contactCard = document.querySelector('.contact-card');
+            contactCard.parentNode.insertBefore(banner, contactCard);
+
+            // Trigger reflow so the transition plays
+            banner.offsetHeight;
+            banner.classList.add('visible');
+
+            setTimeout(() => {
+                banner.classList.remove('visible');
+                banner.addEventListener('transitionend', () => banner.remove());
+            }, 6000);
+        }
+
         function showFieldError(field, errorEl, shouldShow) {
             field.classList.toggle('is-invalid', shouldShow);
             field.setAttribute('aria-invalid', shouldShow ? 'true' : 'false');
@@ -321,9 +344,10 @@
 
                 if (result.success) {
                     localStorage.setItem(lastSentKey, String(Date.now()));
-                    setStatus('Message sent — thank you!', true);
                     contactForm.reset();
                     updateMessageCount();
+                    setStatus('');
+                    showSuccessBanner();
                 } else {
                     setStatus('Something went wrong. Please try again.');
                 }
@@ -344,11 +368,32 @@
         updateMessageCount();
         messageField.addEventListener('input', () => {
             updateMessageCount();
-            validateField(messageField, messageError);
+            // Clear error as user corrects, but don't show new errors while typing
+            if (messageField.value.trim().length > 0 && messageField.checkValidity()) {
+                showFieldError(messageField, messageError, false);
+            }
+        });
+        messageField.addEventListener('blur', () => {
+            if (messageField.value.trim().length > 0) validateField(messageField, messageError);
         });
 
-        nameField.addEventListener('input', () => validateField(nameField, nameError));
-        emailField.addEventListener('input', () => validateField(emailField, emailError));
+        nameField.addEventListener('input', () => {
+            if (nameField.value.trim().length > 0 && nameField.checkValidity()) {
+                showFieldError(nameField, nameError, false);
+            }
+        });
+        nameField.addEventListener('blur', () => {
+            if (nameField.value.trim().length > 0) validateField(nameField, nameError);
+        });
+
+        emailField.addEventListener('input', () => {
+            if (emailField.value.trim().length > 0 && emailField.checkValidity()) {
+                showFieldError(emailField, emailError, false);
+            }
+        });
+        emailField.addEventListener('blur', () => {
+            if (emailField.value.trim().length > 0) validateField(emailField, emailError);
+        });
 
         /* ── Smooth scroll & active section tracking ── */
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
