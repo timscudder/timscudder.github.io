@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tim Scudder – Product Leader</title>
+    <link rel="icon" href="../favicon.ico" sizes="any">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="../favicon-16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" sizes="180x180">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --off-white: #FAF9F6;
+            --teal: #0A8080;
+            --teal-dark: #065858;
+            --teal-light: #E5F4F4;
+            --charcoal: #2B2B2B;
+            --grey-medium: #6B6B6B;
+            --grey-light: #DEDEDE;
+            --accent: #C85A54;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--off-white);
+            color: var(--charcoal);
+            font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+            font-weight: 300;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        .page-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100vh;
+            background: linear-gradient(180deg, var(--teal) 0%, var(--teal-dark) 100%);
+            z-index: 1000;
+        }
+
+        header {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+            padding: 1.25rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            }
+
+        .header-content {
+    padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        h1 {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            color: var(--charcoal);
+            margin-bottom: 0.5rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+        .tagline {
+            font-size: 1.25rem;
+            color: var(--grey-medium);
+            font-weight: 400;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out 0.1s both;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .contact-links a {
+            color: var(--teal);
+            text-decoration: none;
+            font-weight: 400;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .contact-links a:hover {
+            border-bottom-color: var(--teal);
+            color: var(--teal-dark);
+        }
+
+        .cta-button {
+            background: var(--teal) !important;
+            color: white !important;
+            padding: 0.75rem 1.5rem !important;
+            border-radius: 2px;
+            border: none !important;
+            border-bottom: none !important;
+            font-weight: 500 !important;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background: var(--teal-dark) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(10, 128, 128, 0.2);
+            border-bottom: none !important;
+        }
+
+        .profile-summary {
+            margin-top: 1.5rem;
+            max-width: 700px;
+        }
+
+        .profile-summary p {
+            color: var(--grey-medium);
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .header-cta {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+        }
+
+        nav {
+            background: white;
+            border-top: 1px solid var(--grey-light);
+            border-bottom: 1px solid var(--grey-light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: fadeIn 0.8s ease-out 0.4s both;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav li {
+            margin: 0;
+        }
+
+        nav a {
+            display: block;
+            padding: 1.25rem 2rem;
+            text-decoration: none;
+            color: var(--charcoal);
+            font-weight: 400;
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--teal);
+            border-bottom-color: var(--teal);
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        section {
+            margin-bottom: 5rem;
+            animation: fadeInUp 0.6s ease-out both;
+        }
+
+        section:nth-child(1) { animation-delay: 0.1s; }
+        section:nth-child(2) { animation-delay: 0.2s; }
+        section:nth-child(3) { animation-delay: 0.3s; }
+
+        h2.section-title {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            margin-bottom: 2.5rem;
+            color: var(--charcoal);
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        h2.section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--teal);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .skill-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 2px;
+            border-left: 3px solid var(--teal-light);
+            transition: all 0.3s ease;
+        }
+
+        .skill-card:hover {
+            border-left-color: var(--teal);
+            box-shadow: 0 4px 20px rgba(10, 128, 128, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .skill-card h3 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--teal-dark);
+        }
+
+        .skill-card p {
+            color: var(--grey-medium);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .experience-item {
+            margin-bottom: 3.5rem;
+            padding-left: 2.5rem;
+            border-left: 2px solid var(--grey-light);
+            position: relative;
+        }
+
+        .experience-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--teal);
+            border: 2px solid var(--off-white);
+        }
+
+        .experience-item.current::before {
+            background: var(--accent);
+            box-shadow: 0 0 0 4px rgba(200, 90, 84, 0.2);
+        }
+
+        .experience-header {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+            margin-bottom: 1rem;
+        }
+
+        .experience-header h3 {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--charcoal);
+            margin-bottom: 0.25rem;
+        }
+
+        .experience-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+
+        .experience-meta span {
+            color: var(--grey-medium);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .company {
+            color: var(--teal-dark) !important;
+            font-weight: 500 !important;
+        }
+
+        .experience-highlights {
+            margin-top: 1rem;
+        }
+
+        .highlight {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .highlight::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--teal);
+            font-weight: 500;
+        }
+
+        .highlight strong {
+            color: var(--teal-dark);
+            font-weight: 500;
+        }
+
+        /* Blog Articles Grid */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .article-card {
+            background: white;
+            border-left: 3px solid var(--teal-light);
+            padding: 2rem;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-card:hover {
+            border-left-color: var(--teal);
+            box-shadow: 0 4px 20px rgba(10, 128, 128, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .article-date {
+            font-size: 0.85rem;
+            color: var(--grey-medium);
+            margin-bottom: 0.75rem;
+            font-weight: 400;
+        }
+
+        .article-card h3 {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--charcoal);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .article-card h3 a {
+            color: var(--charcoal);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .article-card h3 a:hover {
+            color: var(--teal);
+        }
+
+        .article-excerpt {
+            color: var(--grey-medium);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .read-more {
+            color: var(--teal);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .read-more:hover {
+            gap: 0.75rem;
+            color: var(--teal-dark);
+        }
+
+        .read-more::after {
+            content: '→';
+        }
+
+        footer {
+            background: var(--charcoal);
+            color: var(--grey-light);
+            padding: 2.5rem 2rem;
+            margin-top: 5rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-cta {
+            display: inline-block;
+            background: var(--teal);
+            color: white;
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .footer-cta:hover {
+            background: var(--teal-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(10, 128, 128, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+    padding: 0 2rem;
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+            .skills-grid,
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav a {
+                padding: 1rem;
+            }
+
+            .experience-meta {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+        }
+    .article-content p:first-of-type {
+            font-weight: 400;
+        }
+
+.article-content .published-note {
+    margin-top: 1.75rem;
+}
+
+    </style>
+</head>
+<body>
+    <div class="page-decoration"></div>
+
+    <header>
+        <div class="header-content">
+            <div>
+                <h1>Tim Scudder, Thoughts on Product</h1>
+                <div class="profile-summary">
+                    <p>Product leader with extensive experience shaping strategy and delivering high-impact products in complex industries, including financial services, travel, retail and media. Adept at leading AI/ML products from discovery to launch, driving outstanding user and business outcomes. Skilled at building high-performing teams, leading transformations and implementing product operating models to deliver customer-focused innovation at scale.</p>
+                </div>
+            </div>
+            <div class="header-cta">
+                <a href="mailto:timscudder@gmail.com?subject=Contact%20from%20site" class="cta-button">Get in contact</a>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#writing" class="active">Writing</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="https://www.linkedin.com/in/timscudder" target="_blank">LinkedIn</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="writing">
+            <h2 class="section-title">Writing</h2>
+            
+            <div class="articles-grid">
+                <div class="article-card">
+                    <div class="article-date">2026</div>
+                    <h3><a href="lean-thinking-for-evals.html">Lean thinking for Evals</a></h3>
+                    <p class="article-excerpt">A practical mental model for AI product quality.</p>
+                    <a href="lean-thinking-for-evals.html" class="read-more">Read article</a>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-date">2024</div>
+                    <h3><a href="a-matter-of-opinions.html">A matter of opinions</a></h3>
+                    <p class="article-excerpt">Great products can feel inevitable. There’s no one size fits all approach to getting there, but what’s crucial is that product strategy manifests itself through opinionated product design</p>
+                    <a href="a-matter-of-opinions.html" class="read-more">Read article</a>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-date">2023</div>
+                    <h3><a href="go-faster-applying-product-practice.html">Go faster: driving delivery performance with product thinking</a></h3>
+                    <p class="article-excerpt">Strong teams use retros and other rituals to turbo-charge continuous improvement and achieve better outcomes. Make them an engine for success by leveraging product techniques.</p>
+                    <a href="go-faster-applying-product-practice.html" class="read-more">Read article</a>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-date">2023</div>
+                    <h3><a href="three-breeds-of-discovery.html">Unicorn, Horse & Donkey: three species of ‘discovery’</a></h3>
+                    <p class="article-excerpt">Even compromised discoveries offer the opportunity to deliver value and utilise product craft. Here's how.</p>
+                    <a href="three-breeds-of-discovery.html" class="read-more">Read article</a>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-date">2023</div>
+                    <h3><a href="what-we-can-learn-from-developments.html">Learning from developments in AI</a></h3>
+                    <p class="article-excerpt">Beyond the hype, the methods used to develop AI technologies are a case study for those interested in great product practice</p>
+                    <a href="what-we-can-learn-from-developments.html" class="read-more">Read article</a>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-date">2023</div>
+                    <h3><a href="misaligned-metrics-and-crap-maps.html">Misaligned metrics and crap maps</a></h3>
+                    <p class="article-excerpt">How to spot and mitigate inefficient team topologies and poor models through data, focus, and aligned incentives.</p>
+                    <a href="misaligned-metrics-and-crap-maps.html" class="read-more">Read article</a>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-date">2023</div>
+                    <h3><a href="plate-spinners-jugglers-and-firefighters.html">Plate spinners, jugglers and firefighters</a></h3>
+                    <p class="article-excerpt">How can we develop and maintain amazing product management chops in a world where multi-task management is the surest path to career advancement?</p>
+                    <a href="plate-spinners-jugglers-and-firefighters.html" class="read-more">Read article</a>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-date">2023</div>
+                    <h3><a href="focus-on-the-negatives.html">Focus on the Negatives</a></h3>
+                    <p class="article-excerpt">Looking for problems to solve is central to the product process. Combine optimism for the future with dissatisfaction in the present to push things forwards.</p>
+                    <a href="focus-on-the-negatives.html" class="read-more">Read article</a>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-date">2023</div>
+                    <h3><a href="are-you-performing-product-theatre.html">Are you performing Product Theatre?</a></h3>
+                    <p class="article-excerpt">Four (and a bit) ways to avoid the horror of playing 'Product'.</p>
+                    <a href="are-you-performing-product-theatre.html" class="read-more">Read article</a>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-date">2023</div>
+                    <h3><a href="get-into-the-groove.html">Digital Product Pulses, Heartbeats and stakeholder meetings</a></h3>
+                    <p class="article-excerpt">Product Pulse meetings: what they are, why they matter, and how to run them effectively</p>
+                    <a href="get-into-the-groove.html" class="read-more">Read article</a>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-date">2023</div>
+                    <h3><a href="rapid-discovery-and-data-visualisation.html">Rapid product discovery and data visualisation techniques</a></h3>
+                    <p class="article-excerpt">Learn how to combine smart surveys with high-impact charts to move everyone's understanding of your product forward, fast.</p>
+                    <a href="rapid-discovery-and-data-visualisation.html" class="read-more">Read article</a>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-date">2023</div>
+                    <h3><a href="the-rave-model-prioritising-for-return-strategy.html">The RAVE Model: prioritising for return and strategy</a></h3>
+                    <p class="article-excerpt">This updated version of the RICE model will help you make decisions now, without compromising your long-term approach.</p>
+                    <a href="the-rave-model-prioritising-for-return-strategy.html" class="read-more">Read article</a>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-date">2023</div>
+                    <h3><a href="how-to-create-your-first-simple-roadmap.html">How to create your first, simple roadmap</a></h3>
+                    <p class="article-excerpt">Compromise on best practice. Introducing starter roadmaps to your organisation will support conversation and foster a wider product mindset.</p>
+                    <a href="how-to-create-your-first-simple-roadmap.html" class="read-more">Read article</a>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-date">2023</div>
+                    <h3><a href="please-dont-say-the-business.html">Please don’t say… ’The Business’</a></h3>
+                    <p class="article-excerpt">For businesses to succeed, 'The Business' must die. Product Managers must wield the knife.</p>
+                    <a href="please-dont-say-the-business.html" class="read-more">Read article</a>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-date">2023</div>
+                    <h3><a href="journey-walks-bringing-it-all-together.html">Journey Walks: bringing it all together</a></h3>
+                    <p class="article-excerpt">Regular, whole-team walkthroughs of the customer journey help build quality experiences. Here's how to run the sessions</p>
+                    <a href="journey-walks-bringing-it-all-together.html" class="read-more">Read article</a>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-date">2023</div>
+                    <h3><a href="please-dont-say-i-own-the-customer.html">Please don’t say… ‘I own the customer’</a></h3>
+                    <p class="article-excerpt">Access to customers is too often weaponised by assholes. Let's break free</p>
+                    <a href="please-dont-say-i-own-the-customer.html" class="read-more">Read article</a>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-date">2022</div>
+                    <h3><a href="whats-so-hard-about-teams.html">What’s so hard about teams?</a></h3>
+                    <p class="article-excerpt">Project teams vs Product teams. The different outcomes are stark. Why is this?</p>
+                    <a href="whats-so-hard-about-teams.html" class="read-more">Read article</a>
+                </div>
+
+                <div class="article-card">
+                    <div class="article-date">2022</div>
+                    <h3><a href="saved-by-testing.html">Saved by testing, again</a></h3>
+                    <p class="article-excerpt">Feedback always adds value. Here, some late stage user testing transformed a team's design in small and simple ways.</p>
+                    <a href="saved-by-testing.html" class="read-more">Read article</a>
+                </div>
+            </div>
+        </section>
+        <section id="experience">
+            <h2 class="section-title">Experience</h2>
+            
+            <div class="experience-item current">
+                <div class="experience-header">
+                    <h3>Practice Lead / Principal Product Manager</h3>
+                    <div class="experience-meta">
+                        <span class="company">Valtech</span>
+                        <span>March 2022 – Present</span>
+                    </div>
+                </div>
+                <div class="experience-highlights">
+                    <div class="highlight">
+                        <strong>BBC:</strong> Transformed the BBC Product Group (~2000 people) to a product operating model, creating value-aligned teams and reducing unstrategic work by 30%. Identified opportunities to leverage AI tools including LLMs and customer insight agents.
+                    </div>
+                    <div class="highlight">
+                        <strong>Jet2:</strong> Led 0-1 design and execution of a GenAI-powered customer agent tool. MVP delivered a 10% uplift in conversion and became Jet2's first AI product scaled into operations.
+                    </div>
+                    <div class="highlight">
+                        <strong>Admiral:</strong> Partnered with CEO to design a Customer Lifetime Value programme, combining behavioural data, product metrics, and journey mapping. Programme expanded into full CX transformation.
+                    </div>
+                    <div class="highlight">
+                        <strong>M&S:</strong> Led app-to-till strands of M&S' complex Sparks Pay project, accelerating execution whilst improving customer experience across multiple touchpoints.
+                    </div>
+                    <div class="highlight">
+                        <strong>Leadership:</strong> Leading UK practice of 20+ Product Managers. Responsible for hiring, training, and coaching team members embedded at clients including EasyJet, Santander, Connells, Kantar, and LVMH.
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-item">
+                <div class="experience-header">
+                    <h3>Head of Product</h3>
+                    <div class="experience-meta">
+                        <span class="company">Vitality</span>
+                        <span>September 2018 – February 2022</span>
+                    </div>
+                </div>
+                <div class="experience-highlights">
+                    <div class="highlight">
+                        <strong>Health D2C acquisition:</strong> Led product development on single-page quote-and-apply journey. Delivered 18% uplift in conversion vs previous experience.
+                    </div>
+                    <div class="highlight">
+                        <strong>Multi-product proposition:</strong> Led discovery on Life and Health insurance cross-sell initiative, driving increased share of wallet through improved positioning.
+                    </div>
+                    <div class="highlight">
+                        <strong>Advisor platforms:</strong> Used data insights to redesign key journeys, driving a 22% drop in call volumes.
+                    </div>
+                    <div class="highlight">
+                        <strong>Product Leadership:</strong> Built product functions for Vitality Life and Health, hiring and coaching 10+ Product Managers, Designers, and User Researchers.
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-item">
+                <div class="experience-header">
+                    <h3>Digital Manager</h3>
+                    <div class="experience-meta">
+                        <span class="company">RNLI</span>
+                        <span>December 2015 – September 2018</span>
+                    </div>
+                </div>
+                <div class="experience-highlights">
+                    <div class="highlight">
+                        <strong>Product Leadership:</strong> Established RNLI's first product function. Built cross-functional teams and introduced CRO, User-Centred Design, and Agile practices.
+                    </div>
+                    <div class="highlight">
+                        <strong>Fundraising & Revenue:</strong> Led redesign of RNLI.org, delivering 12% increase in year-on-year digital donations.
+                    </div>
+                    <div class="highlight">
+                        <strong>Design & Brand:</strong> Managed creation of design system to unify user experience across channels.
+                    </div>
+                </div>
+            </div>
+
+            <div class="experience-item">
+                <div class="experience-header">
+                    <h3>Earlier Roles</h3>
+                </div>
+                <div class="experience-highlights">
+                    <div class="highlight">
+                        <strong>Halo Associates:</strong> Head of Digital – established cross-functional digital team.
+                    </div>
+                    <div class="highlight">
+                        <strong>Battle (band):</strong> Founder / Professional Musician – signed to Warner Music.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills">
+            <h2 class="section-title">Skills & Expertise</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h3>Product Strategy</h3>
+                    <p>Crafted customer-centric product strategies for startups, SMEs, and enterprises, driving focus and measurable outcomes.</p>
+                </div>
+                <div class="skill-card">
+                    <h3>AI/ML Products</h3>
+                    <p>Led AI-powered products from discovery to launch, including GenAI customer agents and LLM integrations.</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Data-driven Decision Making</h3>
+                    <p>Fluent in hypothesis-driven development and defining leading and lagging metrics.</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Continuous Discovery</h3>
+                    <p>Leveraging and coaching continuous discovery techniques like Opportunity Solution Trees.</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Growth & Experimentation</h3>
+                    <p>Founded Conversion Rate Optimisation teams, owned A/B testing, and led growth programmes.</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Stakeholder Management</h3>
+                    <p>Extensive experience partnering with C-suite executives. Thrives in cross-functional environments.</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Product Operating Models</h3>
+                    <p>Conducted large-scale transformations to product-centric teams, processes, and tools across multiple sectors.</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Leadership</h3>
+                    <p>Built teams across multiple organisations, owning budgets and hiring whilst developing coaching cultures.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer id="contact">
+        <div class="footer-content">
+            <a href="/cdn-cgi/l/email-protection#57233e3a2434223333322517303a363e3b7934383a682422353d3234236a143839233634237265673125383a726567243e2332" class="footer-cta">Get in contact</a>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    document.querySelectorAll('nav a').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll

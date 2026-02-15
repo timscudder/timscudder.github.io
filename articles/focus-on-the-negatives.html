@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus on the Negatives – Tim Scudder</title>
+    <link rel="icon" href="../favicon.ico" sizes="any">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="../favicon-16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" sizes="180x180">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --off-white: #FAF9F6;
+    --teal: #0A8080;
+    --teal-dark: #065858;
+    --teal-light: #E5F4F4;
+    --charcoal: #2B2B2B;
+    --grey-medium: #6B6B6B;
+    --grey-light: #DEDEDE;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--off-white);
+    color: var(--charcoal);
+    font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+    font-size: 17px;
+}
+
+.page-decoration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100vh;
+    background: linear-gradient(180deg, var(--teal) 0%, var(--teal-dark) 100%);
+    z-index: 1000;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: white;
+    border-bottom: 1px solid var(--grey-light);
+    padding: 1.25rem 0;
+}
+
+.header-content {
+    padding: 0 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-name {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.5rem;
+    color: var(--charcoal);
+    text-decoration: none;
+    font-weight: 400;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.site-name::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--teal);
+    border: 2px solid var(--off-white);
+    display: inline-block;
+}
+
+.site-name:hover {
+    color: var(--teal);
+}
+
+.back-link {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.back-link::before {
+    content: '←';
+}
+
+.back-link:hover {
+    color: var(--teal-dark);
+}
+
+article {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 2rem 4rem;
+}
+
+.article-meta {
+    color: var(--grey-medium);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--charcoal);
+    margin-bottom: 1.5rem;
+}
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+.article-content h2 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 400;
+    margin: 2.25rem 0 1.1rem;
+    color: var(--charcoal);
+}
+
+.article-content h3 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 2rem 0 0.85rem;
+    color: var(--teal-dark);
+}
+
+.article-content p {
+    margin-bottom: 1.35rem;
+    line-height: 1.8;
+}
+
+.article-content p:first-of-type {
+    font-weight: 400;
+}
+
+.article-content .published-note {
+    margin-top: 1.75rem;
+}
+
+.article-content ul,
+.article-content ol {
+    margin: 0 0 1.1rem 1.5rem;
+    color: var(--grey-medium);
+
+    font-weight: 300;
+
+    font-size: 17px;
+
+}
+
+.article-content li {
+    margin-bottom: 0.32rem;
+    color: var(--grey-medium);
+
+    font-weight: 300;
+
+    font-size: 17px;
+
+}
+
+.article-content li::marker {
+    color: var(--grey-medium);
+}
+
+
+.article-content a {
+    color: var(--teal);
+    text-decoration: none;
+    border-bottom: 1px solid var(--teal-light);
+    transition: all 0.3s ease;
+}
+
+.article-content a:hover {
+    border-bottom-color: var(--teal);
+    color: var(--teal-dark);
+}
+
+.article-content strong {
+    font-weight: 500;
+    color: var(--charcoal);
+}
+
+.article-content em {
+    font-style: italic;
+}
+
+.article-content blockquote {
+    border-left: 3px solid var(--teal);
+    padding-left: 2rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--grey-medium);
+}
+
+.article-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--grey-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.article-footer a {
+    color: var(--teal);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.article-footer a:hover {
+    color: var(--teal-dark);
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+    .article-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .article-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="page-decoration"></div>
+    <header>
+        <div class="header-content">
+            <a href="/" class="site-name">Tim Scudder, Thoughts on Product</a>
+            <a href="/" class="back-link">Take me home</a>
+        </div>
+    </header>
+    <article>
+        <div class="article-meta">May 2023</div>
+        <h1>Focus on the Negatives</h1>
+        <div class="article-content">
+              
+            <blockquote><p><em><span>“Progress cannot be generated when we are satisfied with existing situations.” </span><br></em><span>― Taiichi Ohno</span></p></blockquote>
+
+
+<p><strong>Whatever walk of life you’re in, having a positive attitude feels good and helps create the energy to move things forward. Yet a gnawing, nagging sense that things can and should be better often triggers great product thinking. If we’re to achieve fantastic results as product managers, we must hold this deep, constant dissatisfaction with the world around us in tension with a belief that we have the agency and skills to affect change.</strong></p>
+<p>Where does this desire to find fault come from? No matter where we look, the best product people find problems: our bigger issue is often choosing which ones to hunt and destroy. But this challenge is a gift and a position of privilege. So, let’s feel good about our discontent. Here are a few ways in which focusing on the negative can make things better: </p>
+<h2 class="header-anchor-post">Research
+</h2>
+<h3 class="header-anchor-post">Customers
+</h3>
+<blockquote>
+<p><em>“The best ideas are painkillers, not vitamins.”</em></p>
+<p><span>― Tony Fadell, </span><em>Build</em></p>
+</blockquote>
+<p>Our job is to understand our current and future users and find ways to remove irritations from - or add joy to - their lives. We need to know which itches to scratch.</p>
+<p>Just as children who hear only praise become less resilient, to focus customer research on what people like about our products would leave us vulnerable to attack and ill-prepared to respond to changing market conditions. We must understand our weaknesses: those limitations in our flows, features or pricing that could make users think twice before renewing or recommending us to friends and family. So, when watching users handle your products - or when gathering feedback from them - find out what they don’t like. Even small things could help you and might trigger some great insight upon which to build.</p>
+<p>Similarly, tools like Jobs to be Done are, at their core, about finding pain points. We need to find the negatives in the lives of our users. What do they find stressful, difficult, annoying? Where do they want to save time, feel less bored or confused by life? Dig into what they need to uncover opportunities to help them.</p>
+<h3 class="header-anchor-post">The market
+</h3>
+<blockquote>
+<p><em>“If you know the enemy and know yourself, you need not fear the result of a hundred battles. If you know yourself but not the enemy, for every victory gained you will also suffer a defeat. If you know neither the enemy nor yourself, you will succumb in every battle.” </em></p>
+<p><span>― Sun Tzu, </span><em>The Art of War</em></p>
+</blockquote>
+<p>Just as user research should focus on pain, strong market research lasers in on the vulnerabilities of your competitors and shines a harsh light on your own weaknesses. By focusing on the negative in this way, we can truly understand and respond to the market landscape. If you are struggling to close sales, you must understand why a rival’s proposition is considered more compelling than your own. If you’re looking to claim a niche in a larger market, you need to find customer segments that are underserved. If you are looking to build scale, you must understand where you can undercut competitors.</p>
+<p>And we must be brutally honest with ourselves. Whether you’re working with external partners or internal teammates, explicitly demand a non-sugar-coated approach. Softening the blow does no one favours here. Beyond this, beware of morale-boosting pseudo-analysis. Too often, tools such as SWOT or the Strategy Canvas are misappropriated for back-slapping, tub-thumping team days or slapped into governance packs as palliatives for concerned stakeholders.</p>
+<p>We must respect the capabilities of rivals if we’re to overcome them - and we must appreciate where we are vulnerable if we’re to avoid being overwhelmed.</p>
+<h2 class="header-anchor-post">Team development and processes
+</h2>
+<blockquote>
+<p><em>“When there is trust, conflict becomes nothing but the pursuit of truth, an attempt to find the best possible answer.”</em></p>
+<p>― Patrick Lencioni</p>
+</blockquote>
+<p>While great gains can be made by focusing on the pain of your customers, your competitors’ frailties and examining weaknesses in your own product’s positioning and capabililities, a relentless quest to find areas to improve within your team’s daily rhythms can be equally rewarding. Yes, it’s important to build rapport and support open dialogue, but these are means to an end: effective teams surge beyond icebreakers into the open seas of deliberate conversation. </p>
+<p>Recognising imperfections in the way you work, pulling the cord and huddling to find ways to improve is the essence of Kaizen / Continuous Improvement. If you’re working in a formal and stable environment, metrics such as Velocity might be useful in supporting objective decision making. But even if you’ve moved beyond Scrum towards a more fluid pattern of collaboration, you should retain Retros because they create a specific space in which ideas can be generated and discussed. Well-known approaches like the 4Ls or Stop, Start, Continue remain strong frameworks to help here. But this talk is pointless without action. So, in the same session, turn these ideas into actions. Place these actions on a Kanban board, prioritise - and get to work.</p>
+<p>The best people want to be pushed and the best colleagues push each other - often quite hard. If you can succeed in harnessing this energy in a productive way, your team’s progress will accelerate and compound.</p>
+<h2 class="header-anchor-post">Analysis
+</h2>
+<blockquote>
+<p><em>“To see clearly is poetry, prophecy and religion all in one.”</em></p>
+<p>― John Ruskin</p>
+</blockquote>
+<p>I recently wrote about ‘Product Theatre’, where sharing reports to appear productive short-changes you, your stakeholders and, most importantly, your users. What should we do instead? Easy: analytics is yet another area where best practice centres on finding fault. Look for bottlenecks, high-abandonment rates, bloated acquisition costs, poor keyword rankings. If you’ve released a new design pattern look for evidence of repeated errors, which indicate confusion. If you’re trying to drive engagement in a tool, consider how your onboarding journey is helping or hindering user success downstream. </p>
+<p>It’s all about finding areas where we can do things better. Only then can we build experiments, run tests and find solutions. Just remember to centre your efforts on the vital few, not the trivial many.</p>
+<h2 class="header-anchor-post">Yes, and…
+</h2>
+<p>Just as there is a difference between positivity and blind optimism, focusing on the negatives is not the same as dwelling on them. Going further, identifying problems is not the same as understanding them. So go deeper. Use tools like the 5 Whys and drive towards root-cause analysis. It’s there that you’ll find higher-order insights and opportunities. </p>
+<p>And now you’re ready to move into the solution space. You know your landscape and where the dangers lie. You step forwards with confidence, shifting between tactical and strategic solutions, picking the path that’s right for your company and customers. </p>
+<p>Who knew being so negative could yield such positive results?</p>
+<p class="published-note">This article was first published on <a href="https://www.productbreaks.com/" target="_blank" rel="noopener">Product Breaks</a>.</p>
+        </div>
+        <div class="article-footer">
+  <a href="plate-spinners-jugglers-and-firefighters.html">← Previous article</a>
+  <a href="misaligned-metrics-and-crap-maps.html">Next article →</a>
+</div>
+    </article>
+</body>
+</html>

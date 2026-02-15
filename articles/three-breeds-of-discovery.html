@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unicorn, Horse & Donkey: three species of ‘discovery’ – Tim Scudder</title>
+    <link rel="icon" href="../favicon.ico" sizes="any">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="../favicon-16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" sizes="180x180">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --off-white: #FAF9F6;
+    --teal: #0A8080;
+    --teal-dark: #065858;
+    --teal-light: #E5F4F4;
+    --charcoal: #2B2B2B;
+    --grey-medium: #6B6B6B;
+    --grey-light: #DEDEDE;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--off-white);
+    color: var(--charcoal);
+    font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+    font-size: 17px;
+}
+
+.page-decoration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100vh;
+    background: linear-gradient(180deg, var(--teal) 0%, var(--teal-dark) 100%);
+    z-index: 1000;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: white;
+    border-bottom: 1px solid var(--grey-light);
+    padding: 1.25rem 0;
+}
+
+.header-content {
+    padding: 0 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-name {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.5rem;
+    color: var(--charcoal);
+    text-decoration: none;
+    font-weight: 400;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.site-name::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--teal);
+    border: 2px solid var(--off-white);
+    display: inline-block;
+}
+
+.site-name:hover {
+    color: var(--teal);
+}
+
+.back-link {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.back-link::before {
+    content: '←';
+}
+
+.back-link:hover {
+    color: var(--teal-dark);
+}
+
+article {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 2rem 4rem;
+}
+
+.article-meta {
+    color: var(--grey-medium);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--charcoal);
+    margin-bottom: 1.5rem;
+}
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+.article-content h2 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 400;
+    margin: 2.25rem 0 1.1rem;
+    color: var(--charcoal);
+}
+
+.article-content h3 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 2rem 0 0.85rem;
+    color: var(--teal-dark);
+}
+
+.article-content p {
+    margin-bottom: 1.35rem;
+    line-height: 1.8;
+}
+
+.article-content p:first-of-type {
+    font-weight: 400;
+}
+
+.article-content .published-note {
+    margin-top: 1.75rem;
+}
+
+.article-content ul,
+.article-content ol {
+    margin: 0 0 1.1rem 1.5rem;
+    color: var(--grey-medium);
+
+    font-weight: 300;
+
+    font-size: 17px;
+
+}
+
+.article-content li {
+    margin-bottom: 0.32rem;
+    color: var(--grey-medium);
+
+    font-weight: 300;
+
+    font-size: 17px;
+
+}
+
+.article-content li::marker {
+    color: var(--grey-medium);
+}
+
+
+.article-content a {
+    color: var(--teal);
+    text-decoration: none;
+    border-bottom: 1px solid var(--teal-light);
+    transition: all 0.3s ease;
+}
+
+.article-content a:hover {
+    border-bottom-color: var(--teal);
+    color: var(--teal-dark);
+}
+
+.article-content strong {
+    font-weight: 500;
+    color: var(--charcoal);
+}
+
+.article-content em {
+    font-style: italic;
+}
+
+.article-content blockquote {
+    border-left: 3px solid var(--teal);
+    padding-left: 2rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--grey-medium);
+}
+
+.article-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--grey-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.article-footer a {
+    color: var(--teal);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.article-footer a:hover {
+    color: var(--teal-dark);
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+    .article-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .article-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="page-decoration"></div>
+    <header>
+        <div class="header-content">
+            <a href="/" class="site-name">Tim Scudder, Thoughts on Product</a>
+            <a href="/" class="back-link">Take me home</a>
+        </div>
+    </header>
+    <article>
+        <div class="article-meta">August 2023</div>
+        <h1>Unicorn, Horse & Donkey: three species of ‘discovery’</h1>
+        <div class="article-content">
+              
+            <p><strong>The discoveries we are asked to undertake often bear little resemblance to the best practice approaches we read about. But even in challenging environments, product thinking remains incredibly powerful and can yield great results. In this week’s post, I’m going to look at three types of ‘discovery’: the </strong><em><strong>Unicorn</strong></em><strong>, the </strong><em><strong>Horse</strong></em><strong> and the </strong><em><strong>Donkey</strong></em><strong>. I’ll help you identify what type of work you’re really being asked to do, and suggest mindsets and tools that will enable you to add value and learn along the way.</strong></p>
+
+<h3 class="header-anchor-post">Unicorns
+</h3>
+<p>This rare, almost mythical species of discovery has been described in the wild by writers like Marty Cagan and Teresa Torres. Someone in your business (or even before there is a business) identifies a potentially underserved market and believes they can deliver a novel solution in this space. This solution might be a brand new company/ product, a move into an adjacent market, or simply a new feature for an existing product. Some funding and/or resource is unlocked to allow the idea to be explored through market and user research, design, and lots of discussion and thinking. If, after a period of discovery, a viable path isn’t found, people are prepared to walk away. In fact, like any experiments, many Unicorn discoveries find that the product-market fit probably isn’t there. This is a success: it means peoples’ time and money has not been wasted.</p>
+<p>It shouldn’t surprise you that you can lean heavily on best practice tools and techniques if you are lucky enough to work on a Unicorn discovery in a traditional organisation. Double and triple diamond frameworks create space for deep thinking while creating actionable momentum. Problems and opportunities can be uncovered and scrutinised. Novel solutions can be created and discarded. Pivots become possible.</p>
+<h3 class="header-anchor-post">Horses
+</h3>
+<p>The Horse is a widespread species of discovery. Less elegant than its Unicorn cousin, but it will help you get somewhere, fast. That’s because, while all traditional organisations fund project work through annual budget cycles, the smart ones are sensible enough to mitigate risk by checking their thinking before they commit to expensive delivery phases.</p>
+<p>Broadly speaking, a Horse will follow an initial round of ideation and scoping. The central idea will have some leadership support and perhaps notional funding behind it, but delivery will only begin in earnest if evidence exists for a strong return on investment. In this mode, your work as a product manager is to explore the idea, build a plan and make a go/ no go recommendation. As with the Unicorn discovery, the opportunity to kill the project still exists, though the decision is less likely to be yours - and you may face some opposition to your evaluation, so tread carefully.</p>
+<p>Horse discoveries most often take place within established organisations, operating within known markets. Therefore, it is crucial to understand the link between the broader business strategy and the proposed work. Your toolkit should be tweaked accordingly. So, while the double diamond might still be valid, the exploration phase should be narrower in scope. You might even choose to structure it by walking ‘up’ the Product-Market Fit pyramid: try mining data on target segments within your existing customer base and work from there. I have found Dan Olsen’s ‘Lean Product Playbook’ particularly useful when in this mode.</p>
+<h3 class="header-anchor-post">Donkeys
+</h3>
+<p>A donkey is not a racehorse, but you can still ride it.</p>
+<p><span>This species isn’t really a discovery at all. A senior stakeholder will be advocating strongly for the delivery of </span><em>their</em><span> project at pace. A firm budget will have been determined. A pretty solid scope will have been discussed. And a timeline will have been established (typically, and miraculously, the scope can be delivered within the financial year, no matter when they start). Ironically, Donkeys require more magical thinking than Unicorns, but Product can still have an impact.</span></p>
+<p>As a product manager riding a Donkey, you have three key roles:</p>
+<ol>
+<li><p>Support efficient delivery through a well constructed plan</p></li>
+<li><p>Find ways to remove pet features that do not add value - and support the prioritisation of features that do</p></li>
+<li><p>Bring the customer into the design process to enhance usability. </p></li>
+</ol>
+<p>This is not trivial work and requires good product craft. For example, User Story Mapping is a powerful tool for breaking up work and releases, while the effective reporting of user tests can help win low level arguments around feature selection. Discussions with peers can ensure your product plays nice with its siblings. Product principles are incredibly important, whatever context you’re working in. But the key is to be positive about the project as a whole. Naysayers will be ignored and steamrollered.</p>
+<p>On Donkey discoveries, the double diamond is somewhat meaningless. So limit time spent in ‘understand’ mode. Focus instead on artefacts that make the future state concrete and robust. If necessary, retain a few shiny baubles to help your stakeholders impress their peers. </p>
+<h2 class="header-anchor-post">Making product work in the real world
+</h2>
+<p>The most mature organisations are often the least mature when it comes to product but, if we come to terms with this, opportunities exist to do great work. So take a step back and consider what you’re really being asked to do. There are three species of discovery and it takes great skill to ride every one with style.</p>
+<p class="published-note">This article was first published on <a href="https://www.productbreaks.com/" target="_blank" rel="noopener">Product Breaks</a>.</p>
+        </div>
+        <div class="article-footer">
+  <a href="go-faster-applying-product-practice.html">← Previous article</a>
+  <a href="what-we-can-learn-from-developments.html">Next article →</a>
+</div>
+    </article>
+</body>
+</html>

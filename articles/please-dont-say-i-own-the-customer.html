@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Please don’t say… ‘I own the customer’ – Tim Scudder</title>
+    <link rel="icon" href="../favicon.ico" sizes="any">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="../favicon-16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" sizes="180x180">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --off-white: #FAF9F6;
+    --teal: #0A8080;
+    --teal-dark: #065858;
+    --teal-light: #E5F4F4;
+    --charcoal: #2B2B2B;
+    --grey-medium: #6B6B6B;
+    --grey-light: #DEDEDE;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--off-white);
+    color: var(--charcoal);
+    font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+    font-size: 17px;
+}
+
+.page-decoration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100vh;
+    background: linear-gradient(180deg, var(--teal) 0%, var(--teal-dark) 100%);
+    z-index: 1000;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: white;
+    border-bottom: 1px solid var(--grey-light);
+    padding: 1.25rem 0;
+}
+
+.header-content {
+    padding: 0 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-name {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.5rem;
+    color: var(--charcoal);
+    text-decoration: none;
+    font-weight: 400;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.site-name::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--teal);
+    border: 2px solid var(--off-white);
+    display: inline-block;
+}
+
+.site-name:hover {
+    color: var(--teal);
+}
+
+.back-link {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.back-link::before {
+    content: '←';
+}
+
+.back-link:hover {
+    color: var(--teal-dark);
+}
+
+article {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 2rem 4rem;
+}
+
+.article-meta {
+    color: var(--grey-medium);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--charcoal);
+    margin-bottom: 1.5rem;
+}
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+.article-content h2 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 400;
+    margin: 2.25rem 0 1.1rem;
+    color: var(--charcoal);
+}
+
+.article-content h3 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 2rem 0 0.85rem;
+    color: var(--teal-dark);
+}
+
+.article-content p {
+    margin-bottom: 1.35rem;
+    line-height: 1.8;
+}
+
+.article-content p:first-of-type {
+    font-weight: 400;
+}
+
+.article-content .published-note {
+    margin-top: 1.75rem;
+}
+
+.article-content ul,
+.article-content ol {
+    margin: 0 0 1.1rem 1.5rem;
+    color: var(--grey-medium);
+
+    font-weight: 300;
+
+    font-size: 17px;
+
+}
+
+.article-content li {
+    margin-bottom: 0.32rem;
+    color: var(--grey-medium);
+
+    font-weight: 300;
+
+    font-size: 17px;
+
+}
+
+.article-content li::marker {
+    color: var(--grey-medium);
+}
+
+
+.article-content a {
+    color: var(--teal);
+    text-decoration: none;
+    border-bottom: 1px solid var(--teal-light);
+    transition: all 0.3s ease;
+}
+
+.article-content a:hover {
+    border-bottom-color: var(--teal);
+    color: var(--teal-dark);
+}
+
+.article-content strong {
+    font-weight: 500;
+    color: var(--charcoal);
+}
+
+.article-content em {
+    font-style: italic;
+}
+
+.article-content blockquote {
+    border-left: 3px solid var(--teal);
+    padding-left: 2rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--grey-medium);
+}
+
+.article-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--grey-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.article-footer a {
+    color: var(--teal);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.article-footer a:hover {
+    color: var(--teal-dark);
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+    .article-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .article-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="page-decoration"></div>
+    <header>
+        <div class="header-content">
+            <a href="/" class="site-name">Tim Scudder, Thoughts on Product</a>
+            <a href="/" class="back-link">Take me home</a>
+        </div>
+    </header>
+    <article>
+        <div class="article-meta">January 2023</div>
+        <h1>Please don’t say… ‘I own the customer’</h1>
+        <div class="article-content">
+              
+            <h4 class="header-anchor-post">
+<strong>The names in this story have been changed to protect the innocent.</strong>
+</h4>
+
+<p>It was another tricky meeting. I sat in the glass-walled office of a senior, forthright stakeholder. They leaned across their conference table. Why hadn’t we delivered with enough pace? Why didn’t the last feature to ship make the anticipated splash? Why weren’t we executing their ideas effectively?</p>
+<p>This smart and aggressive exec had a strong understanding of the mechanics of their area and was outstanding at pushing work forwards. They had a powerful grasp of detail and knew where they wanted to go. They were IT literate. Books by Jim Collins lined their walls. But, they were not a fan of discovery: why waste time when they knew their market and audience? As I tried - not for the first time - to get the green light on some customer interviews, I was met with a phase that made me shudder:</p>
+<blockquote><p>“I own the customer.”</p></blockquote>
+<p><span>In my experience, the best colleagues take responsibility for their work and contribute positively to their organisation, but they don’t seek to ‘own’ anything. That’s because it’s an ego driven concept. In fact, even </span><em>owning a problem</em><span> is often an actual problem because it closes people off to new perspectives and stops them opening up if they get stuck. But aside from the semantics, people with the gall to say things like, ‘I own the customer’ tend to throttle access to information - and that’s particularly toxic. Here are two reasons why:</span></p>
+<h4 class="header-anchor-post">
+<span>1. </span><strong>Power grabs and knowledge silos</strong>
+</h4>
+<p>Asserting the right to constrain access to a crucial resource like customer insights and data is, as Tony Fadell might say, a classic ‘asshole’ move (he describes ‘Controlling’ and ‘Political’ assholes: I’m talking about both breeds). Their method is to demand respect and increase personal influence by dominating something central to progress. At the same time, it’s easier for them to win arguments if crucial evidence is hidden. This is classic information asymmetry. The result is an asshole in the ascendency and customer knowledge wielded as a weapon, even if the whole act might be similar to the Wizard of Oz.</p>
+<h4 class="header-anchor-post">
+<span>2. </span><strong>The customer is moved from the centre of the journey</strong>
+</h4>
+<p>Ironically, while access to customers is restricted or bottlenecked, the customer themselves actually becomes less central to the business. How can this be? Well, the reality is that people have targets and projects have deadlines. Team members simply can’t not move forwards because they haven’t got all the tools, resources and information that they need. What’s more, if senior stakeholders are comfortable running with their gut, they are unlikely to support pulling the chord on delivery due to a lack of customer understanding. And so, the whole ecosystem starts to treat true insight as a nice to have, becomes numb to their absence and progressing in this way becomes, or remains, the norm.</p>
+<p>So here we have an asshole controlling a resource that people get used to living without. This is why bad ideas go to market and junk features are shipped: internal assumptions replace actual understanding. And this is obviously a risk for the parent business: fewer shots will hit the target, talent will waste away as a command and control mentality is reinforced, and customers will eventually leave in search of something better.</p>
+<h2 class="header-anchor-post">
+<strong>How do we break the cycle?</strong>
+</h2>
+
+<p>This is hard. Business politics is hard to unlock, especially if controlling behaviour has been rewarded in the past. Nonetheless, here are a few ideas:</p>
+<h3 class="header-anchor-post">
+<strong>Highlight the gaps</strong>
+</h3>
+<h4 class="header-anchor-post">a. Show the workings of others
+</h4>
+<p>If you have the chance to showcase the impact of good discovery in a way that seems natural, take it. Even if you’re talking about competitors or other companies/ products, that will resonate. For example, if you’re working for an old-fashioned bank who wants to mimic Starling or other fintechs, go deeper in your analysis than their UI and beyond their tech stack - talk about their approach to data, insights and user testing. This is the opposite of tip-of-the-iceberg storytelling - the iceberg is the story here, but it’s possible to make it compelling and informative. But be patient: you’re looking to sow seeds, not get immediate results.</p>
+<h4 class="header-anchor-post">b. Caveat your own work
+</h4>
+<p>Slightly risky, but it is possible to position yourself as action-orientated and someone who could drive best practice, while also highlighting the assumptions and inherent risk of working without proper access to customers. You’re essentially promoting caveated work. For example, if demoing a new self-service feature on a B2B product, say something like, ‘Ideally, we’d user test this. But if you’re happy to carry the risk, then we can monitor after launch and try to come back to it later.’</p>
+<p>Again, you’re trying to move things forward here without looking like a blocker.</p>
+<h3 class="header-anchor-post">
+<strong>Make it the asshole’s idea</strong>
+</h3>
+<p>Another tricky one and something that might stick in the throat. But generally, assholes crave recognition. And you do want to deliver for your customers and business. So look for non-threatening partnership opportunities and be humble enough to not play the frontman. Piggybacking on existing reports or actvity is the best route into this approach, because you’re not looking for actual behaviour change or collaboration. Once you get some traction, suggest slight increases in depth and reach.</p>
+<p>If bad actors are intent on ‘owning the customer’, then they will happily radiate knowledge if this seems more beneficial to them than squirrelling it away.</p>
+<h3 class="header-anchor-post">
+<strong>Ask for forgiveness, not permission</strong>
+</h3>
+<p>Lastly, just do it. If you need the information to do a better job, you should be able to find some customers to speak to without having to go through the gatekeepers… every castle has a secret door. Start small and go direct, focus on maximising learning quickly. You don’t need to shout about this work immediately - just use it to suggest better ideas and create better features. When the time is right to go ‘public’, don’t be confrontational: let everyone have some sunshine - even those that ‘own the customer’. You’ll have success in scaling if you make it a win for everyone.</p>
+<p>Once you’re in position, use the same opportunities I’ve highlighted above, but in reverse. Showcase your own company’s good practices, not just the outcomes: you want them to be repeatable. Highlight that your collective understanding underpins a design concept to make it more defensible. Incentivise assholes to play on terms that are more customer-orientated (spoiler: they’ll always be assholes).</p>
+<h2 class="header-anchor-post">
+<strong>The agony and the opportunity</strong>
+</h2>
+<p>Yes, some bad actors may want to ‘own’ things for the benefit of their career. But Product Managers need to raise the level of discussion and find ways to make the sequestering of knowledge a political error - while placing the customer and value delivery at the centre of everyone’s thinking. The amplification of customer needs is implicit in our remits and absolutely essential to long-term success.</p>
+<p>Executives are increasingly aware of concepts like Design Thinking, even if they remain blind to their own biases. While the proliferation of insights and data tools, plus peoples’ increased comfort with remote meetings, means it’s increasingly easy to engage with individual customers. The door is ready to be opened.</p>
+<p>What do you think? Are there other ways to gain better access to users? I’d love to hear your thoughts.</p>
+<p class="published-note">This article was first published on <a href="https://www.productbreaks.com/" target="_blank" rel="noopener">Product Breaks</a>.</p>
+        </div>
+        <div class="article-footer">
+  <a href="please-dont-say-the-business.html">← Previous article</a>
+  <a href="whats-so-hard-about-teams.html">Next article →</a>
+</div>
+    </article>
+</body>
+</html>

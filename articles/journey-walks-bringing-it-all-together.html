@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journey Walks: bringing it all together – Tim Scudder</title>
+    <link rel="icon" href="../favicon.ico" sizes="any">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="../favicon-16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" sizes="180x180">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --off-white: #FAF9F6;
+    --teal: #0A8080;
+    --teal-dark: #065858;
+    --teal-light: #E5F4F4;
+    --charcoal: #2B2B2B;
+    --grey-medium: #6B6B6B;
+    --grey-light: #DEDEDE;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--off-white);
+    color: var(--charcoal);
+    font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+    font-size: 17px;
+}
+
+.page-decoration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100vh;
+    background: linear-gradient(180deg, var(--teal) 0%, var(--teal-dark) 100%);
+    z-index: 1000;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: white;
+    border-bottom: 1px solid var(--grey-light);
+    padding: 1.25rem 0;
+}
+
+.header-content {
+    padding: 0 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-name {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.5rem;
+    color: var(--charcoal);
+    text-decoration: none;
+    font-weight: 400;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.site-name::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--teal);
+    border: 2px solid var(--off-white);
+    display: inline-block;
+}
+
+.site-name:hover {
+    color: var(--teal);
+}
+
+.back-link {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.back-link::before {
+    content: '←';
+}
+
+.back-link:hover {
+    color: var(--teal-dark);
+}
+
+article {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 2rem 4rem;
+}
+
+.article-meta {
+    color: var(--grey-medium);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--charcoal);
+    margin-bottom: 1.5rem;
+}
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+.article-content h2 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 400;
+    margin: 2.25rem 0 1.1rem;
+    color: var(--charcoal);
+}
+
+.article-content h3 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 2rem 0 0.85rem;
+    color: var(--teal-dark);
+}
+
+.article-content p {
+    margin-bottom: 1.35rem;
+    line-height: 1.8;
+}
+
+.article-content p:first-of-type {
+    font-weight: 400;
+}
+
+.article-content .published-note {
+    margin-top: 1.75rem;
+}
+
+.article-content ul,
+.article-content ol {
+    margin: 0 0 1.1rem 1.5rem;
+    color: var(--grey-medium);
+
+    font-weight: 300;
+
+    font-size: 17px;
+
+}
+
+.article-content li {
+    margin-bottom: 0.32rem;
+    color: var(--grey-medium);
+
+    font-weight: 300;
+
+    font-size: 17px;
+
+}
+
+.article-content li::marker {
+    color: var(--grey-medium);
+}
+
+
+.article-content a {
+    color: var(--teal);
+    text-decoration: none;
+    border-bottom: 1px solid var(--teal-light);
+    transition: all 0.3s ease;
+}
+
+.article-content a:hover {
+    border-bottom-color: var(--teal);
+    color: var(--teal-dark);
+}
+
+.article-content strong {
+    font-weight: 500;
+    color: var(--charcoal);
+}
+
+.article-content em {
+    font-style: italic;
+}
+
+.article-content blockquote {
+    border-left: 3px solid var(--teal);
+    padding-left: 2rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--grey-medium);
+}
+
+.article-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--grey-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.article-footer a {
+    color: var(--teal);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.article-footer a:hover {
+    color: var(--teal-dark);
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+    .article-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .article-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="page-decoration"></div>
+    <header>
+        <div class="header-content">
+            <a href="/" class="site-name">Tim Scudder, Thoughts on Product</a>
+            <a href="/" class="back-link">Take me home</a>
+        </div>
+    </header>
+    <article>
+        <div class="article-meta">January 2023</div>
+        <h1>Journey Walks: bringing it all together</h1>
+        <div class="article-content">
+              
+            <p><strong>We know that great products are often built by collaborative teams, typically centring on Product, Engineering and Design. Yet strong participation from other areas, such as Marketing, Sales and Operations is also required to go to market with real success.</strong></p>
+<p><span>Having worked on a number of launches, I’ve become a fan of bringing everyone together for regular, detailed run-throughs of all elements of the product experience - from marketing messaging to servicing FAQs and receipts. In these sessions, all contributors are empowered to review and critique anything presented. For this article, I’ll call these sessions ‘</span><strong>Journey Walks</strong><span>’. Here’s a brief description of my preferred format, its pros, cons, and a few thoughts on how I’m looking to improve my own processes going forwards.</span></p>
+
+
+<h2 class="header-anchor-post">Format
+</h2>
+<h4 class="header-anchor-post">
+<strong>What should be covered in a ‘Journey Walk’?</strong>
+</h4>
+<p>Put simply, anything that a potential customer might experience. All materials are added to a Miro board or similar, and laid out in a rough chronology. For example, acquisition materials would typically be to the left of onboarding flows. The artefacts are up-to-date and hi-res wherever possible.</p>
+<p>The board should also contain framing material such as Go To Market timelines and metrics for context. This information should be placed in a row above the Journey itself.</p>
+<h4 class="header-anchor-post">
+<strong>Who should attend?</strong>
+</h4>
+<p>At least one representative of each department contributing to the Journey should attend. The idea is to raise issues and make suggestions. But actions should largely be taken away by SMEs: it’s not useful to get bogged down in solution-mode here - and the aim is not to design by committee.</p>
+<h4 class="header-anchor-post">
+<strong>How often should we run them?</strong>
+</h4>
+<p>The best team of teams I’ve worked with have performed Journey Walks repeatedly as they approach launch. 60-90 minutes every week or fortnight is usually sufficient. Particular emphasis should be placed on updated material - and the impact that these changes have on other elements of the Journey.</p>
+<h2 class="header-anchor-post">What’s the point?
+</h2>
+<p>There are several benefits to Journey Walks:</p>
+<h4 class="header-anchor-post">
+<strong>a. Broad awareness and buy-in</strong>
+</h4>
+<p>Taking this approach allows information to be radiated across departments. This increases engagement and enables coordination.</p>
+<h4 class="header-anchor-post">
+<strong>b. Cross-pollination and a great story</strong>
+</h4>
+<p>Building on this, allowing multiple teams to see the whole picture will free talent to contribute ideas beyond the boundaries of their department and understand the context of their own contributions. This allows for consistency at a broad level and excellence at each step.</p>
+<p>I recommend taking particular care to build a coherent story: from the Marketing proposition to the UI of the tool itself (and beyond). You want the promise of the product to be clear and compelling and for every touchpoint to respect and reflect that promise.</p>
+<h4 class="header-anchor-post">
+<strong>c. Zoom in, zoom out</strong>
+</h4>
+<p>Digital whiteboards enable detailed discussion at scale and continuity across sessions. While working in person is a great way to ideate or get hands on with a device (or just feel part of a team), you are unlikely to find a wall big enough - or a team of people with good enough eyesight - to handle all the elements involved in a complex project. Using a digital tool allows the whole team to continually zoom in and out - and to annotate and update the journey frequently. In addition, the board itself can be used for presentations and other workshops: bye, bye, Powerpoint!</p>
+<h2 class="header-anchor-post">Traps to avoid
+</h2>
+<p>However, while I strongly believe that Journey Walks are a great way to drive quality and alignment, they are not a silver bullet. Here are the three big potholes to avoid if you start to experiment with this approach:</p>
+<h4 class="header-anchor-post">
+<strong>1. You are not the customer</strong>
+</h4>
+<p>Journey Walks are designed to both sharpen and smooth the holistic experience. Their outputs should build on the findings of customer research, user testing, analytics and other user-centred/ evidence-based approaches. Good practice and solid decisions should not be forgotten and overwritten as you all discuss the work.</p>
+<h4 class="header-anchor-post">
+<strong>2. Loss of context</strong>
+</h4>
+<p>Ironically, while digital whiteboards allow everything to be seen in one place, this can reduce contextual understanding. For example, two steps in a journey may appear directly alongside one another - and this may be chronologically accurate… but users may experience them hours, days or even weeks apart. So take care to flag this wherever possible.</p>
+<p>In addition, you mustn’t get bored of the Journey: try to view things with fresh eyes everytime. As with any approach that encourages regular reviews, familiarity may breed contempt, or at least complacency. You’ll need to find ways to ground the Walks in the realities of your user.</p>
+<h4 class="header-anchor-post">
+<strong>3. Prototypes are better</strong>
+</h4>
+<p>Just as laying everything out chronologically may interfere with perceptions, presenting a particular experience or interaction design as a series of flats has obvious limitations. This is why we need Figma, afterall. So, while Journey Walks are a great way to drive consistency of messaging, they are only a companion to deeper design artefacts.</p>
+<p>Finally, remember that Journey Walks are time consuming and best left to major initiatives. Smaller, nimbler approaches work just fine for incremental releases or items with a narrower focus.</p>
+<h2 class="header-anchor-post">Ways to enhance
+</h2>
+<p>I believe that Journey Walks are a powerful collaboration tool. I’m now looking to improve the quality of understanding and discussion they drive by introducing other elements into the whiteboards. For example:</p>
+<ul>
+<li><p>By overlaying metrics to give context and support prioritisation calls</p></li>
+<li><p>By adding maps and research findings to build continuity from discovery to product marketing and beyond.</p></li>
+</ul>
+<h2 class="header-anchor-post">Go for it
+</h2>
+<p>To be clear - it can take time for a group to hit the groove with Journey Walks. There will be frustrations until the breakthrough is made. Those involved need to become familiar with the tools, the big picture and the individual steps in order to add real value.</p>
+<p>So be patient. People are becoming increasingly fluent with online collaboration and the technology is evolving fast. We are breaking away from a siloed mentality as we go. As you next approach a launch, give Journey Walks a shot.</p>
+<p class="published-note">This article was first published on <a href="https://www.productbreaks.com/" target="_blank" rel="noopener">Product Breaks</a>.</p>
+        </div>
+        <div class="article-footer">
+  <a href="the-rave-model-prioritising-for-return-strategy.html">← Previous article</a>
+  <a href="how-to-create-your-first-simple-roadmap.html">Next article →</a>
+</div>
+    </article>
+</body>
+</html>

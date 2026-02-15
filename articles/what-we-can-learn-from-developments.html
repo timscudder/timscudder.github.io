@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning from developments in AI – Tim Scudder</title>
+    <link rel="icon" href="../favicon.ico" sizes="any">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="../favicon-16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" sizes="180x180">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --off-white: #FAF9F6;
+    --teal: #0A8080;
+    --teal-dark: #065858;
+    --teal-light: #E5F4F4;
+    --charcoal: #2B2B2B;
+    --grey-medium: #6B6B6B;
+    --grey-light: #DEDEDE;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--off-white);
+    color: var(--charcoal);
+    font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+    font-size: 17px;
+}
+
+.page-decoration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100vh;
+    background: linear-gradient(180deg, var(--teal) 0%, var(--teal-dark) 100%);
+    z-index: 1000;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: white;
+    border-bottom: 1px solid var(--grey-light);
+    padding: 1.25rem 0;
+}
+
+.header-content {
+    padding: 0 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-name {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.5rem;
+    color: var(--charcoal);
+    text-decoration: none;
+    font-weight: 400;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.site-name::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--teal);
+    border: 2px solid var(--off-white);
+    display: inline-block;
+}
+
+.site-name:hover {
+    color: var(--teal);
+}
+
+.back-link {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.back-link::before {
+    content: '←';
+}
+
+.back-link:hover {
+    color: var(--teal-dark);
+}
+
+article {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 2rem 4rem;
+}
+
+.article-meta {
+    color: var(--grey-medium);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--charcoal);
+    margin-bottom: 1.5rem;
+}
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+.article-content h2 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 400;
+    margin: 2.25rem 0 1.1rem;
+    color: var(--charcoal);
+}
+
+.article-content h3 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 2rem 0 0.85rem;
+    color: var(--teal-dark);
+}
+
+.article-content p {
+    margin-bottom: 1.35rem;
+    line-height: 1.8;
+}
+
+.article-content p:first-of-type {
+    font-weight: 400;
+}
+
+.article-content .published-note {
+    margin-top: 1.75rem;
+}
+
+.article-content ul,
+.article-content ol {
+    margin: 0 0 1.1rem 1.5rem;
+    color: var(--grey-medium);
+
+    font-weight: 300;
+
+    font-size: 17px;
+
+}
+
+.article-content li {
+    margin-bottom: 0.32rem;
+    color: var(--grey-medium);
+
+    font-weight: 300;
+
+    font-size: 17px;
+
+}
+
+.article-content li::marker {
+    color: var(--grey-medium);
+}
+
+
+.article-content a {
+    color: var(--teal);
+    text-decoration: none;
+    border-bottom: 1px solid var(--teal-light);
+    transition: all 0.3s ease;
+}
+
+.article-content a:hover {
+    border-bottom-color: var(--teal);
+    color: var(--teal-dark);
+}
+
+.article-content strong {
+    font-weight: 500;
+    color: var(--charcoal);
+}
+
+.article-content em {
+    font-style: italic;
+}
+
+.article-content blockquote {
+    border-left: 3px solid var(--teal);
+    padding-left: 2rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--grey-medium);
+}
+
+.article-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--grey-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.article-footer a {
+    color: var(--teal);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.article-footer a:hover {
+    color: var(--teal-dark);
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+    .article-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .article-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="page-decoration"></div>
+    <header>
+        <div class="header-content">
+            <a href="/" class="site-name">Tim Scudder, Thoughts on Product</a>
+            <a href="/" class="back-link">Take me home</a>
+        </div>
+    </header>
+    <article>
+        <div class="article-meta">June 2023</div>
+        <h1>Learning from developments in AI</h1>
+        <div class="article-content">
+              
+            <p><strong>Generative AI is, quite obviously, a major development. Aside from the tech itself, in the few months since ChatGPT’s launch, we’ve already seen Microsoft try to make Google ‘dance’, US Congressmen cosy up to OpenAI’s Sam Altman, and heard countless commentators forecast everything from judgement day to a data-driven utopia. From a product perspective, witnessing the rush to find viable use cases has been fascinating. But in this article, I want to talk about something slightly different. Because to me - a product manager with a strong interest in process and organisational development - the methods through which this technology is being developed are something we can learn from and apply in our daily practice.</strong></p>
+
+<p><span>On March 31 2023, OpenAI published the snappily titled, ‘</span><a href="https://openai.com/research/improving-mathematical-reasoning-with-process-supervision" rel>Improving mathematical reasoning with process supervision</a><span>’. This paper details a training method which has delivered a massive leap in GPT4’s ability to accurately solve mathematical problems. Without attempting to relay all the details, the process involved a switch from scoring GPT4 not only on its final answers to problems, but also on the steps it takes when moving towards these answers. So, in layman’s terms, GPT4 is now being asked to show its workings. As the father of two young boys, this is fascinating, because it echoes the manner in which they are taught - their teachers repeatedly ask them to explain how they reached a conclusion. And while I’m not going to argue that GPT4 is developing understanding in the same way that children develop a sense of ‘number’, working through specific processes engenders repeatability. It also makes it easier to understand what is happening under the hood in a world where computations can be rather oblique.</span></p>
+<h2 class="header-anchor-post">But how does this relate to product practice?
+</h2>
+<p>In essence, OpenAI is training GPT4 to follow the right process, because that will deliver better results more of the time. This has strong parallels to approaches such as User Centred Design and agile, as follows:</p>
+<h3 class="header-anchor-post">Focusing on leading metrics improves overall outcomes
+</h3>
+<p>If we consider the correct answer in a complex equation the ‘lagging indicator’ delivered after the work is done, then the prior steps taken as the problem is broken down are the ‘leading indicators’. As product managers, we know that optimising for carefully selected leading indicators is an important precursor to success. The success of ‘process supervision’ perfectly encapsulates the benefit of this approach.</p>
+<h3 class="header-anchor-post">Fast feedback loops allow for quick course correction
+</h3>
+<p>Because OpenAI are effectively optimising GPT4 by focusing on what happens before the answer, they are also giving the model more signals, faster. The ability to receive and respond to feedback - whether quantitative or qualitative - is a key facet of good product practices, while the cadence of a learning cycle directly impacts a team’s ability to iterate towards success.</p>
+<h3 class="header-anchor-post">Reproducible steps support good outcomes
+</h3>
+<p><span>In </span><a href="https://atulgawande.com/book/the-checklist-manifesto/" rel>The Checklist Manifesto</a><span>, Atul Gawande explains how, in industries ranging from medicine to aeronautics, the use of checklists radically increases the likelihood of good outcomes. Just as asking new skiers to work on their turns is safer than sending them speeding down a mountain, requiring GPT4 to move through a series of checkpoints keeps it on the straight-and-narrow and tunes its level of control. For product teams, moving through set patterns supports clarity and purpose. This is why rigorous, standardised approaches to experimentation can yield such incredible results over time. There might be considerable artistry and imagination involved, but no ‘magic’.</span></p>
+<h3 class="header-anchor-post">Disincentivising toxic behaviours
+</h3>
+<p><span>The concept of alignment is incredibly important in AI: as the science fiction of </span><a href="https://en.wikipedia.org/wiki/Robot_series" rel>Issac Asimov</a><span> shows, discrepancies in incentives could theoretically cascade to catastrophic effect (Note: feel free to watch </span><em><a href="https://en.wikipedia.org/wiki/I,_Robot_(film)" rel>I, Robot</a></em><span>, if you want the gist). In my last post, I described how </span><a href="https://www.productbreaks.com/p/misaligned-metrics-and-crap-maps" rel>misaligned metrics</a><span> can create organisational dysfunction. Teams - and AI - are no different. Incentivising transparency and integrity as the collective works towards mutually beneficial common goals creates the conditions for long-term success.</span></p>
+<h2 class="header-anchor-post">But what about being ‘outcomes focussed’?
+</h2>
+<p>Of course, some might see a tension here. In some ways, rewarding good practice and process, while emphasising impact on leading indicators, even when delivering imperfect results seems obtuse. However, it’s important to realise that genAI is, like product development, probabilistic. The likelihood of GPT4 generating the correct answer massively increased through process supervision. Similarly, while testing early and often, speaking to customers and systematically reducing the assumptions you carry will not reduce your chances of releasing a dud to 0, it will increase your hit rate massively. Plus, far less effort will be spent on bad ideas along the way. Focusing on process is, quite simply, the path to repeatable success.</p>
+<p><span>Similarly, an additional parallel between product and AI can be found in the concept of ‘emergent’ capabilities. For AI, this means the development of capabilities that were not (pre-)determined by system designers: the models can do unexpected things. For product managers, harnessing good practice in consistent ways can deliver emergent benefits in one of two forms. Firstly, iterative design and customer feedback is likely to help us uncover new solutions to existing problems and, secondly, we might find new use cases or even new markets to help us pivot to product-market fit or expansion. The manner in which </span><a href="https://mastersofscale.com/brian-chesky/" rel>Airbnb honed its product</a><span> and discovered opportunities to rent out more than spare rooms at conferences is a powerful example of this approach.</span></p>
+<h2 class="header-anchor-post">Methods amidst the madness
+</h2>
+<p>So, while I encourage you to stay on top of new AI-powered products, and the market and regulatory changes these might bring, it’s also important to learn from the manner in which these products are being developed and launched. This is cutting edge science in a world where go-to-market strategies are exposed and accelerated. There is much to learn from watching things unfold.</p>
+<p class="published-note">This article was first published on <a href="https://www.productbreaks.com/" target="_blank" rel="noopener">Product Breaks</a>.</p>
+        </div>
+        <div class="article-footer">
+  <a href="three-breeds-of-discovery.html">← Previous article</a>
+  <a href="plate-spinners-jugglers-and-firefighters.html">Next article →</a>
+</div>
+    </article>
+</body>
+</html>

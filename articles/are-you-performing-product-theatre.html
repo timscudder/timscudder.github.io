@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Are you performing Product Theatre? – Tim Scudder</title>
+    <link rel="icon" href="../favicon.ico" sizes="any">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="../favicon-16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" sizes="180x180">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --off-white: #FAF9F6;
+    --teal: #0A8080;
+    --teal-dark: #065858;
+    --teal-light: #E5F4F4;
+    --charcoal: #2B2B2B;
+    --grey-medium: #6B6B6B;
+    --grey-light: #DEDEDE;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--off-white);
+    color: var(--charcoal);
+    font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+    font-size: 17px;
+}
+
+.page-decoration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100vh;
+    background: linear-gradient(180deg, var(--teal) 0%, var(--teal-dark) 100%);
+    z-index: 1000;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: white;
+    border-bottom: 1px solid var(--grey-light);
+    padding: 1.25rem 0;
+}
+
+.header-content {
+    padding: 0 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-name {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.5rem;
+    color: var(--charcoal);
+    text-decoration: none;
+    font-weight: 400;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.site-name::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--teal);
+    border: 2px solid var(--off-white);
+    display: inline-block;
+}
+
+.site-name:hover {
+    color: var(--teal);
+}
+
+.back-link {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.back-link::before {
+    content: '←';
+}
+
+.back-link:hover {
+    color: var(--teal-dark);
+}
+
+article {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 2rem 4rem;
+}
+
+.article-meta {
+    color: var(--grey-medium);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--charcoal);
+    margin-bottom: 1.5rem;
+}
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+.article-content h2 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 400;
+    margin: 2.25rem 0 1.1rem;
+    color: var(--charcoal);
+}
+
+.article-content h3 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 2rem 0 0.85rem;
+    color: var(--teal-dark);
+}
+
+.article-content p {
+    margin-bottom: 1.35rem;
+    line-height: 1.8;
+}
+
+.article-content p:first-of-type {
+    font-weight: 400;
+}
+
+.article-content .published-note {
+    margin-top: 1.75rem;
+}
+
+.article-content ul,
+.article-content ol {
+    margin: 0 0 1.1rem 1.5rem;
+    color: var(--grey-medium);
+
+    font-weight: 300;
+
+    font-size: 17px;
+
+}
+
+.article-content li {
+    margin-bottom: 0.32rem;
+    color: var(--grey-medium);
+
+    font-weight: 300;
+
+    font-size: 17px;
+
+}
+
+.article-content li::marker {
+    color: var(--grey-medium);
+}
+
+
+.article-content a {
+    color: var(--teal);
+    text-decoration: none;
+    border-bottom: 1px solid var(--teal-light);
+    transition: all 0.3s ease;
+}
+
+.article-content a:hover {
+    border-bottom-color: var(--teal);
+    color: var(--teal-dark);
+}
+
+.article-content strong {
+    font-weight: 500;
+    color: var(--charcoal);
+}
+
+.article-content em {
+    font-style: italic;
+}
+
+.article-content blockquote {
+    border-left: 3px solid var(--teal);
+    padding-left: 2rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--grey-medium);
+}
+
+.article-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--grey-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.article-footer a {
+    color: var(--teal);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.article-footer a:hover {
+    color: var(--teal-dark);
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+    .article-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .article-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="page-decoration"></div>
+    <header>
+        <div class="header-content">
+            <a href="/" class="site-name">Tim Scudder, Thoughts on Product</a>
+            <a href="/" class="back-link">Take me home</a>
+        </div>
+    </header>
+    <article>
+        <div class="article-meta">March 2023</div>
+        <h1>Are you performing Product Theatre?</h1>
+        <div class="article-content">
+              
+            <p><strong>In a recent meeting, an engineering colleague of mine described a piece of work his team was delivering as, ‘Security Theatre.’ While he didn’t mean they’d built something shoddy, a conscious effort had been made to over-communicate security credentials through the design. Security jazz hands. This got me thinking about equivalents in the realm of product management. But I soon realised that, where a bit of razzle-dazzle around trust signals might help the customer and business, Product Theatre is closer to tragedy.</strong></p>
+
+<h2 class="header-anchor-post">Rise above the tragedy of Product Theatre
+</h2>
+<p>Product Theatre twists great ideas into empty gestures. But you can always improvise. Here are a few sample scenes with notes on how to improve things:</p>
+<h3 class="header-anchor-post">
+<strong>1. Plans dressed as roadmaps</strong>
+</h3>
+<p>Plans are out, Roadmaps are in. But the weird thing is, ‘Roadmaps’ now often look like plans. They feature hyper-specific milestones, map complicated dependencies, and absolutely must be created in Powerpoint. Their maintenance often involves shifting items, ‘To the right’ and they are all too-often built specifically for project committees. Yet a true roadmap should not simply describe a series of tasks. Instead, it should evolve over time in line with your developing understanding of the market and your users. Yet many people are unaccustomed to this approach. They’ve built careers by asking, ‘When?’ and then finding ways to, ‘Push harder’. By requesting a ‘Roadmap’ they’ve updated their jargon, but not their approach.</p>
+<p>If you’re trapped in this performance, you’re a victim of Product Theatre.</p>
+<h4 class="header-anchor-post">How to act: show them what they’re missing
+</h4>
+<p>Call a spade a spade. A plan is a ‘Plan’. But call it a ‘Current Plan’. Quietly remind people that complex waterfall projects rarely go as, well, planned. Supplement your presentations with an Now, Next, Later, Ideas roadmap (or similar) and let everyone see how you would prioritise work over time to generate strong outcomes through learning. If nothing else, when scope needs to be cut - and it probably will, you’ll have socialised your approach to prioritisation well ahead of time.</p>
+<h3 class="header-anchor-post">
+<strong>2. Analytics without outcomes</strong>
+</h3>
+<p>Product managers want to know what’s happening and they want to know why. They understand that strong instrumentation creates opportunities to learn, understand and impact outcomes. Combined with strong DevOps and/or experimentation tools, insight-driven improvements can accrue rapidly in a methodical, creative environment. Yet too many product managers are condemned to craft elegant dashboards designed purely to update half-interested stakeholders on what’s happening, with little to no emphasis on action. Too often, stakeholders have no desire to dig deeper or respond to learning because what budget is available after launch must be dedicated to features that missed the cut first time around.</p>
+<p>Using analytics software to provide updates without the mandate to drive outcomes is a disappointing charade. And, often, if you stop sending the reports, no one will notice. It’s Product Theatre, and no one’s even watching.</p>
+<h4 class="header-anchor-post">How to act: build for yourself - and share strategically
+</h4>
+<p>Keep going with the dashboards. In fact, double-down. If stakeholders have lost interest, build reports for you and your team and discuss what you’re seeing regularly. Use your data and understanding whenever you present (do not email) to argue for greater agency and to establish yourself as a rigorous thinker. Many corporate cultures are stupid, but a lot of people within them are smart. If you can make strong arguments and have evidence to support your recommendations, you will gain traction over time. Just be prepared for a crawl, not a run.</p>
+<h3 class="header-anchor-post">
+<strong>3. Top-down OKRs where failure is frowned upon</strong>
+</h3>
+<p>A good chunk of Christina Wodtke’s amazing book, ‘Radical Focus’ advocates for outcome-based objectives in a start-up setting. But towards the end, it broadens out to warn against virulent OKR anti-patterns she sees spreading across larger organisations. These include:</p>
+<ul>
+<li><p>Tying OKRs to performance reviews</p></li>
+<li><p>The top-down imposition of specific objectives, and</p></li>
+<li><p>Confusing task-completion with actual results.</p></li>
+</ul>
+<p>Connecting OKRs to performance reviews or expecting teams to hit 100% every quarter incentivises everyone to set the bar low. It’s a sure fire way to tread water. While handing down tightly-defined objectives, or forcing the mindless laddering up of ‘results’ often crushes creativity. What’s more, if people are asked to deliver a fixed output rather than meaningful, measurable value, they will focus on the wrong things and the whole process will be redundant.</p>
+<p>Too many companies are repackaging old-school planning as OKRs. It’s lipstick on a pig. A quarterly pantomime.</p>
+<h4 class="header-anchor-post">How to act: educate through OKRs
+</h4>
+<p>Very few people will set true stretch targets if their performance reviews are coupled to OKR delivery. But you should always look to set outcome-based Key Results that drive towards your product’s vision.</p>
+<p>Woody Guthrie’s guitar was emblazoned with the legend, ‘This machine kills fascists’ and, while it might seem optimistic to draw parallels between a socialist folk musician and your role in quarterly planning cycles, everytime you strive to deliver value for your users as well as your employer, you nudge people towards something a little bit better. So hard as it may be, use the forum presented by OKRs to argue for a tight set of outcome-based objectives for your team.</p>
+<h3 class="header-anchor-post">
+<strong>4. ‘Agile’ squads that aren’t actually agile</strong>
+</h3>
+<p>Real agile squads work iteratively to solve problems. They are off-road vehicles driven with purpose. But, in many organisations, squads are just little trains, trundling from A to B against timetables they don’t control.</p>
+<p>Every time a faux-agile squad misses an over-optimistic top-down deadline, the reputations of Agile and Lean suffer. And when engineers are called ‘resource’ and swapped in and out like Lego, product managers and designers lose key collaborators. As scrum ceremonies continue and velocity charts are scrutinised, quality and pace drops, trust in the notional team diminishes and the downward spiral continues.</p>
+<h4 class="header-anchor-post">How to act: cut the performance, but keep the collaboration
+</h4>
+<p>Of all the elements of Product Theatre, this is the one I struggle with the most, because it undervalues not only strong product-thinking but also resourceful and creative engineers. Of the wastes identified by Taiichi Ohno, the ‘Father of Lean’, the under-utilisation of talent is by far the most distressing and there’s no easy way to move towards something better without senior level support.</p>
+<p>Despite this, I do have four recommendations:</p>
+<ul>
+<li><p><strong>First</strong><span>, keep asking your team for input and take the time to discuss why you’re building what you’re building. Collaboration will always yield results, no matter how hostile the environment - and it’s far more fun than the alternatives</span></p></li>
+<li><p><strong>Second</strong><span>, avoid sharing agile/ scrum reports wherever possible. As with product dashboards, stakeholders are unlikely to miss them</span></p></li>
+<li><p><strong>Third</strong><span>, look to carve out capacity for continuous improvement, no matter how little. Make sure you over-communicate any success derived from this work. You have to start somewhere</span></p></li>
+<li><p><strong>Fourth</strong><span>, if you have the opportunity to build a team, make it small and high quality. You may need to argue for more expensive ‘heads’, so you need to keep things tight. In this instance, you absolutely have to understand the finances and deliver on your promises.</span></p></li>
+</ul>
+<h2 class="header-anchor-post">Fear not!
+</h2>
+<p>Product Theatre is hollow and depressing. But, if you’re currently playing-out some of these scenes, don’t lose hope. For while many of us are seeing product terms commandeered and abused in service of the status quo, I believe that the value of good product practice is inarguable and is increasingly recognised. The wave is building, even if it’s still a long way from shore. Even in ‘bad’ companies, minor victories will deliver better outcomes - and anyway, you don’t need to stay put once you’ve built the requisite skills to move on.</p>
+<p>So, the story doesn’t have to end in despair. Play your part, be pragmatic and engaged - but don’t forget that you can change the narrative over time.</p>
+<p class="published-note">This article was first published on <a href="https://www.productbreaks.com/" target="_blank" rel="noopener">Product Breaks</a>.</p>
+        </div>
+        <div class="article-footer">
+  <a href="get-into-the-groove.html">← Previous article</a>
+  <a href="the-rave-model-prioritising-for-return-strategy.html">Next article →</a>
+</div>
+    </article>
+</body>
+</html>

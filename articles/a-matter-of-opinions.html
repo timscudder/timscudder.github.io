@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A matter of opinions – Tim Scudder</title>
+    <link rel="icon" href="../favicon.ico" sizes="any">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="../favicon-16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" sizes="180x180">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --off-white: #FAF9F6;
+    --teal: #0A8080;
+    --teal-dark: #065858;
+    --teal-light: #E5F4F4;
+    --charcoal: #2B2B2B;
+    --grey-medium: #6B6B6B;
+    --grey-light: #DEDEDE;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--off-white);
+    color: var(--charcoal);
+    font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+    font-size: 17px;
+}
+
+.page-decoration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100vh;
+    background: linear-gradient(180deg, var(--teal) 0%, var(--teal-dark) 100%);
+    z-index: 1000;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: white;
+    border-bottom: 1px solid var(--grey-light);
+    padding: 1.25rem 0;
+}
+
+.header-content {
+    padding: 0 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-name {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.5rem;
+    color: var(--charcoal);
+    text-decoration: none;
+    font-weight: 400;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.site-name::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--teal);
+    border: 2px solid var(--off-white);
+    display: inline-block;
+}
+
+.site-name:hover {
+    color: var(--teal);
+}
+
+.back-link {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.back-link::before {
+    content: '←';
+}
+
+.back-link:hover {
+    color: var(--teal-dark);
+}
+
+article {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 2rem 4rem;
+}
+
+.article-meta {
+    color: var(--grey-medium);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--charcoal);
+    margin-bottom: 1.5rem;
+}
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+.article-content h2 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 400;
+    margin: 2.25rem 0 1.1rem;
+    color: var(--charcoal);
+}
+
+.article-content h3 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 2rem 0 0.85rem;
+    color: var(--teal-dark);
+}
+
+.article-content p {
+    margin-bottom: 1.35rem;
+    line-height: 1.8;
+}
+
+.article-content p:first-of-type {
+    font-weight: 400;
+}
+
+.article-content .published-note {
+    margin-top: 1.75rem;
+}
+
+.article-content ul,
+.article-content ol {
+    margin: 0 0 1.1rem 1.5rem;
+    color: var(--grey-medium);
+
+    font-weight: 300;
+
+    font-size: 17px;
+
+}
+
+.article-content li {
+    margin-bottom: 0.32rem;
+    color: var(--grey-medium);
+
+    font-weight: 300;
+
+    font-size: 17px;
+
+}
+
+.article-content li::marker {
+    color: var(--grey-medium);
+}
+
+
+.article-content a {
+    color: var(--teal);
+    text-decoration: none;
+    border-bottom: 1px solid var(--teal-light);
+    transition: all 0.3s ease;
+}
+
+.article-content a:hover {
+    border-bottom-color: var(--teal);
+    color: var(--teal-dark);
+}
+
+.article-content strong {
+    font-weight: 500;
+    color: var(--charcoal);
+}
+
+.article-content em {
+    font-style: italic;
+}
+
+.article-content blockquote {
+    border-left: 3px solid var(--teal);
+    padding-left: 2rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--grey-medium);
+}
+
+.article-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--grey-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.article-footer a {
+    color: var(--teal);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.article-footer a:hover {
+    color: var(--teal-dark);
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+    .article-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .article-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="page-decoration"></div>
+    <header>
+        <div class="header-content">
+            <a href="/" class="site-name">Tim Scudder, Thoughts on Product</a>
+            <a href="/" class="back-link">Take me home</a>
+        </div>
+    </header>
+    <article>
+        <div class="article-meta">March 2024</div>
+        <h1>A matter of opinions</h1>
+        <div class="article-content">
+              
+            <p><strong>The best products are built through relentless focus and clean decision making. They are opinionated: it’s clear who they’re for, what they’re for and why they exist. There is a natural, almost evitable logic to their features and </strong><em><strong>feel</strong></em><strong>, a coherence of intent and execution. Where most products are mealy-mouthed and me-too, iconic products become the benchmark against which all others are measured.</strong></p>
+<p>In this post, I’ll look at a few eminent products of the last few years and describe how they achieved their status. I’ll find underlying approaches that unite them and highlight some differences too.</p>
+
+<h2 class="header-anchor-post">Slack: organised fun
+</h2>
+<p>Slack grew from a clear and now obvious insight: email is not an optimal method of communication within teams. The product blends asynchronicity with conversational threads: it’s chat for teams - but evolves beyond this by expressing and enabling what good teams do. The nature of channels and private messages is arguably implicitly informal, yet Slack makes this explicit through emojis, gifs and other semi-verbal cues. Where email is literally electronic mail, with all the ‘Dears’ and ‘Many thanks’ this implies, then Slack is scribbled notes, wry smiles and in-jokes.</p>
+<p>Despite its purchase by Salesfofce and being widely used by many enterprise organisations, Slack has maintained its attitude. For example, Huddles - it’s video chat feature - is pretty low tech compared to Zoom and, more importantly, video in Microsoft Teams. But that’s fine: it enables a quick chat with colleagues to help teamwork flow.</p>
+<p>While Slack is not the biggest player in its space (Microsoft’s ability to bundle products into Office 365 gives Teams an unrivalled distribution channel), it is the key innovator in its market - and the benchmark against which competition is judged.</p>
+<h2 class="header-anchor-post">Amazon.com: clunky brilliance
+</h2>
+<p>Jeff Bezo’s notion of customer obsession is now widely parroted but rarely matched. Today’s Amazon.com is hardly the world leader in elegance, but early iterations were outright ugly. Prioritising process and practicality over aesthetics was a necessary strategy that drove thousands of tiny decisions. Bezo’s relentless focus on removing friction gave customers what they wanted and created a juggernaut. </p>
+<p>Naturally, Amazon’s approach to design has evolved over the last 30 years and iterates regularly. However, functionality remains the focus, with experiments generally designed to drive quantitative performance. Its search functionality is top draw because it became clear that this was the dominant form of user navigation on a site of mind-bogglingly large proportions. Its recommendations engine is now so powerful that it underpins a multi-billion dollar advertising revenue stream with high margins. It’s a brilliant money making engine that focuses on making life simple for the individual customer. Its brand halo is built from reliability and trust, rather than beauty or cool.</p>
+<p>Yet despite their differences, the relentless logic of Amazon echoes Slack’s emphasis on solving customer problems in a coherent and opinionated way.</p>
+<h2 class="header-anchor-post">Google: under the hood
+</h2>
+<p>Again, another modern giant powered by a clear, opinionated approach to product. Google’s superior search engine was unique in the late 90s and would have been a powerful force even if it had only served users via portals such as Yahoo! However, the basic brilliance of its own web interface was just as distinct as its PageRank algorithm. Its white screen with a single input field is iconic. A jumping off point and not the destination, it felt humble, authentic and absolutely essential. Unlike the cluttered screens of its rivals, Google helped users go where they needed to go - and famously found ways to monetise that value exchange later.</p>
+<p>Google bucked the trend by doing something simple. Like emojis in Slack and rapid delivery from Amazon, the simple interface felt like a natural, inevitable expression of its promise to users. Its opinionated product design led to a coherence and usability that is only now coming under threat.</p>
+<h2 class="header-anchor-post">The Apple outlier
+</h2>
+<p>The unifying theme so far has been a focus on connecting distinct customer problems to opportunities afforded by advances in technology. But Apple thinks different. It is both open and closed, opinionated and gnomic. </p>
+<blockquote>
+<p>‘We're going to use the best pointing device in the world. We're going to use a pointing device that we're all born with - born with ten of them.’</p>
+<p>Steve Jobs</p>
+</blockquote>
+<p>In some ways, the iPhone was the quintessential expression of opinionated design. Steve Jobs’ insistence on developing a new multi-touch interface and eschewing a physical keyboard drove countless hardware innovations and UX choices, while build quality and design finesse continued to be key features of the Apple experience. But in 1997 the iPhone launched without the App Store: Jobs’ was under-exploiting its broad utility. When the store was added a year later, the dynamic changed. The iPhone and the iOS platform became the canvases upon which developers could create and the marketplace in which they could meet their audience.</p>
+<p>Since then, Apple has focused on developing premium hardware and software in widely adoptable form factors, rather than meeting specific user needs - at least in early versions of those products. For example, the Apple Watch was a logical line extension, and the execution was strong from the off. But it took some time for health and fitness to emerge as dominant themes in the watch’s proposition. Here, Apple layered in functionality around this central use case, once the desire for such features emerged.</p>
+<p><span>And this seems to be the play for Apple’s Vision Pro headset too. Compared to its rivals, such as Meta’s Quest 3, it is highly specced - perhaps to a fault. It has features that lean towards media consumption and productivity, but seems to miss a few obvious capabilities for the latter. </span><a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=&amp;cad=rja&amp;uact=8&amp;ved=2ahUKEwjc_truiu-EAxXxxQIHHfpCAEsQwqsBegQIDRAG&amp;url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DxChmBfKLqDc&amp;usg=AOvVaw3aWTpFmkZjNYAoPkFgrlr_&amp;opi=89978449" rel>Mark Zuckerberg’s three-minute takedown</a><span> of the Vision Pro vs Quest 3 (Sample: ‘I don’t just think the Quest is the better value. I think the Quest is the better product, period.’) centres on the use cases upon which his product focuses. But it seems to me that Apple is intensely focused on not focusing at this stage. For a company so revered for control and discipline, it is actually open to discovering user needs in the wild.</span></p>
+<p>It remains to be seen whether the current Vision Pro is the first iteration of another mass market phenomenon. But it is clear that Apple’s approach to product development and design is distinct and opinionated, just in a different way to the other examples covered here.</p>
+<h2 class="header-anchor-post">So what?
+</h2>
+<p>Not all products can be smashes: many are not intended to be. But no matter what you aim to do with your product, it should be focused, coherent and opinionated. Slack is a relatively niche product vs Google search. Amazon.com focuses on utility where Apple focuses on feel and craft. But in every case, these products express choices which unify strategy and execution. From this, we can glean the following:</p>
+<ol>
+<li><p>Products need to have a reason for being - or, on rare occasions, be desirable enough for users to adore until scalable and sustainable use cases emerge</p></li>
+<li><p>A product’s purpose should be expressed through every element its design: from feature selection, to UI, to marketing and positioning</p></li>
+<li><p>Product execution must be intrinsically linked to business strategy.</p></li>
+</ol>
+<p>Most of us will never work at Apple or Amazon. But when you’re conducting user research, about to start designing or working with a product marketing team, there’s no reason why your approach can’t be distinctive. Your business and users deserve for you to create something opinionated.</p>
+<p class="published-note">This article was first published on <a href="https://www.productbreaks.com/" target="_blank" rel="noopener">Product Breaks</a>.</p>
+        </div>
+        <div class="article-footer">
+  <a href="lean-thinking-for-evals.html">← Previous article</a>
+  <a href="go-faster-applying-product-practice.html">Next article →</a>
+</div>
+    </article>
+</body>
+</html>

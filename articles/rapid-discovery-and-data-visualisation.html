@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapid product discovery and data visualisation techniques – Tim Scudder</title>
+    <link rel="icon" href="../favicon.ico" sizes="any">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="../favicon-16.png" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" sizes="180x180">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+:root {
+    --off-white: #FAF9F6;
+    --teal: #0A8080;
+    --teal-dark: #065858;
+    --teal-light: #E5F4F4;
+    --charcoal: #2B2B2B;
+    --grey-medium: #6B6B6B;
+    --grey-light: #DEDEDE;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--off-white);
+    color: var(--charcoal);
+    font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+    font-size: 17px;
+}
+
+.page-decoration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100vh;
+    background: linear-gradient(180deg, var(--teal) 0%, var(--teal-dark) 100%);
+    z-index: 1000;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: white;
+    border-bottom: 1px solid var(--grey-light);
+    padding: 1.25rem 0;
+}
+
+.header-content {
+    padding: 0 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-name {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.5rem;
+    color: var(--charcoal);
+    text-decoration: none;
+    font-weight: 400;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.site-name::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--teal);
+    border: 2px solid var(--off-white);
+    display: inline-block;
+}
+
+.site-name:hover {
+    color: var(--teal);
+}
+
+.back-link {
+    color: var(--teal);
+    text-decoration: none;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.back-link::before {
+    content: '←';
+}
+
+.back-link:hover {
+    color: var(--teal-dark);
+}
+
+article {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 2rem 4rem;
+}
+
+.article-meta {
+    color: var(--grey-medium);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--charcoal);
+    margin-bottom: 1.5rem;
+}
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+.article-content h2 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 400;
+    margin: 2.25rem 0 1.1rem;
+    color: var(--charcoal);
+}
+
+.article-content h3 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 2rem 0 0.85rem;
+    color: var(--teal-dark);
+}
+
+.article-content p {
+    margin-bottom: 1.35rem;
+    line-height: 1.8;
+}
+
+.article-content p:first-of-type {
+    font-weight: 400;
+}
+
+.article-content .published-note {
+    margin-top: 1.75rem;
+}
+
+.article-content ul,
+.article-content ol {
+    margin: 0 0 1.1rem 1.5rem;
+    color: var(--grey-medium);
+
+    font-weight: 300;
+
+    font-size: 17px;
+
+}
+
+.article-content li {
+    margin-bottom: 0.32rem;
+    color: var(--grey-medium);
+
+    font-weight: 300;
+
+    font-size: 17px;
+
+}
+
+.article-content li::marker {
+    color: var(--grey-medium);
+}
+
+
+.article-content a {
+    color: var(--teal);
+    text-decoration: none;
+    border-bottom: 1px solid var(--teal-light);
+    transition: all 0.3s ease;
+}
+
+.article-content a:hover {
+    border-bottom-color: var(--teal);
+    color: var(--teal-dark);
+}
+
+.article-content strong {
+    font-weight: 500;
+    color: var(--charcoal);
+}
+
+.article-content em {
+    font-style: italic;
+}
+
+.article-content blockquote {
+    border-left: 3px solid var(--teal);
+    padding-left: 2rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--grey-medium);
+}
+
+.article-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--grey-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.article-footer a {
+    color: var(--teal);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.article-footer a:hover {
+    color: var(--teal-dark);
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+h1::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--teal);
+    margin-top: 1rem;
+}
+
+
+    .article-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .article-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="page-decoration"></div>
+    <header>
+        <div class="header-content">
+            <a href="/" class="site-name">Tim Scudder, Thoughts on Product</a>
+            <a href="/" class="back-link">Take me home</a>
+        </div>
+    </header>
+    <article>
+        <div class="article-meta">March 2023</div>
+        <h1>Rapid product discovery and data visualisation techniques</h1>
+        <div class="article-content">
+<p><strong>It’s the start of the pandemic and I’m on Zoom with a new stakeholder. My portfolio has just expanded to cover a B2B product and I’m trying to get my head around its purpose, user-base and the market. It’s a positive call, but within ten minutes I know that:&nbsp;</strong></p><ol><li><p><strong>I’m in a feature factory</strong></p></li><li><p><strong>The product sucks: users ‘hate it’ and are ‘threatening to stop working with us’. This hasn’t fully resonated internally, but senior leaders hate the design and want to introduce a dark mode asap</strong></p></li><li><p><strong>There’s an understanding that retention and sales are valuable, but outcomes and success metrics haven’t been properly defined. No instrumentation is in place</strong></p></li><li><p><strong>Individual clients are having bespoke feature requests fulfilled. My stakeholder’s current priority is integration with a mid-sized client’s back office. The feature can’t be scaled to help others.</strong></p></li></ol><p><strong>There’s a lot to do. I need to rapidly orientate myself in this area, determine true priorities and bring people with me.</strong></p><h2>Orientation</h2><p>Time and resources are scarce in this environment. There isn’t a willingness to wait on substantial Discovery work but I need to start moving towards a customer-centric approach immediately. Any delay will see customer complaints increase, eroding whatever tolerance exists for ‘unconventional’ approaches. It’s crucial that I quickly understand what’s important, create a framework for measuring performance and build my story.</p><p>I decide to focus on four things:</p><ol><li><p><strong>Familiarity with the product</strong></p><p>Even if it’s unclear what value its features provide, I need to understand what’s there, how it works - and the technology stack on which it’s built. This will give me a baseline understanding for my next steps.</p></li><li><p><strong>Business line mechanics</strong></p><p>I’m relatively new to this area, so I need to understand some of the fundamentals. I might not immediately be an expert, but some knowledge will allow me to draft performance metrics and understand stakeholder perspectives.</p></li><li><p><strong>Meet some customers</strong></p><p>I embark on a small series of customer interviews, helping me appreciate the gaps between our product’s features and experience, and it users’ wants and needs.</p></li><li><p><strong>Evaluate the competition</strong></p><p>Unexpectedly, an interviewee gives me sight of the equivalent products from two major competitors. This furthers my understanding of what success looks like and establishes where the current bar is set.</p></li></ol><p>After a few days, I have a solid understanding of the challenges we face. These cluster around a handful of themes derived from the customer interviews, like Stability, Support, Navigation, Logins and Ease of Use. But I haven’t yet established a strong way to prioritise competing opportunities or tell this story to my stakeholders. I need a way to refine my thinking, broaden our collective understanding of what’s wrong with our product - and rally energy around what we need to focus on now.</p><h2>Prioritisation</h2><p>I need to find an approach that does three things:</p><ol><li><p>Helps me prioritise my high-level themes</p></li><li><p>Creates a data-set and narrative to overcome existing biases</p></li><li><p>Gets me there fast.</p></li></ol><p>I don’t have a great memory for detail, but love concepts and read material on Product, Lean and Analytics avidly. Thinking through my problem, I remember an approach outlined in <em>The Lean Product Playbook</em>, Dan Olsen’s brilliant guide to moving things forward quickly. Throughout the book, Olsen recommends a series of lightweight approaches to move the needle at pace - without compromising the essentials of good practice. This includes a method for rapidly appraising and prioritising features by Importance and Satisfaction. Respondents are asked to score features along these two parameters from 1-7. By looking for gaps between the two data points, opportunities and priorities are revealed.</p><p>Following Olsen’s approach, I create a simple customer survey centred on the themes uncovered through the earlier interviews - plus some additional areas perceived as important internally. It takes about 30 minutes to construct. I get hold of a distribution list and… fire!</p><p>One week later: and the results are in. For all the internal talk of scrappy design and the desire to acquiesce to noisy clients, we have two outstanding problem areas to tackle first: Stability and Login. People just want to get into the damn thing without having identity issues - and they don’t want their work to be lost mid-session when they’re in there.</p><h2>Telling the story</h2><h3>Finding my visual hook</h3><p>I now have a clear set of priorities to go after. But the job is only half done: internal communications are vital and I need my stakeholders to believe in the data. These ambitious leaders have come to believe they always know what’s right for their customers. They are not accustomed to making data-driven decisions, but they are smart and pragmatic.&nbsp;</p><p>I need a novel but straight-forward way to sell the data. A bar-chart is too bland, while formats like pizza-charts are too intricate. So I go with something in-between: a Radar chart. More often used in competency analysis or console games like FIFA, it feels just right for this data and audience. Within ten minutes, I’ve put it together, looking something like this:</p><h3>The meeting</h3><p>Just a couple of weeks after taking the product on, I’m back on Zoom - this time with a wider group. I present my initial diagnosis of the product’s malaise, give a broad sense of where we stand compared to competitors, make recommendations around what we should look to measure - and give a clear, data-supported view on where we should focus our immediate attention. The structure of the Importance / Satisfaction survey helps raise the level of debate and the radar chart helps everyone grasp where our biggest problems lie. The requests for UI tinkering go out the window - as do client X’s feature request. All eyes turn to stabilising the product and making login in easier and more reliable.</p><p>With priorities now set, all we need to do now is turn the product around.</p><h2>Key takeaways</h2><p>Pairing Dan Olsen’s survey structure with the radar chart worked well for me here. But this project underlined some far broader principles that I’ve remembered ever since:</p><ul><li><p>Quick discovery is always better than no discovery</p></li><li><p>Talking to customers is often less time consuming - and more fun - than debating assumptions in meetings</p></li><li><p>Data will trump opinion in most environments -&nbsp; it will raise the level of debate too</p></li><li><p>Data visualisation can be used as a narrative tool. Choose a compelling (but not gimmicky) format that’s right for your audience and story. This doesn’t need to be technically complex. Playing around with tools like Sheets and Excel can help you stay current</p></li><li><p>Product Managers must move beyond stakeholder assumptions. We didn’t suddenly leap from feature factory to empowered team here: far from it, in fact. But we must assert our agency and take steps towards domain expertise, no matter how challenging the environment. This is how we add value to our users and businesses.</p></li></ul>
+        
+                <p class="published-note">This article was first published on <a href="https://www.productbreaks.com/" target="_blank" rel="noopener">Product Breaks</a>.</p>
+        </div>
+        <div class="article-footer">
+  <a href="misaligned-metrics-and-crap-maps.html">← Previous article</a>
+  <a href="get-into-the-groove.html">Next article →</a>
+</div>
+    </article>
+</body>
+</html>
