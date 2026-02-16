@@ -749,47 +749,49 @@ textarea {
 
 /* ── Article contact prompt ── */
 
-.article-contact-prompt {
-    margin-top: 3rem;
-    padding: 2.5rem;
-    background: white;
-    border-left: 3px solid var(--teal);
-    text-align: left;
+.page-article .article-contact-prompt {
+    margin-top: 3.5rem;
+    padding: 2.5rem 3rem;
+    background: var(--teal-light);
+    border-top: 3px solid var(--teal);
+    text-align: center;
 }
 
-.article-contact-prompt .contact-prompt-heading {
+.page-article .article-contact-prompt .contact-prompt-heading {
     font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 400;
     color: var(--charcoal);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
 }
 
-.article-contact-prompt .contact-prompt-text {
+.page-article .article-contact-prompt .contact-prompt-text {
     color: var(--grey-medium);
     font-size: 1.05rem;
     line-height: 1.6;
     margin-bottom: 1.5rem;
 }
 
-.article-contact-prompt .contact-prompt-button {
+.page-article .article-contact-prompt a.contact-prompt-button {
     display: inline-block;
     background: var(--teal);
-    color: white;
-    text-decoration: none;
-    padding: 0.75rem 1.5rem;
+    color: white !important;
+    text-decoration: none !important;
+    padding: 0.85rem 2rem;
     border-radius: 2px;
+    border: none !important;
+    border-bottom: none !important;
     font-weight: 500;
     font-size: 1rem;
     font-family: 'IBM Plex Sans', -apple-system, sans-serif;
     transition: all 0.3s ease;
-    border: none;
 }
 
-.article-contact-prompt .contact-prompt-button:hover {
+.page-article .article-contact-prompt a.contact-prompt-button:hover {
     background: var(--teal-dark);
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(10, 128, 128, 0.2);
+    color: white !important;
 }
 
 /* ── Article footer (prev/next navigation) ── */
