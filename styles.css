@@ -559,7 +559,6 @@ textarea {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 }
 
@@ -588,23 +587,6 @@ textarea {
     color: var(--teal);
 }
 
-.page-article .back-link {
-    color: var(--teal);
-    text-decoration: none;
-    font-size: 1rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 500;
-}
-
-.page-article .back-link::before {
-    content: '←';
-}
-
-.page-article .back-link:hover {
-    color: var(--teal-dark);
-}
 
 /* ── Article layout ── */
 
@@ -824,6 +806,14 @@ textarea {
     }
 
     /* ── Article responsive ── */
+
+    .page-article .header-content {
+        padding: 0 1rem;
+    }
+
+    .site-name {
+        font-size: 1.1rem;
+    }
 
     .page-article h1 {
         font-size: 2rem;
