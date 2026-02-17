@@ -791,6 +791,11 @@ textarea {
     align-items: center;
 }
 
+/* Most recent article: only a Next link — push it to the right */
+.article-footer--next-only {
+    justify-content: flex-end;
+}
+
 .article-footer a {
     color: var(--teal);
     text-decoration: none;
