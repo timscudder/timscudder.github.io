@@ -298,6 +298,7 @@ h2.section-title::after {
 
 .article-tag {
     display: inline-block;
+    align-self: flex-start;
     font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.04em;
