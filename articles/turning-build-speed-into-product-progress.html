@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turning build speed into product progress – Tim Scudder</title>
+    <link rel="icon" href="../favicon.ico?v=2" sizes="any">
+    <link rel="icon" href="../favicon.svg?v=2" type="image/svg+xml">
+    <link rel="icon" href="../favicon-32.png?v=2" type="image/png" sizes="32x32">
+    <link rel="icon" href="../favicon-16.png?v=2" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2" sizes="180x180">
+
+    <!-- SEO & Social Sharing -->
+    <meta name="description" content="Faster building is not the same as faster progress, and the gap between the two is where a lot of product teams are about to get stuck.">
+    <meta name="author" content="Tim Scudder">
+    <link rel="canonical" href="https://timscudder.github.io/articles/turning-build-speed-into-product-progress.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Turning build speed into product progress – Tim Scudder">
+    <meta property="og:description" content="Faster building is not the same as faster progress, and the gap between the two is where a lot of product teams are about to get stuck.">
+    <meta property="og:url" content="https://timscudder.github.io/articles/turning-build-speed-into-product-progress.html">
+    <meta property="og:image" content="https://timscudder.github.io/og-image.png">
+    <meta property="og:locale" content="en_GB">
+
+    <!-- Twitter/X Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Turning build speed into product progress – Tim Scudder">
+    <meta name="twitter:description" content="Faster building is not the same as faster progress, and the gap between the two is where a lot of product teams are about to get stuck.">
+    <meta name="twitter:image" content="https://timscudder.github.io/og-image.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="page-article">
+    <div class="page-decoration"></div>
+    <header class="site-header">
+        <div class="site-header-bar">
+            <a href="/" class="site-name">Tim Scudder, Thoughts on Product</a>
+            <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation">
+                <div class="nav-toggle-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+            <ul class="site-nav" id="site-nav">
+                <li><a href="/#writing">Writing</a></li>
+                <li><a href="/#contact">Contact</a></li>
+                <li><a href="https://www.linkedin.com/in/timothyscudder/" target="_blank" rel="noopener">LinkedIn</a></li>
+            </ul>
+        </div>
+    </header>
+    <main>
+    <article>
+        <div class="article-meta">February 2026<span class="article-tag">Product</span></div>
+        <h1>Turning build speed into product progress</h1>
+        <div class="article-content">
+
+<p><strong>AI coding tools have changed the economics of building software. Features that once took a sprint can now be deployed in hours. But faster building is not the same as faster progress, and the gap between the two is where a lot of product teams are about to get stuck.</strong></p>
+
+<p>When a team gets access to AI-accelerated development, something predictable happens: output increases. Features appear on staging daily — and engineers previously blocked by capacity constraints start building at the speed of their curiosity. But that creates challenges around focus. Imagine requests from senior stakeholders: now there's no reason for these not to go live almost immediately, irrespective of Product-Market Fit or customer sentiment. Similarly, design simplicity may get lost when everything is possible.</p>
+
+<p>This is what velocity without progress looks like. The accelerator is slammed down hard, but the distance between where the product is and where it needs to be doesn't really change. While AI compresses execution risk in the product development lifecycle, the organisations that benefit most will be those that connect their new speed to a clear sense of direction. Ultimately, outcomes still matter most.</p>
+
+<h2>Changing the risk profile</h2>
+
+<p>Marty Cagan's four risks: value (will customers want this?), usability (can they figure it out?), feasibility (can we build it?), and business viability (does it work for our business?) provide a useful lens for what actually shifts in the new world (1):</p>
+
+<h3>Feasibility compresses</h3>
+
+<p>For many teams, feasibility was already the least dangerous of the four risks but consumed a disproportionate share of attention because it was the most visible constraint. But now, the cost and time to produce working software drops significantly, especially for new features and well-scoped work. Things requiring a sprint or two of engineering effort can be prototyped in hours, and the default answer to, 'Can we build this?' is increasingly, 'Yes — and quickly.'</p>
+
+<h3>Usability shifts</h3>
+
+<p>Faster access to working software means usability issues surface in real usage rather than prototype testing. The risk does not disappear: it migrates from the lab to the wild. Faster, but messier.</p>
+
+<h3>Value and viability are reweighted</h3>
+
+<p>No amount of execution speed changes whether you are solving a real problem for real people, whether customers care enough to engage, or whether the solution fits your business model. These risks sit upstream of execution and they are the ones that determine Product-Market Fit.</p>
+
+<p>But speed does change two things about them:</p>
+
+<ul>
+    <li>First, you have more opportunities to test value assumptions through real usage, provided your experimentation and customer research can capture what you learn.</li>
+    <li>Second, the consequences of <em>not</em> addressing these risks go up. Faster execution produces more evidence of strategic weakness, more quickly. Ship three features in a month that nobody uses and the pattern is hard to ignore.</li>
+</ul>
+
+<p>Value and viability risk are not untouched by AI-accelerated development. They are reweighted: easier to validate if you are disciplined, more painfully exposed if you are not.</p>
+
+<p>The shift in prototyping shows this clearly. Traditional prototyping existed partly because building real software was expensive, so it was simulated to test assumptions cheaply. When building becomes cheap and coding is driven through conversation with agents, this becomes far less necessary. Teams that once spent weeks crafting high-fidelity prototypes in Figma are increasingly vibe coding working software or designing directly inside tools like Cursor, so design outputs are now the product, not just a simulation. Yet the need to understand what you are testing and why remains: understand the problem, understand the customer, understand what success looks like.</p>
+
+<h2>From circular motion...</h2>
+
+<p>Slow delivery cycles have quietly acted as a safety net for weak strategy. When it takes a quarter to ship a feature, there is time to retrofit a narrative, adjust positioning, and claim alignment that was never really there. Nobody notices the rationale was thin because by the time the feature lands, the context has moved on enough to obscure the gap.</p>
+
+<p>Rapid execution removes that buffer. If your strategy is vague, the gap between what you are shipping and what you should be shipping becomes visible almost immediately, and at volume. Leadership starts asking why the hit rate is low, and the answer is almost always the same: the team was building solutions to problems that were not well enough understood, or the definition of success was loose enough to accommodate any outcome.</p>
+
+<p>A list of initiatives is not a strategy. Neither is a growth target. What teams need, more than ever, are guiding principles, clear positions on where to play and where not to, and high-level actions connecting business objectives to product decisions. When delivery was slow, you could get away with a vague destination and course-correct along the way. When delivery is fast, you build confidently in three different directions at once and get nowhere fast.</p>
+
+<h2>... To forward motion</h2>
+
+<p>If the danger is velocity without progress, the opportunity is a tighter feedback loop between strategy and execution. More frequent shipping generates more frequent signals about whether your strategic assumptions hold, but only if you are set up to capture and process them. Get this right, and each cycle of building, releasing, and learning brings you closer to Product-Market Fit rather than further from it.</p>
+
+<h3>Gate proportionally to risk</h3>
+
+<p>Not everything needs the same level of rigour. If the primary risks are feasibility or usability, adopt a build-first mindset and evaluate in production. If value or viability are genuinely at stake, do more discovery and customer research before committing. Be pragmatic and prevent product management becoming a bottleneck while maintaining discipline where the stakes are high.</p>
+
+<p>There's a middle path too, and one that becomes increasingly practical when working software is cheap to produce: beta groups and early-access cohorts let you put real software in front of real customers before a full release. Instead of testing assumptions against prototypes or mock-ups, test them against the actual product with people who can tell you whether it solves their problem.</p>
+
+<p>The key is honesty about which category a piece of work falls into. Left ungoverned, teams will default to treating everything as low-risk, because building is now the path of least resistance.</p>
+
+<h3>Set the direction, don't police the output</h3>
+
+<p>Talking about the 'why' with cross-functional colleagues has never been more important.</p>
+
+<p>For work that does not need gating, PMs can keep things directionally sound by curating the strategic context that surrounds development. Product strategy documents, feature inventories, and experiment framing templates can live alongside the code, accessible to both developers and their AI coding agents. This does not prevent anyone from building, but it creates a shared reference point when someone asks, 'Should we be doing this?'</p>
+
+<p>When the pace of change accelerates, people outside the immediate product team need to understand the reasoning behind what is being built too. If the only thing that scales is output, you create confusion across the organisation.</p>
+
+<h3>Build the learning into the building</h3>
+
+<p>For features that go straight to build, the discipline of experimentation needs to live inside the development workflow, not upstream:</p>
+
+<ul>
+    <li>What hypothesis does this feature test?</li>
+    <li>How will we know if it is working?</li>
+    <li>What are the criteria for keeping, iterating, or removing it?</li>
+</ul>
+
+<p>If these questions are answered alongside the code, speed and rigour coexist. Without them, features and concepts accrue that are individually harmless but collectively incoherent. Building may be cheap, but maintaining, supporting, and explaining a growing product surface is not (2).</p>
+
+<p>Your analytics need to keep pace with your release frequency too. If you are pushing to production weekly but reviewing metrics monthly, you have created a gap that swallows the advantage of speed.</p>
+
+<h3>Faster feedback</h3>
+
+<p>This is where the compounding effect lives. Most organisations are not short of data. What they lack is the ability to turn it into something actionable quickly enough to inform the next round of decisions. If AI can make building faster, it can make learning faster too, and it is the learning that determines whether speed translates to progress. Tools like Claude can compress the synthesis step, taking experiment results, usage data, and customer feedback and turning them into insight filtered through your product strategy. Not just, 'Here is what happened' but also, 'Here is what this means for our assumptions.'</p>
+
+<p>Yet none of this works if strategy is treated as a fixed document reviewed once a year. A two-way dialogue between execution and strategy is needed too:</p>
+
+<blockquote><p>Execution anchored through strategy. Strategy informed by accelerated learning.</p></blockquote>
+
+<h2>What this means for product management</h2>
+
+<p>In an AI-accelerated world, the PM's most important contribution is maintaining strategic coherence across a faster cycle: keeping the team pointed at problems that matter, ensuring customer insight feeds into direction, and making sure the product stays focused on user needs and business outcomes rather than on whatever is fun to build. This requires PMs to be deeply embedded in the team, not sitting above it writing specs that arrive too late to be useful.</p>
+
+<p>This shift is already under way. In some organisations, engineers frustrated by the pace of product decision-making are going directly to customer recordings and building from what they hear. That is a rational response to a bottleneck — and PMs who define their value by what they prevent will find themselves increasingly worked around. But PMs who bring strategic grounding, customer centricity, and a relentless focus on whether the product is getting closer to solving real problems will find their contributions embraced.</p>
+
+<p>The binding constraint in product development is no longer how fast you can build. It is how clearly you understand what you are building towards, and whether your organisation learns fast enough to steer. AI has removed one bottleneck. Are you ready for the ones it has revealed?</p>
+
+<div><hr></div>
+<h2>Sources</h2>
+<p>1. Cagan, M. — <a href="https://www.svpg.com/inspired-how-to-create-tech-products-customers-love/" target="_blank" rel="noopener">Inspired: How to Create Tech Products Customers Love</a></p>
+<p>2. McKinsey &amp; Company — <a href="https://www.mckinsey.com/industries/technology-media-and-telecommunications/our-insights/how-an-ai-enabled-software-product-development-life-cycle-will-fuel-innovation" target="_blank" rel="noopener">How an AI-enabled software product development life cycle will fuel innovation</a>, February 2025</p>
+
+        </div>
+        <div class="article-contact-prompt">
+            <p class="contact-prompt-heading">Thanks for reading!</p>
+            <p class="contact-prompt-text">Want to chat about product? I'd love to hear from you.</p>
+            <a href="/#contact" class="contact-prompt-button">Get in touch</a>
+        </div>
+        <div class="article-footer">
+            <a href="encoding-organisational-decisions-for-the-agentic-age.html">&larr; Previous article</a>
+        </div>
+    </article>
+</main>
+    <footer>
+        <p>&copy; Tim Scudder</p>
+    </footer>
+    <script src="/nav.js"></script>
+</body>
+</html>
