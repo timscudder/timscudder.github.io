@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Sense Coach – Tim Scudder</title>
+    <link rel="icon" href="/favicon.ico?v=2" sizes="any">
+    <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+    <link rel="icon" href="/favicon-32.png?v=2" type="image/png" sizes="32x32">
+    <link rel="icon" href="/favicon-16.png?v=2" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" sizes="180x180">
+
+    <!-- SEO & Social Sharing -->
+    <meta name="description" content="Practise PM interview questions with instant rubric scoring and Socratic coaching. Three-turn sessions covering problem framing, user empathy, prioritisation and measurability.">
+    <meta name="author" content="Tim Scudder">
+    <link rel="canonical" href="https://timscudderproduct.com/coach.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Product Sense Coach – Tim Scudder">
+    <meta property="og:description" content="Practise PM interview questions with instant rubric scoring and Socratic coaching. Three-turn sessions covering problem framing, user empathy, prioritisation and measurability.">
+    <meta property="og:url" content="https://timscudderproduct.com/coach.html">
+    <meta property="og:image" content="https://timscudderproduct.com/og-image.png">
+    <meta property="og:locale" content="en_GB">
+
+    <!-- Twitter/X Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Product Sense Coach – Tim Scudder">
+    <meta name="twitter:description" content="Practise PM interview questions with instant rubric scoring and Socratic coaching.">
+    <meta name="twitter:image" content="https://timscudderproduct.com/og-image.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="page-coach">
+    <div class="page-decoration"></div>
+
+    <header class="site-header">
+        <div class="site-header-bar">
+            <a href="/" class="site-name">Tim Scudder, Thoughts on Product</a>
+            <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation">
+                <div class="nav-toggle-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+            <ul class="site-nav" id="site-nav">
+                <li><a href="/#writing">Writing</a></li>
+                <li><a href="/#contact">Contact</a></li>
+                <li><a href="/coach.html">Product Sense Coach</a></li>
+                <li><a href="https://www.linkedin.com/in/timothyscudder/" target="_blank" rel="noopener">LinkedIn</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="coach-hero">
+        <div class="coach-hero-content">
+            <h1>Product Sense Coach</h1>
+            <p>Practise PM interview questions with instant rubric scoring and Socratic coaching. Evaluated on problem framing, user empathy, prioritisation logic and measurability.</p>
+        </div>
+    </div>
+
+    <main>
+        <div id="scenario-card" class="coach-scenario-card">
+            <div class="coach-scenario-title" id="scenario-title">Loading scenario…</div>
+            <div class="coach-scenario-text" id="scenario-text"></div>
+            <button class="coach-btn-ghost" id="new-scenario-btn" onclick="loadScenario()">New Scenario</button>
+        </div>
+
+        <div id="answer-section">
+            <label class="coach-input-label" for="answer-textarea">Your answer</label>
+            <textarea id="answer-textarea" placeholder="Type your answer here…"></textarea>
+            <div class="coach-submit-row">
+                <button class="coach-btn-primary" id="submit-btn" onclick="submitAnswer()">Submit Answer →</button>
+            </div>
+        </div>
+
+        <div id="results-section"></div>
+    </main>
+
+    <footer>
+        <p>&copy; Tim Scudder</p>
+    </footer>
+
+    <script src="/nav.js"></script>
+    <script>
+        // Update this to your deployed server URL if hosting remotely
+        const API_BASE = 'http://localhost:3001';
+
+        /* ── State ── */
+        let currentScenario = null;
+        let messages = [];
+        let phase = 0;
+
+        /* ── Boot ── */
+        loadScenario();
+        wireAutoResize(document.getElementById('answer-textarea'));
+
+        /* ── Auto-resize ── */
+        function wireAutoResize(el) {
+            el.addEventListener('input', function () { autoResize(el); });
+        }
+
+        function autoResize(el) {
+            el.style.height = 'auto';
+            el.style.height = el.scrollHeight + 'px';
+        }
+
+        /* ── Load scenario ── */
+        async function loadScenario() {
+            var excludeParam = currentScenario
+                ? '?exclude=' + encodeURIComponent(currentScenario.title)
+                : '';
+            document.getElementById('new-scenario-btn').disabled = true;
+
+            try {
+                var res = await fetch(API_BASE + '/api/scenario' + excludeParam);
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                var data = await res.json();
+                currentScenario = data;
+
+                document.getElementById('scenario-title').textContent = data.title;
+                document.getElementById('scenario-text').textContent = data.scenario;
+
+                phase = 0;
+                messages = [];
+
+                var ta = document.getElementById('answer-textarea');
+                ta.value = '';
+                ta.disabled = false;
+                autoResize(ta);
+
+                document.getElementById('submit-btn').disabled = false;
+                document.getElementById('answer-section').style.display = '';
+                document.getElementById('results-section').innerHTML = '';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (err) {
+                document.getElementById('scenario-title').textContent =
+                    'Could not connect to coach server. Make sure it is running at localhost:3001.';
+                console.error(err);
+            } finally {
+                document.getElementById('new-scenario-btn').disabled = false;
+            }
+        }
+
+        /* ── Submit initial answer ── */
+        async function submitAnswer() {
+            var answer = document.getElementById('answer-textarea').value.trim();
+            if (!answer) return;
+
+            document.getElementById('answer-textarea').disabled = true;
+            document.getElementById('submit-btn').disabled = true;
+
+            messages.push({
+                role: 'user',
+                content: 'SCENARIO:\n' + currentScenario.scenario + '\n\nCANDIDATE ANSWER:\n' + answer,
+            });
+
+            phase = 1;
+            await streamAndRender(1);
+        }
+
+        /* ── Submit follow-up ── */
+        async function submitFollowUp(taId, btnId, nextPhase) {
+            var ta = document.getElementById(taId);
+            var btn = document.getElementById(btnId);
+            var text = ta.value.trim();
+            if (!text) return;
+
+            ta.disabled = true;
+            btn.disabled = true;
+
+            messages.push({ role: 'user', content: text });
+            phase = nextPhase;
+            await streamAndRender(nextPhase);
+        }
+
+        /* ── SSE streaming ── */
+        async function streamAndRender(currentPhase) {
+            var container = document.getElementById('results-section');
+
+            var loadingEl = document.createElement('div');
+            loadingEl.className = 'coach-loading';
+            loadingEl.innerHTML = '<div class="coach-pulse-dot"></div><span>Coach is thinking&hellip;</span>';
+            container.appendChild(loadingEl);
+            loadingEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            try {
+                var res = await fetch(API_BASE + '/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ messages: messages }),
+                });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+
+                var reader = res.body.getReader();
+                var decoder = new TextDecoder();
+                var sseBuffer = '';
+                var fullText = '';
+                var done = false;
+
+                while (!done) {
+                    var chunk = await reader.read();
+                    if (chunk.done) break;
+                    sseBuffer += decoder.decode(chunk.value, { stream: true });
+                    var lines = sseBuffer.split('\n');
+                    sseBuffer = lines.pop();
+
+                    for (var i = 0; i < lines.length; i++) {
+                        var line = lines[i];
+                        if (!line.startsWith('data: ')) continue;
+                        var payload = line.slice(6);
+                        if (payload === '[DONE]') { done = true; break; }
+                        var parsed;
+                        try { parsed = JSON.parse(payload); } catch (e) { continue; }
+                        if (parsed.error) throw new Error(parsed.error);
+                        if (parsed.text) fullText += parsed.text;
+                    }
+                }
+
+                loadingEl.remove();
+                messages.push({ role: 'assistant', content: fullText });
+
+                if (currentPhase === 1) renderPhase1(fullText, container);
+                else if (currentPhase === 3) renderPhase3(fullText, container);
+                else if (currentPhase === 5) renderPhase5(fullText, container);
+
+            } catch (err) {
+                loadingEl.remove();
+                var errEl = document.createElement('p');
+                errEl.style.cssText = 'color:var(--accent);font-family:DM Sans,system-ui,sans-serif;padding:1rem 0;font-size:0.875rem;';
+                errEl.textContent = 'Error: ' + err.message;
+                container.appendChild(errEl);
+            }
+        }
+
+        /* ── Section parser ── */
+        function parseSections(text) {
+            var sections = {};
+            var lines = text.split('\n');
+            var currentTitle = null;
+            var contentLines = [];
+            var inSeparator = false;
+
+            function isSep(l) { return /^═{4,}/.test(l.trim()); }
+
+            for (var i = 0; i < lines.length; i++) {
+                var line = lines[i];
+                if (isSep(line)) {
+                    if (!inSeparator) {
+                        if (currentTitle !== null) {
+                            sections[currentTitle] = contentLines.join('\n').trim();
+                        }
+                        inSeparator = true;
+                        contentLines = [];
+                    } else {
+                        inSeparator = false;
+                    }
+                } else if (inSeparator) {
+                    currentTitle = line.trim();
+                    inSeparator = false;
+                } else if (currentTitle !== null) {
+                    contentLines.push(line);
+                }
+            }
+            if (currentTitle !== null && contentLines.length > 0) {
+                sections[currentTitle] = contentLines.join('\n').trim();
+            }
+            return sections;
+        }
+
+        /* ── Rubric scores ── */
+        function parseRubricScores(text) {
+            function g(rx) { var m = text.match(rx); return m ? parseInt(m[1], 10) : 0; }
+            var overall = text.match(/Overall:\s*\[(\d+)\/40\]\s*[—–-]\s*\[Grade:\s*([^\]]+)\]/);
+            return {
+                problemFraming:      g(/Problem Framing\s+\[(\d+)\/10\]/),
+                userEmpathy:         g(/User Empathy\s+\[(\d+)\/10\]/),
+                prioritisationLogic: g(/Prioritisation Logic\s+\[(\d+)\/10\]/),
+                measurability:       g(/Measurability\s+\[(\d+)\/10\]/),
+                overall: overall ? parseInt(overall[1], 10) : 0,
+                grade:   overall ? overall[2].trim() : '',
+            };
+        }
+
+        function scoreColor(n) {
+            if (n >= 8) return 'is-green';
+            if (n >= 5) return 'is-medium';
+            return 'is-rust';
+        }
+
+        /* ── Inline formatting ── */
+        function formatInline(text) {
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+        }
+
+        /* ── Feedback block formatter ── */
+        function formatFeedbackText(raw) {
+            var lines = raw.split('\n');
+            var html = '';
+            var inList = false;
+
+            function closeList() { if (inList) { html += '</ul>'; inList = false; } }
+
+            for (var i = 0; i < lines.length; i++) {
+                var t = lines[i].trim();
+                if (!t) { closeList(); continue; }
+
+                if (/^[A-Za-z][A-Za-z\s]+:$/.test(t) && t.indexOf('[') === -1) {
+                    closeList();
+                    html += '<div class="coach-section-head">' + formatInline(t.slice(0, -1)) + '</div>';
+                    continue;
+                }
+                if (t.charAt(0) === '\u2022') {
+                    if (!inList) { html += '<ul>'; inList = true; }
+                    html += '<li>' + formatInline(t.slice(1).trim()) + '</li>';
+                    continue;
+                }
+                closeList();
+                html += '<p>' + formatInline(t) + '</p>';
+            }
+            closeList();
+            return html;
+        }
+
+        /* ── Follow-up input block ── */
+        function makeFollowUpBlock(taId, btnId, nextPhase) {
+            return '<div style="margin-top:1.5rem;">' +
+                '<label class="coach-input-label">Your response</label>' +
+                '<textarea id="' + taId + '" placeholder="Type your response\u2026"></textarea>' +
+                '<div class="coach-submit-row">' +
+                '<button class="coach-btn-primary" id="' + btnId + '"' +
+                ' onclick="submitFollowUp(\'' + taId + '\',\'' + btnId + '\',' + nextPhase + ')">Continue \u2192</button>' +
+                '</div></div>';
+        }
+
+        /* ── Phase 1: rubric + feedback + Q1 + follow-up ── */
+        function renderPhase1(text, container) {
+            var scores = parseRubricScores(text);
+            var sections = parseSections(text);
+            var feedbackText = sections['DETAILED FEEDBACK'] || '';
+            var q1Text = sections['COACHING QUESTION 1'] || '';
+
+            var rubricItems = [
+                { label: 'Problem Framing',      score: scores.problemFraming },
+                { label: 'User Empathy',         score: scores.userEmpathy },
+                { label: 'Prioritisation Logic', score: scores.prioritisationLogic },
+                { label: 'Measurability',        score: scores.measurability },
+            ];
+
+            var html = '<hr class="coach-divider"><div class="coach-rubric-grid">';
+            for (var i = 0; i < rubricItems.length; i++) {
+                var item = rubricItems[i];
+                var clr = scoreColor(item.score);
+                var pct = (item.score / 10) * 100;
+                html += '<div class="coach-rubric-card">' +
+                    '<div class="coach-rubric-number">' + item.score + '</div>' +
+                    '<div class="coach-rubric-denom">/10</div>' +
+                    '<div class="coach-rubric-label">' + item.label + '</div>' +
+                    '<div class="coach-score-bar-track">' +
+                    '<div class="coach-score-bar-fill ' + clr + '" style="width:' + pct + '%"></div>' +
+                    '</div></div>';
+            }
+            html += '</div>';
+            html += '<div class="coach-overall-score">Overall: <strong>' + scores.overall + '/40</strong>' +
+                (scores.grade ? ' &mdash; ' + scores.grade : '') + '</div>';
+
+            if (feedbackText) {
+                html += '<div class="coach-feedback">' + formatFeedbackText(feedbackText) + '</div>';
+            }
+            if (q1Text) {
+                html += '<div class="coach-question-callout">' +
+                    '<div class="coach-question-label">Coaching Question</div>' +
+                    '<p>' + formatInline(q1Text) + '</p></div>';
+            }
+            html += makeFollowUpBlock('fu1-ta', 'fu1-btn', 3);
+
+            var div = document.createElement('div');
+            div.innerHTML = html;
+            container.appendChild(div);
+            wireAutoResize(document.getElementById('fu1-ta'));
+            div.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        /* ── Phase 3: Q2 + follow-up ── */
+        function renderPhase3(text, container) {
+            var sections = parseSections(text);
+            var q2Content = sections['COACHING QUESTION 2'] || text.trim();
+
+            var html = '<hr class="coach-divider">' +
+                '<div class="coach-question-callout">' +
+                '<div class="coach-question-label">Coaching Question 2</div>' +
+                '<p>' + formatInline(q2Content) + '</p></div>' +
+                makeFollowUpBlock('fu2-ta', 'fu2-btn', 5);
+
+            var div = document.createElement('div');
+            div.innerHTML = html;
+            container.appendChild(div);
+            wireAutoResize(document.getElementById('fu2-ta'));
+            div.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        /* ── Phase 5: summary + new scenario ── */
+        function renderPhase5(text, container) {
+            var sections = parseSections(text);
+            var summaryContent = sections["COACH'S SUMMARY"] || text.trim();
+
+            var workedMatch   = summaryContent.match(/What worked:([\s\S]*?)(?=Improve next time:|One thing to say|$)/i);
+            var improveMatch  = summaryContent.match(/Improve next time:([\s\S]*?)(?=One thing to say|$)/i);
+            var oneThingMatch = summaryContent.match(/One thing to say next time:([\s\S]*?)$/i);
+
+            var summaryInner = '';
+
+            if (workedMatch) {
+                summaryInner += '<div class="coach-summary-section">' +
+                    '<div class="coach-summary-label">What worked</div>' +
+                    '<ul>' + parseBullets(workedMatch[1].trim()) + '</ul></div>';
+            }
+            if (improveMatch) {
+                summaryInner += '<div class="coach-summary-section">' +
+                    '<div class="coach-summary-label">Improve next time</div>' +
+                    '<ul>' + parseBullets(improveMatch[1].trim()) + '</ul></div>';
+            }
+            if (oneThingMatch) {
+                var raw = oneThingMatch[1].trim();
+                var qm = raw.match(/"([^"]+)"/);
+                summaryInner += '<div class="coach-summary-section">' +
+                    '<div class="coach-summary-label">One thing to say next time</div>' +
+                    '<div class="coach-verbatim">' +
+                    (qm ? '&ldquo;' + formatInline(qm[1]) + '&rdquo;' : formatInline(raw)) +
+                    '</div></div>';
+            }
+            if (!summaryInner) {
+                summaryInner = '<div class="coach-feedback">' + formatFeedbackText(summaryContent) + '</div>';
+            }
+
+            var html = '<hr class="coach-divider">' +
+                '<div class="coach-summary-card"><h2>Coach&rsquo;s Summary</h2>' + summaryInner + '</div>' +
+                '<div class="coach-new-scenario-row">' +
+                '<button class="coach-btn-primary" onclick="loadScenario()">New Scenario &rarr;</button></div>';
+
+            var div = document.createElement('div');
+            div.innerHTML = html;
+            container.appendChild(div);
+            div.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function parseBullets(text) {
+            var lines = text.split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+            var bullets = lines.filter(function (l) { return l.charAt(0) === '\u2022'; });
+            if (bullets.length) {
+                return bullets.map(function (l) {
+                    return '<li>' + formatInline(l.slice(1).trim()) + '</li>';
+                }).join('');
+            }
+            return lines.map(function (l) { return '<li>' + formatInline(l) + '</li>'; }).join('');
+        }
+    </script>
+</body>
+</html>
