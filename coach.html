@@ -93,16 +93,6 @@
             animation: coachFadeIn 0.35s ease;
         }
 
-        /* ── Streaming text (replaced by formatted output when complete) ────────── */
-
-        .coach-streaming-text {
-            font-family: 'Lora', Georgia, serif;
-            font-size: 1rem;
-            line-height: 1.8;
-            color: var(--ink);
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
 
         /* ── Page intro (scrolls with chat) ────────────────────────────────────── */
 
@@ -589,11 +579,105 @@
             if (busy) submitBtn.classList.remove('is-active');
         }
 
-        /* ── SSE streaming ── */
+        /* ── Section HTML builders ── */
+
+        function buildRubricHtml(content) {
+            var scores = parseRubricScores(content);
+            var items = [
+                { label: 'Problem Framing',      score: scores.problemFraming },
+                { label: 'User Empathy',         score: scores.userEmpathy },
+                { label: 'Prioritisation Logic', score: scores.prioritisationLogic },
+                { label: 'Measurability',        score: scores.measurability },
+            ];
+            var html = '<div class="coach-rubric-grid">';
+            for (var i = 0; i < items.length; i++) {
+                var it = items[i];
+                html += '<div class="coach-rubric-card">' +
+                    '<div class="coach-rubric-number">' + it.score + '</div>' +
+                    '<div class="coach-rubric-denom">/10</div>' +
+                    '<div class="coach-rubric-label">' + it.label + '</div>' +
+                    '<div class="coach-score-bar-track">' +
+                    '<div class="coach-score-bar-fill ' + scoreColor(it.score) + '" style="width:' + ((it.score / 10) * 100) + '%"></div>' +
+                    '</div></div>';
+            }
+            html += '</div>';
+            html += '<div class="coach-overall-score">Overall: <strong>' + scores.overall + '/40</strong>' +
+                (scores.grade ? ' &mdash; ' + escapeHtml(scores.grade) : '') + '</div>';
+            return html;
+        }
+
+        function buildSummaryHtml(content) {
+            var wm  = content.match(/What worked:([\s\S]*?)(?=Improve next time:|One thing to say|$)/i);
+            var im  = content.match(/Improve next time:([\s\S]*?)(?=One thing to say|$)/i);
+            var otm = content.match(/One thing to say next time:([\s\S]*?)$/i);
+            var inner = '';
+            if (wm)  inner += '<div class="coach-summary-section"><div class="coach-summary-label">What worked</div><ul>' + parseBullets(wm[1].trim()) + '</ul></div>';
+            if (im)  inner += '<div class="coach-summary-section"><div class="coach-summary-label">Improve next time</div><ul>' + parseBullets(im[1].trim()) + '</ul></div>';
+            if (otm) {
+                var raw = otm[1].trim(), qm = raw.match(/"([^"]+)"/);
+                inner += '<div class="coach-summary-section"><div class="coach-summary-label">One thing to say next time</div>' +
+                    '<div class="coach-verbatim">' + (qm ? '&ldquo;' + formatInline(qm[1]) + '&rdquo;' : formatInline(raw)) + '</div></div>';
+            }
+            if (!inner) inner = '<div class="coach-feedback">' + formatFeedbackText(content) + '</div>';
+            return '<div class="coach-summary-card"><h2>Coach&rsquo;s Summary</h2>' + inner + '</div>';
+        }
+
+        function sectionToEl(title, content) {
+            var el = document.createElement('div');
+            el.className = 'coach-fade-in';
+            if (title === 'RUBRIC SCORES') {
+                el.innerHTML = buildRubricHtml(content);
+            } else if (title === 'DETAILED FEEDBACK') {
+                el.innerHTML = '<div class="coach-feedback">' + formatFeedbackText(content) + '</div>';
+            } else if (title === 'COACHING QUESTION 1') {
+                el.innerHTML = '<div class="coach-question-callout"><div class="coach-question-label">Coaching Question</div><p>' + formatInline(content.trim()) + '</p></div>';
+            } else if (title === 'COACHING QUESTION 2') {
+                el.innerHTML = '<div class="coach-question-callout"><div class="coach-question-label">Coaching Question 2</div><p>' + formatInline(content.trim()) + '</p></div>';
+            } else if (title === "COACH'S SUMMARY") {
+                el.innerHTML = buildSummaryHtml(content);
+            } else {
+                el.innerHTML = '<div class="coach-feedback">' + formatFeedbackText(content) + '</div>';
+            }
+            return el;
+        }
+
+        /* ── SSE streaming — sections rendered progressively in final form ── */
         async function streamAndRender(currentPhase) {
             var loadingEl = addLoadingIndicator();
-            var streamEl  = null;
-            var streamInner = null;
+            var msgEl = null;
+            var pulseEl = null;
+            var renderedSections = {};
+
+            function ensureContainer() {
+                if (msgEl) return;
+                loadingEl.remove();
+                msgEl = document.createElement('div');
+                msgEl.className = 'msg-coach';
+                chatArea.appendChild(msgEl);
+            }
+
+            function showPulse() {
+                if (pulseEl) return;
+                pulseEl = document.createElement('div');
+                pulseEl.className = 'coach-loading';
+                pulseEl.innerHTML = '<div class="coach-pulse-dot"></div>';
+                msgEl.appendChild(pulseEl);
+            }
+
+            function hidePulse() {
+                if (pulseEl) { pulseEl.remove(); pulseEl = null; }
+            }
+
+            function flushSections(sections, withPulse) {
+                for (var t in sections) {
+                    if (!renderedSections[t]) {
+                        renderedSections[t] = true;
+                        hidePulse();
+                        msgEl.appendChild(sectionToEl(t, sections[t]));
+                        if (withPulse) showPulse();
+                    }
+                }
+            }
 
             try {
                 var res = await fetch(API_BASE + '/api/chat', {
@@ -626,38 +710,43 @@
                         if (parsed.error) throw new Error(parsed.error);
                         if (parsed.text) {
                             fullText += parsed.text;
-                            /* On first chunk: swap loading indicator for streaming element */
-                            if (!streamEl) {
-                                loadingEl.remove();
-                                streamEl = document.createElement('div');
-                                streamEl.className = 'msg-coach';
-                                streamInner = document.createElement('div');
-                                streamInner.className = 'coach-streaming-text';
-                                streamEl.appendChild(streamInner);
-                                chatArea.appendChild(streamEl);
-                            }
-                            streamInner.textContent = fullText;
+                            ensureContainer();
+                            if (!pulseEl) showPulse();
+                            flushSections(parseSections(fullText), true);
                         }
                     }
                 }
 
-                /* Streaming done — swap to formatted output */
-                if (streamEl) streamEl.remove();
+                /* Final flush — render last section, no trailing pulse */
+                hidePulse();
+                if (msgEl) flushSections(parseSections(fullText), false);
                 else loadingEl.remove();
 
                 messages.push({ role: 'assistant', content: fullText });
 
-                if (currentPhase === 1) renderPhase1(fullText);
-                else if (currentPhase === 3) renderPhase3(fullText);
-                else if (currentPhase === 5) renderPhase5(fullText);
+                if (currentPhase === 1) {
+                    phase = 2;
+                    textarea.placeholder = 'Type your response\u2026';
+                    setInputBusy(false);
+                } else if (currentPhase === 3) {
+                    phase = 4;
+                    textarea.placeholder = 'Type your response\u2026';
+                    setInputBusy(false);
+                } else if (currentPhase === 5) {
+                    phase = 6;
+                    inputDock.style.display = 'none';
+                    var endEl = document.createElement('div');
+                    endEl.className = 'session-end-row';
+                    endEl.innerHTML = '<button class="coach-btn-primary" onclick="loadScenario()">New Scenario &rarr;</button>';
+                    chatArea.appendChild(endEl);
+                }
 
             } catch (err) {
-                if (streamEl) streamEl.remove();
-                else loadingEl.remove();
+                hidePulse();
+                if (msgEl) msgEl.remove(); else loadingEl.remove();
                 var errEl = document.createElement('div');
                 errEl.className = 'msg-coach';
-                errEl.innerHTML =
-                    '<div class="coach-error">Error: ' + escapeHtml(err.message) + '</div>';
+                errEl.innerHTML = '<div class="coach-error">Error: ' + escapeHtml(err.message) + '</div>';
                 chatArea.appendChild(errEl);
                 setInputBusy(false);
             }
@@ -764,129 +853,6 @@
             return html;
         }
 
-        /* ── Phase 1: rubric + feedback + Q1 ── */
-        function renderPhase1(text) {
-            var scores   = parseRubricScores(text);
-            var sections = parseSections(text);
-            var feedbackText = sections['DETAILED FEEDBACK'] || '';
-            var q1Text       = sections['COACHING QUESTION 1'] || '';
-
-            var rubricItems = [
-                { label: 'Problem Framing',      score: scores.problemFraming },
-                { label: 'User Empathy',         score: scores.userEmpathy },
-                { label: 'Prioritisation Logic', score: scores.prioritisationLogic },
-                { label: 'Measurability',        score: scores.measurability },
-            ];
-
-            var html = '<div class="coach-rubric-grid">';
-            for (var i = 0; i < rubricItems.length; i++) {
-                var item = rubricItems[i];
-                var clr  = scoreColor(item.score);
-                var pct  = (item.score / 10) * 100;
-                html +=
-                    '<div class="coach-rubric-card">' +
-                    '<div class="coach-rubric-number">' + item.score + '</div>' +
-                    '<div class="coach-rubric-denom">/10</div>' +
-                    '<div class="coach-rubric-label">' + item.label + '</div>' +
-                    '<div class="coach-score-bar-track">' +
-                    '<div class="coach-score-bar-fill ' + clr + '" style="width:' + pct + '%"></div>' +
-                    '</div></div>';
-            }
-            html += '</div>';
-
-            html += '<div class="coach-overall-score">Overall: <strong>' + scores.overall + '/40</strong>' +
-                (scores.grade ? ' &mdash; ' + escapeHtml(scores.grade) : '') + '</div>';
-
-            if (feedbackText) {
-                html += '<div class="coach-feedback">' + formatFeedbackText(feedbackText) + '</div>';
-            }
-
-            if (q1Text) {
-                html +=
-                    '<div class="coach-question-callout">' +
-                    '<div class="coach-question-label">Coaching Question</div>' +
-                    '<p>' + formatInline(q1Text) + '</p></div>';
-            }
-
-            var msgEl = document.createElement('div');
-            msgEl.className = 'msg-coach';
-            msgEl.innerHTML = '<div>' + html + '</div>';
-            chatArea.appendChild(msgEl);
-
-            phase = 2;
-            textarea.placeholder = 'Type your response\u2026';
-            setInputBusy(false);
-        }
-
-        /* ── Phase 3: coaching question 2 ── */
-        function renderPhase3(text) {
-            var sections  = parseSections(text);
-            var q2Content = sections['COACHING QUESTION 2'] || text.trim();
-
-            var msgEl = document.createElement('div');
-            msgEl.className = 'msg-coach';
-            msgEl.innerHTML =
-                '<div class="coach-question-callout">' +
-                '<div class="coach-question-label">Coaching Question 2</div>' +
-                '<p>' + formatInline(q2Content) + '</p></div>';
-            chatArea.appendChild(msgEl);
-
-            phase = 4;
-            textarea.placeholder = 'Type your response\u2026';
-            setInputBusy(false);
-        }
-
-        /* ── Phase 5: summary ── */
-        function renderPhase5(text) {
-            var sections     = parseSections(text);
-            var summaryContent = sections["COACH'S SUMMARY"] || text.trim();
-
-            var workedMatch   = summaryContent.match(/What worked:([\s\S]*?)(?=Improve next time:|One thing to say|$)/i);
-            var improveMatch  = summaryContent.match(/Improve next time:([\s\S]*?)(?=One thing to say|$)/i);
-            var oneThingMatch = summaryContent.match(/One thing to say next time:([\s\S]*?)$/i);
-
-            var summaryInner = '';
-
-            if (workedMatch) {
-                summaryInner +=
-                    '<div class="coach-summary-section">' +
-                    '<div class="coach-summary-label">What worked</div>' +
-                    '<ul>' + parseBullets(workedMatch[1].trim()) + '</ul></div>';
-            }
-            if (improveMatch) {
-                summaryInner +=
-                    '<div class="coach-summary-section">' +
-                    '<div class="coach-summary-label">Improve next time</div>' +
-                    '<ul>' + parseBullets(improveMatch[1].trim()) + '</ul></div>';
-            }
-            if (oneThingMatch) {
-                var raw = oneThingMatch[1].trim();
-                var qm  = raw.match(/"([^"]+)"/);
-                summaryInner +=
-                    '<div class="coach-summary-section">' +
-                    '<div class="coach-summary-label">One thing to say next time</div>' +
-                    '<div class="coach-verbatim">' +
-                    (qm ? '&ldquo;' + formatInline(qm[1]) + '&rdquo;' : formatInline(raw)) +
-                    '</div></div>';
-            }
-            if (!summaryInner) {
-                summaryInner = '<div class="coach-feedback">' + formatFeedbackText(summaryContent) + '</div>';
-            }
-
-            var msgEl = document.createElement('div');
-            msgEl.className = 'msg-coach';
-            msgEl.innerHTML =
-                '<div class="coach-summary-card"><h2>Coach&rsquo;s Summary</h2>' + summaryInner + '</div>';
-            chatArea.appendChild(msgEl);
-
-            phase = 6;
-            inputDock.style.display = 'none';
-
-            var endEl = document.createElement('div');
-            endEl.className = 'session-end-row';
-            endEl.innerHTML = '<button class="coach-btn-primary" onclick="loadScenario()">New Scenario &rarr;</button>';
-            chatArea.appendChild(endEl);
-        }
 
         function parseBullets(text) {
             var lines = text.split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
