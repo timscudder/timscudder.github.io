@@ -155,6 +155,32 @@
             color: var(--ink);
             white-space: pre-wrap;
             word-break: break-word;
+            max-height: 260px;
+            overflow: hidden;
+        }
+
+        .msg-user-bubble.is-expanded {
+            max-height: none;
+        }
+
+        .show-more-btn {
+            display: block;
+            margin-top: 6px;
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: var(--ink-medium);
+            font-family: 'DM Sans', system-ui, sans-serif;
+            font-size: 0.8rem;
+            cursor: pointer;
+            padding: 0;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            transform: none !important;
+        }
+
+        .show-more-btn:hover {
+            color: var(--green);
         }
 
         /* ── Loading indicator ──────────────────────────────────────────────────── */
@@ -516,7 +542,8 @@
                     introEl.className = 'coach-intro';
                     introEl.innerHTML =
                         '<h1>Product Sense Coach</h1>' +
-                        '<p class="coach-intro-text">Use this coach to refine your ability to breakdown complex project scenarios. Good luck!</p>';
+                        '<p class="coach-intro-text">Use this coach to refine your ability to breakdown complex project scenarios. Good luck!</p>' +
+                        '<div class="scenario-head">The scenario</div>';
                     chatArea.appendChild(introEl);
                 }
 
@@ -524,7 +551,6 @@
                 var msgEl = document.createElement('div');
                 msgEl.className = 'msg-coach coach-fade-in';
                 msgEl.innerHTML =
-                    '<div class="scenario-head">The scenario</div>' +
                     '<div class="scenario-section-h2">' + escapeHtml(data.title) + '</div>' +
                     '<div class="scenario-body">' + escapeHtml(data.scenario) + '</div>';
                 chatArea.appendChild(msgEl);
@@ -546,9 +572,26 @@
         function addUserBubble(text) {
             var el = document.createElement('div');
             el.className = 'msg-user';
-            el.innerHTML = '<div class="msg-user-bubble">' + escapeHtml(text) + '</div>';
+            var bubble = document.createElement('div');
+            bubble.className = 'msg-user-bubble';
+            bubble.textContent = text;
+            el.appendChild(bubble);
             chatArea.appendChild(el);
             scrollToBottom();
+
+            /* Add "Show more" if content overflows the max-height */
+            requestAnimationFrame(function () {
+                if (bubble.scrollHeight > bubble.clientHeight + 2) {
+                    var btn = document.createElement('button');
+                    btn.className = 'show-more-btn';
+                    btn.textContent = 'Show more';
+                    btn.onclick = function () {
+                        bubble.classList.add('is-expanded');
+                        btn.remove();
+                    };
+                    el.appendChild(btn);
+                }
+            });
         }
 
         function addLoadingIndicator() {
@@ -642,43 +685,9 @@
             return el;
         }
 
-        /* ── SSE streaming — sections rendered progressively in final form ── */
+        /* ── SSE streaming — buffer full response, then stagger-reveal sections ── */
         async function streamAndRender(currentPhase) {
             var loadingEl = addLoadingIndicator();
-            var msgEl = null;
-            var pulseEl = null;
-            var renderedSections = {};
-
-            function ensureContainer() {
-                if (msgEl) return;
-                loadingEl.remove();
-                msgEl = document.createElement('div');
-                msgEl.className = 'msg-coach';
-                chatArea.appendChild(msgEl);
-            }
-
-            function showPulse() {
-                if (pulseEl) return;
-                pulseEl = document.createElement('div');
-                pulseEl.className = 'coach-loading';
-                pulseEl.innerHTML = '<div class="coach-pulse-dot"></div>';
-                msgEl.appendChild(pulseEl);
-            }
-
-            function hidePulse() {
-                if (pulseEl) { pulseEl.remove(); pulseEl = null; }
-            }
-
-            function flushSections(sections, fullText, withPulse) {
-                for (var t in sections) {
-                    if (!renderedSections[t]) {
-                        renderedSections[t] = true;
-                        hidePulse();
-                        msgEl.appendChild(sectionToEl(t, sections[t], fullText));
-                        if (withPulse) showPulse();
-                    }
-                }
-            }
 
             try {
                 var res = await fetch(API_BASE + '/api/chat', {
@@ -688,6 +697,7 @@
                 });
                 if (!res.ok) throw new Error('HTTP ' + res.status);
 
+                /* Buffer the full SSE stream */
                 var reader = res.body.getReader();
                 var decoder = new TextDecoder();
                 var sseBuffer = '';
@@ -709,42 +719,55 @@
                         var parsed;
                         try { parsed = JSON.parse(payload); } catch (e) { continue; }
                         if (parsed.error) throw new Error(parsed.error);
-                        if (parsed.text) {
-                            fullText += parsed.text;
-                            ensureContainer();
-                            if (!pulseEl) showPulse();
-                            flushSections(parseSections(fullText), fullText, true);
-                        }
+                        if (parsed.text) fullText += parsed.text;
                     }
                 }
 
-                /* Final flush — render last section, no trailing pulse */
-                hidePulse();
-                if (msgEl) flushSections(parseSections(fullText), fullText, false);
-                else loadingEl.remove();
-
                 messages.push({ role: 'assistant', content: fullText });
 
-                if (currentPhase === 1) {
-                    phase = 2;
-                    textarea.placeholder = 'Type your response\u2026';
-                    setInputBusy(false);
-                } else if (currentPhase === 3) {
-                    phase = 4;
-                    textarea.placeholder = 'Type your response\u2026';
-                    setInputBusy(false);
-                } else if (currentPhase === 5) {
-                    phase = 6;
-                    inputDock.style.display = 'none';
-                    var endEl = document.createElement('div');
-                    endEl.className = 'session-end-row';
-                    endEl.innerHTML = '<button class="coach-btn-primary" onclick="loadScenario()">New Scenario &rarr;</button>';
-                    chatArea.appendChild(endEl);
+                /* Parse once on the complete text */
+                var sections = parseSections(fullText);
+                var sectionKeys = Object.keys(sections);
+
+                loadingEl.remove();
+                var msgEl = document.createElement('div');
+                msgEl.className = 'msg-coach';
+                chatArea.appendChild(msgEl);
+
+                /* Reveal sections with staggered fade-ins */
+                var STEP = 280;
+                for (var s = 0; s < sectionKeys.length; s++) {
+                    (function (key, delay) {
+                        setTimeout(function () {
+                            var sEl = sectionToEl(key, sections[key], fullText);
+                            msgEl.appendChild(sEl);
+                            sEl.scrollIntoView({ block: 'nearest' });
+                        }, delay);
+                    })(sectionKeys[s], s * STEP);
                 }
 
+                /* Update phase after the last section has appeared */
+                setTimeout(function () {
+                    if (currentPhase === 1) {
+                        phase = 2;
+                        textarea.placeholder = 'Type your response\u2026';
+                        setInputBusy(false);
+                    } else if (currentPhase === 3) {
+                        phase = 4;
+                        textarea.placeholder = 'Type your response\u2026';
+                        setInputBusy(false);
+                    } else if (currentPhase === 5) {
+                        phase = 6;
+                        inputDock.style.display = 'none';
+                        var endEl = document.createElement('div');
+                        endEl.className = 'session-end-row';
+                        endEl.innerHTML = '<button class="coach-btn-primary" onclick="loadScenario()">New Scenario &rarr;</button>';
+                        chatArea.appendChild(endEl);
+                    }
+                }, sectionKeys.length * STEP);
+
             } catch (err) {
-                hidePulse();
-                if (msgEl) msgEl.remove(); else loadingEl.remove();
+                loadingEl.remove();
                 var errEl = document.createElement('div');
                 errEl.className = 'msg-coach';
                 errEl.innerHTML = '<div class="coach-error">Error: ' + escapeHtml(err.message) + '</div>';
