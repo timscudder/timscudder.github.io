@@ -82,16 +82,15 @@
             position: relative;
         }
 
-        /* Fade chat content under the dock */
-        .coach-dock::before {
-            content: '';
-            position: absolute;
-            top: -48px;
-            left: 0;
-            right: 0;
-            height: 48px;
-            background: linear-gradient(to bottom, transparent, var(--cream));
-            pointer-events: none;
+        /* ── Fade-in for refreshed content ─────────────────────────────────────── */
+
+        @keyframes coachFadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        .coach-fade-in {
+            animation: coachFadeIn 0.35s ease;
         }
 
         /* ── Page intro (scrolls with chat) ────────────────────────────────────── */
@@ -190,12 +189,16 @@
             padding-bottom: 2rem;
         }
 
-        /* ── Back-to-bottom button ──────────────────────────────────────────────── */
+        /* ── Back-to-bottom button (floats above dock) ──────────────────────────── */
 
         .scroll-bottom-wrapper {
+            position: absolute;
+            top: -48px;
+            left: 0;
+            right: 0;
             display: flex;
             justify-content: center;
-            margin-bottom: 10px;
+            pointer-events: none;
         }
 
         .scroll-bottom-wrapper.hidden {
@@ -215,6 +218,7 @@
             cursor: pointer;
             transition: background 0.15s ease;
             transform: none !important;
+            pointer-events: auto;
         }
 
         .scroll-bottom-btn:hover {
@@ -483,6 +487,8 @@
         async function loadScenario() {
             newScenarioBtn.disabled = true;
 
+            /* Preserve the intro across refreshes */
+            var existingIntro = chatArea.querySelector('.coach-intro');
             chatArea.innerHTML = '';
             var excludeParam = currentScenario
                 ? '?exclude=' + encodeURIComponent(currentScenario.title)
@@ -500,20 +506,24 @@
                 setInputBusy(false);
                 inputDock.style.display = '';
 
-                /* Page intro (scrolls with chat) */
-                var introEl = document.createElement('div');
-                introEl.className = 'coach-intro';
-                introEl.innerHTML =
-                    '<h1>Product Sense Coach</h1>' +
-                    '<p class="coach-intro-text">Use this coach to refine your ability to breakdown complex project scenarios. Good luck!</p>';
-                chatArea.appendChild(introEl);
+                /* Page intro: restore if already exists, create on first load */
+                if (existingIntro) {
+                    chatArea.appendChild(existingIntro);
+                } else {
+                    var introEl = document.createElement('div');
+                    introEl.className = 'coach-intro';
+                    introEl.innerHTML =
+                        '<h1>Product Sense Coach</h1>' +
+                        '<p class="coach-intro-text">Use this coach to refine your ability to breakdown complex project scenarios. Good luck!</p>';
+                    chatArea.appendChild(introEl);
+                }
 
-                /* Scenario card */
+                /* Scenario card — fades in on each load */
                 var msgEl = document.createElement('div');
-                msgEl.className = 'msg-coach';
+                msgEl.className = 'msg-coach coach-fade-in';
                 msgEl.innerHTML =
-                    '<div class="scenario-section-h2">' + escapeHtml(data.title) + '</div>' +
                     '<div class="scenario-head">The scenario</div>' +
+                    '<div class="scenario-section-h2">' + escapeHtml(data.title) + '</div>' +
                     '<div class="scenario-body">' + escapeHtml(data.scenario) + '</div>';
                 chatArea.appendChild(msgEl);
 

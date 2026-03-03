@@ -1353,7 +1353,7 @@ footer {
 /* ── Coaching question callout ── */
 
 .coach-question-callout {
-    background: var(--cream-dark);
+    background: var(--green-dark);
     border-radius: 6px;
     padding: 1.5rem 1.75rem;
     margin-bottom: 1.75rem;
@@ -1365,7 +1365,7 @@ footer {
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.09em;
-    color: var(--ink-medium);
+    color: rgba(253, 250, 246, 0.6);
     margin-bottom: 0.625rem;
 }
 
@@ -1373,7 +1373,7 @@ footer {
     font-family: 'Lora', Georgia, serif;
     font-size: 1rem;
     line-height: 1.75;
-    color: var(--ink);
+    color: var(--surface);
 }
 
 /* ── Summary card ── */
