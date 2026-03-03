@@ -122,11 +122,11 @@
 
         .scenario-head {
             font-family: 'DM Serif Display', Georgia, serif;
-            font-size: 1.1rem;
+            font-size: 1.5rem;
             color: var(--ink);
             font-weight: 400;
             letter-spacing: 0.01em;
-            margin-bottom: 0.6rem;
+            margin-bottom: 0.5rem;
         }
 
         .scenario-body {
@@ -227,7 +227,7 @@
         .scenario-change-row {
             display: flex;
             justify-content: center;
-            margin-top: 10px;
+            margin-top: 16px;
         }
 
         .scenario-change-btn {
@@ -268,8 +268,7 @@
         }
 
         .prompt-box:focus-within {
-            border-color: var(--green);
-            box-shadow: 0 0 0 3px rgba(45, 92, 65, 0.12);
+            border-color: var(--ink-medium);
         }
 
         /* Override styles.css textarea for the coach prompt only */
@@ -378,7 +377,7 @@
 
         <div class="coach-dock" id="input-dock">
             <div class="scroll-bottom-wrapper hidden" id="scroll-bottom-wrapper">
-                <button class="scroll-bottom-btn" onclick="scrollToBottom()" title="Back to bottom">
+                <button class="scroll-bottom-btn" onclick="scrollToBottom(true)" title="Back to bottom">
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M6 2v8M6 10L3 7M6 10L9 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -513,11 +512,9 @@
                 var msgEl = document.createElement('div');
                 msgEl.className = 'msg-coach';
                 msgEl.innerHTML =
-                    '<div class="scenario-section-h2">The scenario</div>' +
-                    '<div>' +
-                    '<div class="scenario-head">' + escapeHtml(data.title) + '</div>' +
-                    '<div class="scenario-body">' + escapeHtml(data.scenario) + '</div>' +
-                    '</div>';
+                    '<div class="scenario-section-h2">' + escapeHtml(data.title) + '</div>' +
+                    '<div class="scenario-head">The scenario</div>' +
+                    '<div class="scenario-body">' + escapeHtml(data.scenario) + '</div>';
                 chatArea.appendChild(msgEl);
 
                 newScenarioBtn.disabled = false;
@@ -553,8 +550,8 @@
             return el;
         }
 
-        function scrollToBottom() {
-            chatArea.scrollTop = chatArea.scrollHeight;
+        function scrollToBottom(smooth) {
+            chatArea.scrollTo({ top: chatArea.scrollHeight, behavior: smooth ? 'smooth' : 'auto' });
             scrollBottomWrapper.classList.add('hidden');
         }
 

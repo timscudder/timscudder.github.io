@@ -421,7 +421,7 @@ h2.section-title {
     color: var(--green);
     text-decoration: none;
     font-weight: 500;
-    font-size: 17px;
+    font-size: 16px;
     font-family: 'DM Sans', system-ui, sans-serif;
     display: inline-flex;
     align-items: center;
@@ -920,16 +920,31 @@ textarea {
 }
 
 .article-footer a {
-    color: var(--ink-medium);
+    color: var(--green);
     text-decoration: none;
-    font-weight: 400;
-    font-size: 17px;
+    font-weight: 500;
+    font-size: 16px;
     font-family: 'DM Sans', system-ui, sans-serif;
-    transition: color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: color 0.2s ease, gap 0.2s ease;
+}
+
+/* Prev link: arrow added via ::before */
+.article-footer:not(.article-footer--next-only) a:first-child::before {
+    content: '←';
+}
+
+/* Next link: arrow added via ::after */
+.article-footer a:last-child:not(:first-child)::after,
+.article-footer--next-only a::after {
+    content: '→';
 }
 
 .article-footer a:hover {
-    color: var(--green);
+    color: var(--green-dark);
+    gap: 0.6rem;
 }
 
 /* ── Site footer ── */
@@ -1033,18 +1048,7 @@ footer {
     padding-top: 58px;
 }
 
-/* ── Coach hero ── */
-
-.coach-hero {
-    background: var(--cream-dark);
-    padding: 2.75rem 2rem 2.25rem;
-    border-bottom: 1px solid var(--ink-light);
-}
-
-.coach-hero-content {
-    max-width: 900px;
-    margin: 0 auto;
-}
+/* ── Coach page heading (matches article h1) ── */
 
 .page-coach h1 {
     font-family: 'DM Serif Display', Georgia, serif;
@@ -1065,67 +1069,75 @@ footer {
     border-radius: 2px;
 }
 
-.coach-hero p {
-    font-family: 'DM Sans', system-ui, sans-serif;
-    font-size: 1rem;
-    color: var(--ink-medium);
-    line-height: 1.65;
-    max-width: 600px;
-    margin-top: 1.25rem;
-}
-
 /* ── Coach main area ── */
 
 .page-coach main {
     max-width: 760px;
-    margin: 0 auto;
-    padding: 3rem 2rem 5rem;
+    margin: 3.5rem auto;
+    padding: 0 2rem 4.5rem;
+}
+
+.coach-intro-text {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--ink);
+    margin-top: 1.5rem;
 }
 
 /* ── Scenario card ── */
 
 .coach-scenario-card {
-    background: var(--cream-dark);
-    border-radius: 6px;
-    padding: 2rem 2.25rem;
     margin-bottom: 2rem;
 }
 
 .coach-scenario-title {
     font-family: 'DM Serif Display', Georgia, serif;
-    font-size: 1.2rem;
+    font-size: 1.35rem;
     font-weight: 400;
     color: var(--ink);
-    margin-bottom: 0.85rem;
+    margin-bottom: 0.75rem;
 }
 
 .coach-scenario-text {
     font-family: 'Lora', Georgia, serif;
     font-size: 1rem;
     line-height: 1.75;
-    color: var(--ink);
-    margin-bottom: 1.5rem;
+    color: var(--ink-medium);
+    margin-bottom: 0.5rem;
 }
 
-.coach-btn-ghost {
-    background: transparent;
+.coach-scenario-action {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.75rem;
+}
+
+.coach-btn-text {
+    background: none;
+    border: none;
     color: var(--green);
-    border: 1px solid var(--green);
-    padding: 0.55rem 1.1rem;
-    border-radius: 3px;
-    font-family: 'DM Sans', system-ui, sans-serif;
     font-weight: 500;
-    font-size: 0.875rem;
+    font-size: 16px;
+    font-family: 'DM Sans', system-ui, sans-serif;
     cursor: pointer;
-    transition: background 0.15s ease, transform 0.1s ease;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: color 0.2s ease, gap 0.2s ease;
 }
 
-.coach-btn-ghost:hover:not(:disabled) {
-    background: var(--green-light);
-    transform: translateY(-1px);
+.coach-btn-text::after {
+    content: '→';
 }
 
-.coach-btn-ghost:disabled {
+.coach-btn-text:hover:not(:disabled) {
+    color: var(--green-dark);
+    gap: 0.6rem;
+}
+
+.coach-btn-text:disabled {
     opacity: 0.45;
     cursor: not-allowed;
 }
@@ -1341,7 +1353,7 @@ footer {
 /* ── Coaching question callout ── */
 
 .coach-question-callout {
-    background: var(--green-light);
+    background: var(--cream-dark);
     border-radius: 6px;
     padding: 1.5rem 1.75rem;
     margin-bottom: 1.75rem;
@@ -1353,7 +1365,7 @@ footer {
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.09em;
-    color: var(--green);
+    color: var(--ink-medium);
     margin-bottom: 0.625rem;
 }
 
@@ -1434,19 +1446,15 @@ footer {
 /* ── Coach responsive ── */
 
 @media (max-width: 768px) {
-    .coach-hero {
-        padding: 2rem 1.25rem 1.75rem;
-    }
-
     .page-coach main {
-        padding: 2rem 1.25rem 3.5rem;
+        margin: 2rem auto;
+        padding: 0 1.25rem 3.5rem;
     }
 
     .page-coach h1 {
         font-size: 2.1rem;
     }
 
-    .coach-scenario-card,
     .coach-summary-card {
         padding: 1.5rem 1.25rem;
     }
