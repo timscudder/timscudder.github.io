@@ -220,6 +220,7 @@
             transition: background 0.15s ease;
             transform: none !important;
             pointer-events: auto;
+            box-shadow: 0 2px 8px rgba(51, 40, 32, 0.12);
         }
 
         .scroll-bottom-btn:hover {
@@ -581,8 +582,8 @@
 
         /* ── Section HTML builders ── */
 
-        function buildRubricHtml(content) {
-            var scores = parseRubricScores(content);
+        function buildRubricHtml(fullText) {
+            var scores = parseRubricScores(fullText);
             var items = [
                 { label: 'Problem Framing',      score: scores.problemFraming },
                 { label: 'User Empathy',         score: scores.userEmpathy },
@@ -622,18 +623,18 @@
             return '<div class="coach-summary-card"><h2>Coach&rsquo;s Summary</h2>' + inner + '</div>';
         }
 
-        function sectionToEl(title, content) {
+        function sectionToEl(title, content, fullText) {
             var el = document.createElement('div');
             el.className = 'coach-fade-in';
-            if (title === 'RUBRIC SCORES') {
-                el.innerHTML = buildRubricHtml(content);
-            } else if (title === 'DETAILED FEEDBACK') {
+            var t = title.toUpperCase();
+            if (t.indexOf('RUBRIC') !== -1) {
+                el.innerHTML = buildRubricHtml(fullText);
+            } else if (t.indexOf('DETAILED FEEDBACK') !== -1 || t.indexOf('FEEDBACK') !== -1) {
                 el.innerHTML = '<div class="coach-feedback">' + formatFeedbackText(content) + '</div>';
-            } else if (title === 'COACHING QUESTION 1') {
-                el.innerHTML = '<div class="coach-question-callout"><div class="coach-question-label">Coaching Question</div><p>' + formatInline(content.trim()) + '</p></div>';
-            } else if (title === 'COACHING QUESTION 2') {
-                el.innerHTML = '<div class="coach-question-callout"><div class="coach-question-label">Coaching Question 2</div><p>' + formatInline(content.trim()) + '</p></div>';
-            } else if (title === "COACH'S SUMMARY") {
+            } else if (t.indexOf('COACHING QUESTION') !== -1) {
+                var isQ2 = t.indexOf('2') !== -1;
+                el.innerHTML = '<div class="coach-question-callout"><div class="coach-question-label">Coaching Question' + (isQ2 ? ' 2' : '') + '</div><p>' + formatFeedbackText(content.trim()) + '</p></div>';
+            } else if (t.indexOf('SUMMARY') !== -1) {
                 el.innerHTML = buildSummaryHtml(content);
             } else {
                 el.innerHTML = '<div class="coach-feedback">' + formatFeedbackText(content) + '</div>';
@@ -668,12 +669,12 @@
                 if (pulseEl) { pulseEl.remove(); pulseEl = null; }
             }
 
-            function flushSections(sections, withPulse) {
+            function flushSections(sections, fullText, withPulse) {
                 for (var t in sections) {
                     if (!renderedSections[t]) {
                         renderedSections[t] = true;
                         hidePulse();
-                        msgEl.appendChild(sectionToEl(t, sections[t]));
+                        msgEl.appendChild(sectionToEl(t, sections[t], fullText));
                         if (withPulse) showPulse();
                     }
                 }
@@ -712,14 +713,14 @@
                             fullText += parsed.text;
                             ensureContainer();
                             if (!pulseEl) showPulse();
-                            flushSections(parseSections(fullText), true);
+                            flushSections(parseSections(fullText), fullText, true);
                         }
                     }
                 }
 
                 /* Final flush — render last section, no trailing pulse */
                 hidePulse();
-                if (msgEl) flushSections(parseSections(fullText), false);
+                if (msgEl) flushSections(parseSections(fullText), fullText, false);
                 else loadingEl.remove();
 
                 messages.push({ role: 'assistant', content: fullText });
