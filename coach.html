@@ -77,7 +77,7 @@
         /* Prompt dock — anchored at bottom, no keyline */
         .coach-dock {
             flex-shrink: 0;
-            padding: 0 2rem 1.5rem;
+            padding: 0 1.25rem 1.5rem;
             background: var(--cream);
             position: relative;
         }
@@ -267,8 +267,8 @@
             position: relative;
             background: var(--surface);
             border: 1px solid var(--ink-light);
-            border-radius: 12px;
-            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+            border-radius: 6px;
+            transition: border-color 0.15s ease;
         }
 
         .prompt-box:focus-within {
@@ -288,7 +288,7 @@
             color: var(--ink);
             background: transparent;
             border: none;
-            border-radius: 12px;
+            border-radius: 6px;
             resize: none;
             overflow-y: auto;
             scrollbar-width: none;
@@ -381,7 +381,7 @@
 
         <div class="coach-dock" id="input-dock">
             <div class="scroll-bottom-wrapper hidden" id="scroll-bottom-wrapper">
-                <button class="scroll-bottom-btn" onclick="scrollToBottom(true)" title="Back to bottom">
+                <button class="scroll-bottom-btn" onclick="scrollToBottom()" title="Back to bottom">
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M6 2v8M6 10L3 7M6 10L9 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -487,9 +487,11 @@
         async function loadScenario() {
             newScenarioBtn.disabled = true;
 
-            /* Preserve the intro across refreshes */
-            var existingIntro = chatArea.querySelector('.coach-intro');
-            chatArea.innerHTML = '';
+            /* Remove all chat content except the intro, which stays in place */
+            Array.from(chatArea.children).forEach(function (child) {
+                if (!child.classList.contains('coach-intro')) child.remove();
+            });
+
             var excludeParam = currentScenario
                 ? '?exclude=' + encodeURIComponent(currentScenario.title)
                 : '';
@@ -506,10 +508,8 @@
                 setInputBusy(false);
                 inputDock.style.display = '';
 
-                /* Page intro: restore if already exists, create on first load */
-                if (existingIntro) {
-                    chatArea.appendChild(existingIntro);
-                } else {
+                /* Create intro only on first load */
+                if (!chatArea.querySelector('.coach-intro')) {
                     var introEl = document.createElement('div');
                     introEl.className = 'coach-intro';
                     introEl.innerHTML =
@@ -560,8 +560,8 @@
             return el;
         }
 
-        function scrollToBottom(smooth) {
-            chatArea.scrollTo({ top: chatArea.scrollHeight, behavior: smooth ? 'smooth' : 'auto' });
+        function scrollToBottom() {
+            chatArea.scrollTop = chatArea.scrollHeight;
             scrollBottomWrapper.classList.add('hidden');
         }
 
