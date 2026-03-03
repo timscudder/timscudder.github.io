@@ -97,7 +97,7 @@
         /* ── Page intro (scrolls with chat) ────────────────────────────────────── */
 
         .coach-intro {
-            padding-bottom: 0.5rem;
+            padding-bottom: 0;
         }
 
         /* ── Scenario section heading (matches .article-content h3) ────────────── */
@@ -126,7 +126,8 @@
             color: var(--ink);
             font-weight: 400;
             letter-spacing: 0.01em;
-            margin-bottom: 0.5rem;
+            margin-top: 1.75rem;
+            margin-bottom: 0;
         }
 
         .scenario-body {
@@ -155,18 +156,39 @@
             color: var(--ink);
             white-space: pre-wrap;
             word-break: break-word;
+            position: relative;
             max-height: 260px;
             overflow: hidden;
         }
 
-        .msg-user-bubble.is-expanded {
-            max-height: none;
+        /* Collapsed state: extra bottom padding for button + fade overlay */
+        .msg-user-bubble.has-overflow {
+            padding-bottom: 44px;
         }
 
+        .msg-user-bubble.has-overflow::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 68px;
+            background: linear-gradient(to bottom, transparent, var(--cream-dark));
+            pointer-events: none;
+            border-radius: 0 0 4px 16px;
+        }
+
+        /* Expanded state */
+        .msg-user-bubble.is-expanded {
+            max-height: none;
+            padding-bottom: 44px;
+        }
+
+        /* Show more / Show less button — sits inside the bubble */
         .show-more-btn {
-            display: block;
-            margin-top: 6px;
-            margin-left: auto;
+            position: absolute;
+            bottom: 14px;
+            left: 24px;
             background: none;
             border: none;
             color: var(--ink-medium);
@@ -174,13 +196,13 @@
             font-size: 0.8rem;
             cursor: pointer;
             padding: 0;
-            text-decoration: underline;
-            text-underline-offset: 2px;
+            z-index: 1;
             transform: none !important;
+            transition: color 0.15s ease;
         }
 
         .show-more-btn:hover {
-            color: var(--green);
+            color: var(--ink);
         }
 
         /* ── Loading indicator ──────────────────────────────────────────────────── */
@@ -246,7 +268,7 @@
             transition: background 0.15s ease;
             transform: none !important;
             pointer-events: auto;
-            box-shadow: 0 2px 8px rgba(51, 40, 32, 0.12);
+            box-shadow: 0 4px 8px -2px rgba(51, 40, 32, 0.22);
         }
 
         .scroll-bottom-btn:hover {
@@ -295,7 +317,7 @@
             position: relative;
             background: var(--surface);
             border: 1px solid var(--ink-light);
-            border-radius: 6px;
+            border-radius: 16px;
             transition: border-color 0.15s ease;
         }
 
@@ -316,7 +338,7 @@
             color: var(--ink);
             background: transparent;
             border: none;
-            border-radius: 6px;
+            border-radius: 16px;
             resize: none;
             overflow-y: auto;
             scrollbar-width: none;
@@ -579,17 +601,25 @@
             chatArea.appendChild(el);
             scrollToBottom();
 
-            /* Add "Show more" if content overflows the max-height */
+            /* Add show-more/less toggle inside bubble if content overflows */
             requestAnimationFrame(function () {
                 if (bubble.scrollHeight > bubble.clientHeight + 2) {
+                    bubble.classList.add('has-overflow');
                     var btn = document.createElement('button');
                     btn.className = 'show-more-btn';
                     btn.textContent = 'Show more';
+                    bubble.appendChild(btn);
                     btn.onclick = function () {
-                        bubble.classList.add('is-expanded');
-                        btn.remove();
+                        if (bubble.classList.contains('is-expanded')) {
+                            bubble.classList.remove('is-expanded');
+                            bubble.classList.add('has-overflow');
+                            btn.textContent = 'Show more';
+                        } else {
+                            bubble.classList.remove('has-overflow');
+                            bubble.classList.add('is-expanded');
+                            btn.textContent = 'Show less';
+                        }
                     };
-                    el.appendChild(btn);
                 }
             });
         }
