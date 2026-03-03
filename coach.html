@@ -10,12 +10,11 @@
     <link rel="icon" href="/favicon-16.png?v=2" type="image/png" sizes="16x16">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" sizes="180x180">
 
-    <!-- SEO & Social Sharing -->
+    <meta name="robots" content="noindex, nofollow">
     <meta name="description" content="Practise PM interview questions with instant rubric scoring and Socratic coaching. Three-turn sessions covering problem framing, user empathy, prioritisation and measurability.">
     <meta name="author" content="Tim Scudder">
     <link rel="canonical" href="https://timscudderproduct.com/coach.html">
 
-    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Product Sense Coach – Tim Scudder">
     <meta property="og:description" content="Practise PM interview questions with instant rubric scoring and Socratic coaching. Three-turn sessions covering problem framing, user empathy, prioritisation and measurability.">
@@ -23,7 +22,6 @@
     <meta property="og:image" content="https://timscudderproduct.com/og-image.png">
     <meta property="og:locale" content="en_GB">
 
-    <!-- Twitter/X Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Product Sense Coach – Tim Scudder">
     <meta name="twitter:description" content="Practise PM interview questions with instant rubric scoring and Socratic coaching.">
@@ -31,6 +29,328 @@
 
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles.css">
+
+    <style>
+        /* ── Full-height chat layout ────────────────────────────────────────────── */
+
+        html, body.page-coach {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body.page-coach {
+            padding-top: 0; /* header offset handled by coach-app */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* App shell sits below the 58px fixed site header */
+        .coach-app {
+            position: fixed;
+            top: 58px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        /* Scrollable chat area */
+        .coach-chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem 2rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.75rem;
+            /* Hide scrollbar — scroll still works */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .coach-chat::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Prompt dock — anchored at bottom, no keyline */
+        .coach-dock {
+            flex-shrink: 0;
+            padding: 0 2rem 1.5rem;
+            background: var(--cream);
+            position: relative;
+        }
+
+        /* Fade chat content under the dock */
+        .coach-dock::before {
+            content: '';
+            position: absolute;
+            top: -48px;
+            left: 0;
+            right: 0;
+            height: 48px;
+            background: linear-gradient(to bottom, transparent, var(--cream));
+            pointer-events: none;
+        }
+
+        /* ── Page intro (scrolls with chat) ────────────────────────────────────── */
+
+        .coach-intro {
+            padding-bottom: 0.5rem;
+        }
+
+        /* ── Scenario section heading (matches .article-content h3) ────────────── */
+
+        .scenario-section-h2 {
+            font-family: 'DM Sans', system-ui, sans-serif;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 0 0 0.65rem;
+            color: var(--green-dark);
+            letter-spacing: 0.01em;
+        }
+
+        /* ── Coach message ──────────────────────────────────────────────────────── */
+
+        .msg-coach {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-width: 100%;
+        }
+
+        .scenario-head {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: 1.1rem;
+            color: var(--ink);
+            font-weight: 400;
+            letter-spacing: 0.01em;
+            margin-bottom: 0.6rem;
+        }
+
+        .scenario-body {
+            font-family: 'Lora', Georgia, serif;
+            font-size: 1rem;
+            line-height: 1.75;
+            color: var(--ink);
+        }
+
+        /* ── User message ───────────────────────────────────────────────────────── */
+
+        .msg-user {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .msg-user-bubble {
+            background: var(--cream-dark);
+            border: 1px solid var(--ink-light);
+            border-radius: 16px 16px 4px 16px;
+            padding: 20px 24px;
+            max-width: 82%;
+            font-family: 'Lora', Georgia, serif;
+            font-size: 0.95rem;
+            line-height: 1.65;
+            color: var(--ink);
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* ── Loading indicator ──────────────────────────────────────────────────── */
+
+        .coach-loading {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            font-family: 'DM Sans', system-ui, sans-serif;
+            font-size: 0.875rem;
+            color: var(--ink-medium);
+        }
+
+        .coach-pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--green);
+            flex-shrink: 0;
+            animation: coachPulse 1.4s ease-in-out infinite;
+        }
+
+        @keyframes coachPulse {
+            0%, 100% { opacity: 0.25; transform: scale(0.75); }
+            50%       { opacity: 1;    transform: scale(1); }
+        }
+
+        /* ── Session end ────────────────────────────────────────────────────────── */
+
+        .session-end-row {
+            display: flex;
+            justify-content: flex-end;
+            padding-bottom: 2rem;
+        }
+
+        /* ── Back-to-bottom button ──────────────────────────────────────────────── */
+
+        .scroll-bottom-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .scroll-bottom-wrapper.hidden {
+            display: none;
+        }
+
+        .scroll-bottom-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--surface);
+            color: var(--ink-medium);
+            border: 1px solid var(--ink-light);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.15s ease;
+            transform: none !important;
+        }
+
+        .scroll-bottom-btn:hover {
+            background: var(--cream);
+            transform: none !important;
+        }
+
+        /* ── Change scenario row (centred below prompt) ─────────────────────────── */
+
+        .scenario-change-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .scenario-change-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: none;
+            color: var(--ink-medium);
+            font-family: 'DM Sans', system-ui, sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: color 0.15s ease;
+            transform: none !important;
+        }
+
+        .scenario-change-btn:hover:not(:disabled) {
+            color: var(--green);
+            transform: none !important;
+        }
+
+        .scenario-change-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* ── Prompt box (Claude-style) ──────────────────────────────────────────── */
+
+        .prompt-box {
+            position: relative;
+            background: var(--surface);
+            border: 1px solid var(--ink-light);
+            border-radius: 12px;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .prompt-box:focus-within {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(45, 92, 65, 0.12);
+        }
+
+        /* Override styles.css textarea for the coach prompt only */
+        .prompt-box textarea {
+            display: block;
+            width: 100%;
+            min-height: 80px;
+            max-height: 200px;
+            padding: 13px 52px 13px 16px;
+            font-family: 'Lora', Georgia, serif;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--ink);
+            background: transparent;
+            border: none;
+            border-radius: 12px;
+            resize: none;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            /* reset styles.css overrides */
+            min-height: 80px;
+            box-shadow: none;
+        }
+
+        .prompt-box textarea::-webkit-scrollbar {
+            display: none;
+        }
+
+        .prompt-box textarea:focus {
+            outline: none;
+            border-color: transparent;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .prompt-box textarea:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Circle submit button */
+        .prompt-submit {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--ink-light); /* inactive: warm grey */
+            border: none;
+            cursor: default;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.15s ease;
+        }
+
+        .prompt-submit.is-active {
+            background: var(--green);
+            cursor: pointer;
+        }
+
+        .prompt-submit.is-active:hover {
+            background: var(--green-dark);
+        }
+
+        .prompt-submit:disabled {
+            background: var(--ink-light);
+            cursor: not-allowed;
+        }
+
+        /* Error text */
+        .coach-error {
+            color: var(--accent);
+            font-family: 'DM Sans', system-ui, sans-serif;
+            font-size: 0.875rem;
+            padding: 4px 0;
+        }
+    </style>
 </head>
 <body class="page-coach">
     <div class="page-decoration"></div>
@@ -48,54 +368,75 @@
             <ul class="site-nav" id="site-nav">
                 <li><a href="/#writing">Writing</a></li>
                 <li><a href="/#contact">Contact</a></li>
-                <li><a href="/coach.html">Product Sense Coach</a></li>
                 <li><a href="https://www.linkedin.com/in/timothyscudder/" target="_blank" rel="noopener">LinkedIn</a></li>
             </ul>
         </div>
     </header>
 
-    <div class="coach-hero">
-        <div class="coach-hero-content">
-            <h1>Product Sense Coach</h1>
-            <p>Practise PM interview questions with instant rubric scoring and Socratic coaching. Evaluated on problem framing, user empathy, prioritisation logic and measurability.</p>
+    <div class="coach-app">
+        <div class="coach-chat" id="chat-area"></div>
+
+        <div class="coach-dock" id="input-dock">
+            <div class="scroll-bottom-wrapper hidden" id="scroll-bottom-wrapper">
+                <button class="scroll-bottom-btn" onclick="scrollToBottom()" title="Back to bottom">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 2v8M6 10L3 7M6 10L9 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="prompt-box">
+                <textarea id="answer-textarea" placeholder="Type your answer here…"></textarea>
+                <button class="prompt-submit" id="submit-btn" onclick="handleSubmit()" title="Submit" disabled>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 11V3M7 3L3.5 6.5M7 3L10.5 6.5" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="scenario-change-row">
+                <button class="scenario-change-btn" id="new-scenario-btn" onclick="loadScenario()">
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 6.5A4.5 4.5 0 1 1 8.5 2.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M11 2.5v3H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Change scenario
+                </button>
+            </div>
         </div>
     </div>
 
-    <main>
-        <div id="scenario-card" class="coach-scenario-card">
-            <div class="coach-scenario-title" id="scenario-title">Loading scenario…</div>
-            <div class="coach-scenario-text" id="scenario-text"></div>
-            <button class="coach-btn-ghost" id="new-scenario-btn" onclick="loadScenario()">New Scenario</button>
-        </div>
-
-        <div id="answer-section">
-            <label class="coach-input-label" for="answer-textarea">Your answer</label>
-            <textarea id="answer-textarea" placeholder="Type your answer here…"></textarea>
-            <div class="coach-submit-row">
-                <button class="coach-btn-primary" id="submit-btn" onclick="submitAnswer()">Submit Answer →</button>
-            </div>
-        </div>
-
-        <div id="results-section"></div>
-    </main>
-
-    <footer>
-        <p>&copy; Tim Scudder</p>
-    </footer>
-
     <script src="/nav.js"></script>
     <script>
-        // Update this to your deployed server URL if hosting remotely
-        const API_BASE = 'http://localhost:3001';
+        const API_BASE = 'https://product-sense-coach-production.up.railway.app';
 
         /* ── State ── */
         let currentScenario = null;
         let messages = [];
         let phase = 0;
 
+        /* ── Elements ── */
+        const textarea            = document.getElementById('answer-textarea');
+        const submitBtn           = document.getElementById('submit-btn');
+        const inputDock           = document.getElementById('input-dock');
+        const chatArea            = document.getElementById('chat-area');
+        const scrollBottomWrapper = document.getElementById('scroll-bottom-wrapper');
+        const newScenarioBtn      = document.getElementById('new-scenario-btn');
+
         /* ── Boot ── */
         loadScenario();
-        wireAutoResize(document.getElementById('answer-textarea'));
+        wireAutoResize(textarea);
+
+        /* Button activates only when textarea has content */
+        textarea.addEventListener('input', function () {
+            const hasText = textarea.value.trim().length > 0;
+            submitBtn.disabled = !hasText;
+            submitBtn.classList.toggle('is-active', hasText);
+        });
+
+        /* Back-to-bottom: show when not at bottom */
+        chatArea.addEventListener('scroll', function () {
+            var atBottom = chatArea.scrollTop + chatArea.clientHeight >= chatArea.scrollHeight - 20;
+            scrollBottomWrapper.classList.toggle('hidden', atBottom);
+        });
 
         /* ── Auto-resize ── */
         function wireAutoResize(el) {
@@ -107,12 +448,46 @@
             el.style.height = el.scrollHeight + 'px';
         }
 
+        /* ── Submit gate ── */
+        function handleSubmit() {
+            const text = textarea.value.trim();
+            if (!text) return;
+
+            if (phase === 0) {
+                addUserBubble(text);
+                messages.push({
+                    role: 'user',
+                    content: 'SCENARIO:\n' + currentScenario.scenario + '\n\nCANDIDATE ANSWER:\n' + text,
+                });
+                clearInput();
+                setInputBusy(true);
+                phase = 1;
+                streamAndRender(1);
+            } else if (phase === 2) {
+                addUserBubble(text);
+                messages.push({ role: 'user', content: text });
+                clearInput();
+                setInputBusy(true);
+                phase = 3;
+                streamAndRender(3);
+            } else if (phase === 4) {
+                addUserBubble(text);
+                messages.push({ role: 'user', content: text });
+                clearInput();
+                setInputBusy(true);
+                phase = 5;
+                streamAndRender(5);
+            }
+        }
+
         /* ── Load scenario ── */
         async function loadScenario() {
+            newScenarioBtn.disabled = true;
+
+            chatArea.innerHTML = '';
             var excludeParam = currentScenario
                 ? '?exclude=' + encodeURIComponent(currentScenario.title)
                 : '';
-            document.getElementById('new-scenario-btn').disabled = true;
 
             try {
                 var res = await fetch(API_BASE + '/api/scenario' + excludeParam);
@@ -120,71 +495,85 @@
                 var data = await res.json();
                 currentScenario = data;
 
-                document.getElementById('scenario-title').textContent = data.title;
-                document.getElementById('scenario-text').textContent = data.scenario;
-
                 phase = 0;
                 messages = [];
+                clearInput();
+                setInputBusy(false);
+                inputDock.style.display = '';
 
-                var ta = document.getElementById('answer-textarea');
-                ta.value = '';
-                ta.disabled = false;
-                autoResize(ta);
+                /* Page intro (scrolls with chat) */
+                var introEl = document.createElement('div');
+                introEl.className = 'coach-intro';
+                introEl.innerHTML =
+                    '<h1>Product Sense Coach</h1>' +
+                    '<p class="coach-intro-text">Use this coach to refine your ability to breakdown complex project scenarios. Good luck!</p>';
+                chatArea.appendChild(introEl);
 
-                document.getElementById('submit-btn').disabled = false;
-                document.getElementById('answer-section').style.display = '';
-                document.getElementById('results-section').innerHTML = '';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                /* Scenario card */
+                var msgEl = document.createElement('div');
+                msgEl.className = 'msg-coach';
+                msgEl.innerHTML =
+                    '<div class="scenario-section-h2">The scenario</div>' +
+                    '<div>' +
+                    '<div class="scenario-head">' + escapeHtml(data.title) + '</div>' +
+                    '<div class="scenario-body">' + escapeHtml(data.scenario) + '</div>' +
+                    '</div>';
+                chatArea.appendChild(msgEl);
+
+                newScenarioBtn.disabled = false;
+                scrollToBottom();
             } catch (err) {
-                document.getElementById('scenario-title').textContent =
-                    'Could not connect to coach server. Make sure it is running at localhost:3001.';
+                var errEl = document.createElement('div');
+                errEl.className = 'msg-coach';
+                errEl.innerHTML =
+                    '<div class="coach-error">Could not connect. Make sure the server is running at localhost:3001.</div>';
+                chatArea.appendChild(errEl);
+                newScenarioBtn.disabled = false;
                 console.error(err);
-            } finally {
-                document.getElementById('new-scenario-btn').disabled = false;
             }
         }
 
-        /* ── Submit initial answer ── */
-        async function submitAnswer() {
-            var answer = document.getElementById('answer-textarea').value.trim();
-            if (!answer) return;
-
-            document.getElementById('answer-textarea').disabled = true;
-            document.getElementById('submit-btn').disabled = true;
-
-            messages.push({
-                role: 'user',
-                content: 'SCENARIO:\n' + currentScenario.scenario + '\n\nCANDIDATE ANSWER:\n' + answer,
-            });
-
-            phase = 1;
-            await streamAndRender(1);
+        /* ── Chat helpers ── */
+        function addUserBubble(text) {
+            var el = document.createElement('div');
+            el.className = 'msg-user';
+            el.innerHTML = '<div class="msg-user-bubble">' + escapeHtml(text) + '</div>';
+            chatArea.appendChild(el);
+            scrollToBottom();
         }
 
-        /* ── Submit follow-up ── */
-        async function submitFollowUp(taId, btnId, nextPhase) {
-            var ta = document.getElementById(taId);
-            var btn = document.getElementById(btnId);
-            var text = ta.value.trim();
-            if (!text) return;
+        function addLoadingIndicator() {
+            var el = document.createElement('div');
+            el.className = 'msg-coach';
+            el.id = 'loading-msg';
+            el.innerHTML =
+                '<div class="coach-loading"><div class="coach-pulse-dot"></div><span>Thinking&hellip;</span></div>';
+            chatArea.appendChild(el);
+            scrollToBottom();
+            return el;
+        }
 
-            ta.disabled = true;
-            btn.disabled = true;
+        function scrollToBottom() {
+            chatArea.scrollTop = chatArea.scrollHeight;
+            scrollBottomWrapper.classList.add('hidden');
+        }
 
-            messages.push({ role: 'user', content: text });
-            phase = nextPhase;
-            await streamAndRender(nextPhase);
+        function clearInput() {
+            textarea.value = '';
+            textarea.style.height = '80px';
+            submitBtn.disabled = true;
+            submitBtn.classList.remove('is-active');
+        }
+
+        function setInputBusy(busy) {
+            textarea.disabled = busy;
+            submitBtn.disabled = busy;
+            if (busy) submitBtn.classList.remove('is-active');
         }
 
         /* ── SSE streaming ── */
         async function streamAndRender(currentPhase) {
-            var container = document.getElementById('results-section');
-
-            var loadingEl = document.createElement('div');
-            loadingEl.className = 'coach-loading';
-            loadingEl.innerHTML = '<div class="coach-pulse-dot"></div><span>Coach is thinking&hellip;</span>';
-            container.appendChild(loadingEl);
-            loadingEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            var loadingEl = addLoadingIndicator();
 
             try {
                 var res = await fetch(API_BASE + '/api/chat', {
@@ -222,46 +611,51 @@
                 loadingEl.remove();
                 messages.push({ role: 'assistant', content: fullText });
 
-                if (currentPhase === 1) renderPhase1(fullText, container);
-                else if (currentPhase === 3) renderPhase3(fullText, container);
-                else if (currentPhase === 5) renderPhase5(fullText, container);
+                if (currentPhase === 1) renderPhase1(fullText);
+                else if (currentPhase === 3) renderPhase3(fullText);
+                else if (currentPhase === 5) renderPhase5(fullText);
 
             } catch (err) {
                 loadingEl.remove();
-                var errEl = document.createElement('p');
-                errEl.style.cssText = 'color:var(--accent);font-family:DM Sans,system-ui,sans-serif;padding:1rem 0;font-size:0.875rem;';
-                errEl.textContent = 'Error: ' + err.message;
-                container.appendChild(errEl);
+                var errEl = document.createElement('div');
+                errEl.className = 'msg-coach';
+                errEl.innerHTML =
+                    '<div class="coach-error">Error: ' + escapeHtml(err.message) + '</div>';
+                chatArea.appendChild(errEl);
+                setInputBusy(false);
+                scrollToBottom();
             }
         }
 
-        /* ── Section parser ── */
+        /* ── Section parser (3-state — fixes the feedback display bug) ── */
         function parseSections(text) {
             var sections = {};
             var lines = text.split('\n');
             var currentTitle = null;
             var contentLines = [];
-            var inSeparator = false;
+            var state = 'content'; /* 'content' | 'title' | 'post-title' */
 
             function isSep(l) { return /^═{4,}/.test(l.trim()); }
 
             for (var i = 0; i < lines.length; i++) {
                 var line = lines[i];
                 if (isSep(line)) {
-                    if (!inSeparator) {
+                    if (state === 'content') {
                         if (currentTitle !== null) {
                             sections[currentTitle] = contentLines.join('\n').trim();
                         }
-                        inSeparator = true;
                         contentLines = [];
-                    } else {
-                        inSeparator = false;
+                        state = 'title';
+                    } else if (state === 'post-title') {
+                        state = 'content';
                     }
-                } else if (inSeparator) {
-                    currentTitle = line.trim();
-                    inSeparator = false;
-                } else if (currentTitle !== null) {
-                    contentLines.push(line);
+                } else {
+                    if (state === 'title') {
+                        currentTitle = line.trim();
+                        state = 'post-title';
+                    } else if (state === 'content' && currentTitle !== null) {
+                        contentLines.push(line);
+                    }
                 }
             }
             if (currentTitle !== null && contentLines.length > 0) {
@@ -270,17 +664,19 @@
             return sections;
         }
 
-        /* ── Rubric scores ── */
+        /* ── Rubric scores (flexible regex — handles format variations) ── */
         function parseRubricScores(text) {
             function g(rx) { var m = text.match(rx); return m ? parseInt(m[1], 10) : 0; }
-            var overall = text.match(/Overall:\s*\[(\d+)\/40\]\s*[—–-]\s*\[Grade:\s*([^\]]+)\]/);
+            var overallScore = g(/Overall:\s*\[?(\d+)\/40\]?/i);
+            var gradeMatch   = text.match(/Grade:\s*([^\]\n\r]+)/i);
+            var grade        = gradeMatch ? gradeMatch[1].replace(/\]$/, '').trim() : '';
             return {
-                problemFraming:      g(/Problem Framing\s+\[(\d+)\/10\]/),
-                userEmpathy:         g(/User Empathy\s+\[(\d+)\/10\]/),
-                prioritisationLogic: g(/Prioritisation Logic\s+\[(\d+)\/10\]/),
-                measurability:       g(/Measurability\s+\[(\d+)\/10\]/),
-                overall: overall ? parseInt(overall[1], 10) : 0,
-                grade:   overall ? overall[2].trim() : '',
+                problemFraming:      g(/Problem\s+Framing\s*\[?(\d+)\/10\]?/i),
+                userEmpathy:         g(/User\s+Empathy\s*\[?(\d+)\/10\]?/i),
+                prioritisationLogic: g(/Prioritis[ae]tion\s+Logic\s*\[?(\d+)\/10\]?/i),
+                measurability:       g(/Measurability\s*\[?(\d+)\/10\]?/i),
+                overall: overallScore,
+                grade:   grade,
             };
         }
 
@@ -290,16 +686,19 @@
             return 'is-rust';
         }
 
-        /* ── Inline formatting ── */
-        function formatInline(text) {
-            return text
+        /* ── Text helpers ── */
+        function escapeHtml(text) {
+            return String(text)
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function formatInline(text) {
+            return escapeHtml(text)
                 .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
         }
 
-        /* ── Feedback block formatter ── */
         function formatFeedbackText(raw) {
             var lines = raw.split('\n');
             var html = '';
@@ -316,9 +715,10 @@
                     html += '<div class="coach-section-head">' + formatInline(t.slice(0, -1)) + '</div>';
                     continue;
                 }
-                if (t.charAt(0) === '\u2022') {
+                if (t.charAt(0) === '\u2022' || t.startsWith('- ')) {
                     if (!inList) { html += '<ul>'; inList = true; }
-                    html += '<li>' + formatInline(t.slice(1).trim()) + '</li>';
+                    var content = t.charAt(0) === '\u2022' ? t.slice(1).trim() : t.slice(2).trim();
+                    html += '<li>' + formatInline(content) + '</li>';
                     continue;
                 }
                 closeList();
@@ -328,23 +728,12 @@
             return html;
         }
 
-        /* ── Follow-up input block ── */
-        function makeFollowUpBlock(taId, btnId, nextPhase) {
-            return '<div style="margin-top:1.5rem;">' +
-                '<label class="coach-input-label">Your response</label>' +
-                '<textarea id="' + taId + '" placeholder="Type your response\u2026"></textarea>' +
-                '<div class="coach-submit-row">' +
-                '<button class="coach-btn-primary" id="' + btnId + '"' +
-                ' onclick="submitFollowUp(\'' + taId + '\',\'' + btnId + '\',' + nextPhase + ')">Continue \u2192</button>' +
-                '</div></div>';
-        }
-
-        /* ── Phase 1: rubric + feedback + Q1 + follow-up ── */
-        function renderPhase1(text, container) {
-            var scores = parseRubricScores(text);
+        /* ── Phase 1: rubric + feedback + Q1 ── */
+        function renderPhase1(text) {
+            var scores   = parseRubricScores(text);
             var sections = parseSections(text);
             var feedbackText = sections['DETAILED FEEDBACK'] || '';
-            var q1Text = sections['COACHING QUESTION 1'] || '';
+            var q1Text       = sections['COACHING QUESTION 1'] || '';
 
             var rubricItems = [
                 { label: 'Problem Framing',      score: scores.problemFraming },
@@ -353,12 +742,13 @@
                 { label: 'Measurability',        score: scores.measurability },
             ];
 
-            var html = '<hr class="coach-divider"><div class="coach-rubric-grid">';
+            var html = '<div class="coach-rubric-grid">';
             for (var i = 0; i < rubricItems.length; i++) {
                 var item = rubricItems[i];
-                var clr = scoreColor(item.score);
-                var pct = (item.score / 10) * 100;
-                html += '<div class="coach-rubric-card">' +
+                var clr  = scoreColor(item.score);
+                var pct  = (item.score / 10) * 100;
+                html +=
+                    '<div class="coach-rubric-card">' +
                     '<div class="coach-rubric-number">' + item.score + '</div>' +
                     '<div class="coach-rubric-denom">/10</div>' +
                     '<div class="coach-rubric-label">' + item.label + '</div>' +
@@ -367,47 +757,54 @@
                     '</div></div>';
             }
             html += '</div>';
+
             html += '<div class="coach-overall-score">Overall: <strong>' + scores.overall + '/40</strong>' +
-                (scores.grade ? ' &mdash; ' + scores.grade : '') + '</div>';
+                (scores.grade ? ' &mdash; ' + escapeHtml(scores.grade) : '') + '</div>';
 
             if (feedbackText) {
                 html += '<div class="coach-feedback">' + formatFeedbackText(feedbackText) + '</div>';
             }
+
             if (q1Text) {
-                html += '<div class="coach-question-callout">' +
+                html +=
+                    '<div class="coach-question-callout">' +
                     '<div class="coach-question-label">Coaching Question</div>' +
                     '<p>' + formatInline(q1Text) + '</p></div>';
             }
-            html += makeFollowUpBlock('fu1-ta', 'fu1-btn', 3);
 
-            var div = document.createElement('div');
-            div.innerHTML = html;
-            container.appendChild(div);
-            wireAutoResize(document.getElementById('fu1-ta'));
-            div.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            var msgEl = document.createElement('div');
+            msgEl.className = 'msg-coach';
+            msgEl.innerHTML = '<div>' + html + '</div>';
+            chatArea.appendChild(msgEl);
+
+            phase = 2;
+            textarea.placeholder = 'Type your response\u2026';
+            setInputBusy(false);
+            scrollToBottom();
         }
 
-        /* ── Phase 3: Q2 + follow-up ── */
-        function renderPhase3(text, container) {
-            var sections = parseSections(text);
+        /* ── Phase 3: coaching question 2 ── */
+        function renderPhase3(text) {
+            var sections  = parseSections(text);
             var q2Content = sections['COACHING QUESTION 2'] || text.trim();
 
-            var html = '<hr class="coach-divider">' +
+            var msgEl = document.createElement('div');
+            msgEl.className = 'msg-coach';
+            msgEl.innerHTML =
                 '<div class="coach-question-callout">' +
                 '<div class="coach-question-label">Coaching Question 2</div>' +
-                '<p>' + formatInline(q2Content) + '</p></div>' +
-                makeFollowUpBlock('fu2-ta', 'fu2-btn', 5);
+                '<p>' + formatInline(q2Content) + '</p></div>';
+            chatArea.appendChild(msgEl);
 
-            var div = document.createElement('div');
-            div.innerHTML = html;
-            container.appendChild(div);
-            wireAutoResize(document.getElementById('fu2-ta'));
-            div.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            phase = 4;
+            textarea.placeholder = 'Type your response\u2026';
+            setInputBusy(false);
+            scrollToBottom();
         }
 
-        /* ── Phase 5: summary + new scenario ── */
-        function renderPhase5(text, container) {
-            var sections = parseSections(text);
+        /* ── Phase 5: summary ── */
+        function renderPhase5(text) {
+            var sections     = parseSections(text);
             var summaryContent = sections["COACH'S SUMMARY"] || text.trim();
 
             var workedMatch   = summaryContent.match(/What worked:([\s\S]*?)(?=Improve next time:|One thing to say|$)/i);
@@ -417,19 +814,22 @@
             var summaryInner = '';
 
             if (workedMatch) {
-                summaryInner += '<div class="coach-summary-section">' +
+                summaryInner +=
+                    '<div class="coach-summary-section">' +
                     '<div class="coach-summary-label">What worked</div>' +
                     '<ul>' + parseBullets(workedMatch[1].trim()) + '</ul></div>';
             }
             if (improveMatch) {
-                summaryInner += '<div class="coach-summary-section">' +
+                summaryInner +=
+                    '<div class="coach-summary-section">' +
                     '<div class="coach-summary-label">Improve next time</div>' +
                     '<ul>' + parseBullets(improveMatch[1].trim()) + '</ul></div>';
             }
             if (oneThingMatch) {
                 var raw = oneThingMatch[1].trim();
-                var qm = raw.match(/"([^"]+)"/);
-                summaryInner += '<div class="coach-summary-section">' +
+                var qm  = raw.match(/"([^"]+)"/);
+                summaryInner +=
+                    '<div class="coach-summary-section">' +
                     '<div class="coach-summary-label">One thing to say next time</div>' +
                     '<div class="coach-verbatim">' +
                     (qm ? '&ldquo;' + formatInline(qm[1]) + '&rdquo;' : formatInline(raw)) +
@@ -439,23 +839,30 @@
                 summaryInner = '<div class="coach-feedback">' + formatFeedbackText(summaryContent) + '</div>';
             }
 
-            var html = '<hr class="coach-divider">' +
-                '<div class="coach-summary-card"><h2>Coach&rsquo;s Summary</h2>' + summaryInner + '</div>' +
-                '<div class="coach-new-scenario-row">' +
-                '<button class="coach-btn-primary" onclick="loadScenario()">New Scenario &rarr;</button></div>';
+            var msgEl = document.createElement('div');
+            msgEl.className = 'msg-coach';
+            msgEl.innerHTML =
+                '<div class="coach-summary-card"><h2>Coach&rsquo;s Summary</h2>' + summaryInner + '</div>';
+            chatArea.appendChild(msgEl);
 
-            var div = document.createElement('div');
-            div.innerHTML = html;
-            container.appendChild(div);
-            div.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            phase = 6;
+            inputDock.style.display = 'none';
+
+            var endEl = document.createElement('div');
+            endEl.className = 'session-end-row';
+            endEl.innerHTML = '<button class="coach-btn-primary" onclick="loadScenario()">New Scenario &rarr;</button>';
+            chatArea.appendChild(endEl);
+
+            scrollToBottom();
         }
 
         function parseBullets(text) {
             var lines = text.split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
-            var bullets = lines.filter(function (l) { return l.charAt(0) === '\u2022'; });
+            var bullets = lines.filter(function (l) { return l.charAt(0) === '\u2022' || l.startsWith('- '); });
             if (bullets.length) {
                 return bullets.map(function (l) {
-                    return '<li>' + formatInline(l.slice(1).trim()) + '</li>';
+                    var content = l.charAt(0) === '\u2022' ? l.slice(1).trim() : l.slice(2).trim();
+                    return '<li>' + formatInline(content) + '</li>';
                 }).join('');
             }
             return lines.map(function (l) { return '<li>' + formatInline(l) + '</li>'; }).join('');
