@@ -508,16 +508,24 @@
             submitBtn.classList.toggle('is-active', hasText);
         });
 
-        /* Auto-replace "- " with "• " when typed at the start of a line */
+        /* Auto-replace "- " with "   • " (indented bullet) when typed at line start.
+           Also resets the exit-counter whenever the user types real content. */
         textarea.addEventListener('input', function () {
-            var pos = textarea.selectionStart;
-            var val = textarea.value;
+            var pos       = textarea.selectionStart;
+            var val       = textarea.value;
             var lineStart = val.lastIndexOf('\n', pos - 1) + 1;
             var linePrefix = val.substring(lineStart, pos);
+
             if (linePrefix === '- ') {
-                textarea.value = val.substring(0, lineStart) + '• ' + val.substring(pos);
-                textarea.selectionStart = textarea.selectionEnd = lineStart + 2;
+                textarea.value = val.substring(0, lineStart) + '   • ' + val.substring(pos);
+                textarea.selectionStart = textarea.selectionEnd = lineStart + 5;
+                return;
             }
+
+            /* Reset exit-counter if user is typing real content on a list line */
+            var hasContent = /^   (?:\d+\. |• )(.+)/.test(linePrefix) ||
+                             /^      (?:[a-z]\. |◦ )(.+)/.test(linePrefix);
+            if (hasContent) consecutiveEmptyListEnters = 0;
         });
 
         /* ── Keyboard handler ── */
@@ -532,12 +540,12 @@
                 var lineEnd   = val.indexOf('\n', pos); if (lineEnd === -1) lineEnd = val.length;
                 var fullLine  = val.substring(lineStart, lineEnd);
 
-                var mo = /^(\d+)\. (.*)/.exec(fullLine);
-                var mu = /^• (.*)/.exec(fullLine);
+                var mo = /^   (\d+)\. (.*)/.exec(fullLine);
+                var mu = /^   • (.*)/.exec(fullLine);
 
                 if (mo || mu) {
                     var content   = mo ? mo[2] : mu[1];
-                    var newPrefix = mo ? '   a. ' : '   ◦ ';
+                    var newPrefix = mo ? '      a. ' : '      ◦ ';
                     var newLine   = newPrefix + content;
                     textarea.value = val.substring(0, lineStart) + newLine + val.substring(lineEnd);
                     textarea.selectionStart = textarea.selectionEnd = lineStart + newPrefix.length + content.length;
@@ -558,8 +566,8 @@
                 var fullLine  = val.substring(lineStart, lineEnd);
 
                 /* ── Sub-list empty item: return to parent list ── */
-                var soFull = /^   [a-z]\. (.*)/.exec(fullLine);
-                var suFull = /^   ◦ (.*)/.exec(fullLine);
+                var soFull = /^      [a-z]\. (.*)/.exec(fullLine);
+                var suFull = /^      ◦ (.*)/.exec(fullLine);
                 var subIsEmpty = (soFull && soFull[1].trim() === '') ||
                                  (suFull && suFull[1].trim() === '');
 
@@ -573,13 +581,13 @@
                         var beforeLines = before.split('\n');
                         var lastNum = 0;
                         for (var j = beforeLines.length - 2; j >= 0; j--) {
-                            var nm = /^(\d+)\. /.exec(beforeLines[j]);
+                            var nm = /^   (\d+)\. /.exec(beforeLines[j]);
                             if (nm) { lastNum = parseInt(nm[1], 10); break; }
                             if (beforeLines[j].trim() === '') break;
                         }
-                        newPrefix = (lastNum > 0 ? lastNum + 1 : 1) + '. ';
+                        newPrefix = '   ' + (lastNum > 0 ? lastNum + 1 : 1) + '. ';
                     } else {
-                        newPrefix = '• ';
+                        newPrefix = '   • ';
                     }
                     textarea.value = val.substring(0, lineStart) + newPrefix + val.substring(lineEnd);
                     textarea.selectionStart = textarea.selectionEnd = lineStart + newPrefix.length;
@@ -590,8 +598,8 @@
                 }
 
                 /* ── Main list empty item: clear entire prefix in one tap ── */
-                var moFull = /^(\d+)\. (.*)/.exec(fullLine);
-                var muFull = /^• (.*)/.exec(fullLine);
+                var moFull = /^   (\d+)\. (.*)/.exec(fullLine);
+                var muFull = /^   • (.*)/.exec(fullLine);
                 var mainIsEmpty = (moFull && moFull[2].trim() === '') ||
                                   (muFull && muFull[1].trim() === '');
 
@@ -623,10 +631,10 @@
                 var lineStart = val.lastIndexOf('\n', pos - 1) + 1;
                 var cur       = val.substring(lineStart, pos);
 
-                var mo = /^(\d+)\. (.*)/.exec(cur);
-                var mu = /^• (.*)/.exec(cur);
-                var so = /^   ([a-z])\. (.*)/.exec(cur);
-                var su = /^   ◦ (.*)/.exec(cur);
+                var mo = /^   (\d+)\. (.*)/.exec(cur);
+                var mu = /^   • (.*)/.exec(cur);
+                var so = /^      ([a-z])\. (.*)/.exec(cur);
+                var su = /^      ◦ (.*)/.exec(cur);
 
                 if (mo || mu || so || su) {
                     e.preventDefault();
@@ -641,13 +649,15 @@
                             textarea.value = val.substring(0, lineStart) + '\n' + val.substring(pos);
                             textarea.selectionStart = textarea.selectionEnd = lineStart + 1;
                         } else {
-                            /* First empty — add another empty item */
+                            /* First empty press — add another empty item */
                             var ins = '\n' + nextListPrefix(mo, mu, so, su);
                             textarea.value = val.substring(0, pos) + ins + val.substring(pos);
                             textarea.selectionStart = textarea.selectionEnd = pos + ins.length;
                         }
                     } else {
-                        consecutiveEmptyListEnters = 0;
+                        /* Non-empty item: create next item and pre-load counter so
+                           the very next Shift+Enter on the new empty item exits */
+                        consecutiveEmptyListEnters = 1;
                         var ins = '\n' + nextListPrefix(mo, mu, so, su);
                         textarea.value = val.substring(0, pos) + ins + val.substring(pos);
                         textarea.selectionStart = textarea.selectionEnd = pos + ins.length;
@@ -660,10 +670,10 @@
         });
 
         function nextListPrefix(mo, mu, so, su) {
-            if (mo) return (parseInt(mo[1], 10) + 1) + '. ';
-            if (mu) return '• ';
-            if (so) return '   ' + String.fromCharCode(so[1].charCodeAt(0) + 1) + '. ';
-            return '   ◦ ';
+            if (mo) return '   ' + (parseInt(mo[1], 10) + 1) + '. ';
+            if (mu) return '   • ';
+            if (so) return '      ' + String.fromCharCode(so[1].charCodeAt(0) + 1) + '. ';
+            return '      ◦ ';
         }
 
         /* Back-to-bottom: show when not at bottom */
@@ -1048,19 +1058,19 @@
         }
 
         /* ── User text formatter ───────────────────────────────────────────────────
-           Handles:
-             • / -     → <ul> main bullet list
-             1. 2. …   → <ol> main numbered list
-             "   a. "  → <ol type="a"> sub-list (indented)
-             "   ◦ "   → <ul class="user-sub-ul"> sub-list (indented, hollow bullet)
-             blank     → paragraph break
-             other     → paragraph text
+           New indented format (3-space main, 6-space sub); old formats kept for
+           backward compatibility with messages typed before this update.
         ── */
         function formatUserText(rawText) {
-            var MAIN_ORDERED = /^(\d+)\. (.*)/;
-            var MAIN_BULLET  = /^(?:• |- )(.*)/;
-            var SUB_ORDERED  = /^   ([a-z])\. (.*)/;
-            var SUB_BULLET   = /^   ◦ (.*)/;
+            var MAIN_ORDERED = /^   (\d+)\. (.*)/;
+            var MAIN_BULLET  = /^   (?:• |- )(.*)/;
+            var SUB_ORDERED  = /^      ([a-z])\. (.*)/;
+            var SUB_BULLET   = /^      ◦ (.*)/;
+            /* Legacy patterns (no leading spaces) */
+            var MAIN_ORDERED_OLD = /^(\d+)\. (.*)/;
+            var MAIN_BULLET_OLD  = /^(?:• |- )(.*)/;
+            var SUB_ORDERED_OLD  = /^   ([a-z])\. (.*)/;
+            var SUB_BULLET_OLD   = /^   ◦ (.*)/;
 
             var lines       = rawText.split('\n');
             var html        = '';
@@ -1081,10 +1091,11 @@
 
             for (var i = 0; i < lines.length; i++) {
                 var line = lines[i];
-                var mo = MAIN_ORDERED.exec(line);
-                var mb = MAIN_BULLET.exec(line);
-                var so = SUB_ORDERED.exec(line);
-                var sb = SUB_BULLET.exec(line);
+                /* New indented format first, fall back to legacy */
+                var mo = MAIN_ORDERED.exec(line) || MAIN_ORDERED_OLD.exec(line);
+                var mb = MAIN_BULLET.exec(line)  || MAIN_BULLET_OLD.exec(line);
+                var so = SUB_ORDERED.exec(line)  || SUB_ORDERED_OLD.exec(line);
+                var sb = SUB_BULLET.exec(line)   || SUB_BULLET_OLD.exec(line);
 
                 if (so) {
                     flushPara();
