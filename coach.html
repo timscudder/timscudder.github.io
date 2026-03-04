@@ -549,7 +549,7 @@
                 return;
             }
 
-            /* BACKSPACE on empty sub-list item — return to parent list */
+            /* BACKSPACE — smart list prefix handling */
             if (e.key === 'Backspace') {
                 var pos       = textarea.selectionStart;
                 var val       = textarea.value;
@@ -557,20 +557,22 @@
                 var lineEnd   = val.indexOf('\n', pos); if (lineEnd === -1) lineEnd = val.length;
                 var fullLine  = val.substring(lineStart, lineEnd);
 
+                /* ── Sub-list empty item: return to parent list ── */
                 var soFull = /^   [a-z]\. (.*)/.exec(fullLine);
                 var suFull = /^   ◦ (.*)/.exec(fullLine);
                 var subIsEmpty = (soFull && soFull[1].trim() === '') ||
                                  (suFull && suFull[1].trim() === '');
 
-                if (subIsEmpty) {
+                if (subIsEmpty && pos > lineStart) {
                     e.preventDefault();
                     var newPrefix;
                     if (soFull) {
-                        /* Find last main ordered number to continue from */
+                        /* Find last main ordered number — start at length-2 to skip
+                           the trailing '' that split('\n') always produces */
                         var before = val.substring(0, lineStart);
                         var beforeLines = before.split('\n');
                         var lastNum = 0;
-                        for (var j = beforeLines.length - 1; j >= 0; j--) {
+                        for (var j = beforeLines.length - 2; j >= 0; j--) {
                             var nm = /^(\d+)\. /.exec(beforeLines[j]);
                             if (nm) { lastNum = parseInt(nm[1], 10); break; }
                             if (beforeLines[j].trim() === '') break;
@@ -586,8 +588,25 @@
                     textarea.dispatchEvent(new Event('input'));
                     return;
                 }
-                /* else: normal backspace */
-                return;
+
+                /* ── Main list empty item: clear entire prefix in one tap ── */
+                var moFull = /^(\d+)\. (.*)/.exec(fullLine);
+                var muFull = /^• (.*)/.exec(fullLine);
+                var mainIsEmpty = (moFull && moFull[2].trim() === '') ||
+                                  (muFull && muFull[1].trim() === '');
+
+                if (mainIsEmpty && pos > lineStart) {
+                    e.preventDefault();
+                    /* Remove the prefix, leaving an empty line */
+                    textarea.value = val.substring(0, lineStart) + val.substring(lineEnd);
+                    textarea.selectionStart = textarea.selectionEnd = lineStart;
+                    consecutiveEmptyListEnters = 0;
+                    autoResize(textarea);
+                    textarea.dispatchEvent(new Event('input'));
+                    return;
+                }
+
+                /* else: normal backspace — fall through */
             }
 
             /* ENTER (no shift) — submit */
