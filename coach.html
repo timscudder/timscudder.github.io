@@ -522,6 +522,15 @@
                 return;
             }
 
+            /* Auto-indent "N. " typed at the start of a line → "   N. " */
+            var orderedTyped = /^(\d+)\. $/.exec(linePrefix);
+            if (orderedTyped) {
+                var indented = '   ' + orderedTyped[1] + '. ';
+                textarea.value = val.substring(0, lineStart) + indented + val.substring(pos);
+                textarea.selectionStart = textarea.selectionEnd = lineStart + indented.length;
+                return;
+            }
+
             /* Reset exit-counter if user is typing real content on a list line */
             var hasContent = /^   (?:\d+\. |• )(.+)/.test(linePrefix) ||
                              /^      (?:[a-z]\. |◦ )(.+)/.test(linePrefix);
