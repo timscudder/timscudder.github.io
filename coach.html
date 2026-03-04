@@ -163,7 +163,7 @@
 
         /* Collapsed state: extra bottom padding for button + fade overlay */
         .msg-user-bubble.has-overflow {
-            padding-bottom: 44px;
+            padding-bottom: 56px;
         }
 
         .msg-user-bubble.has-overflow::after {
@@ -172,8 +172,8 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 68px;
-            background: linear-gradient(to bottom, transparent, var(--cream-dark));
+            height: 100px;
+            background: linear-gradient(to bottom, transparent 0%, var(--cream-dark) 65%);
             pointer-events: none;
             border-radius: 0 0 4px 16px;
         }
@@ -181,7 +181,7 @@
         /* Expanded state */
         .msg-user-bubble.is-expanded {
             max-height: none;
-            padding-bottom: 44px;
+            padding-bottom: 56px;
         }
 
         /* Show more / Show less button — sits inside the bubble */
@@ -322,7 +322,7 @@
         }
 
         .prompt-box:focus-within {
-            border-color: var(--ink-medium);
+            border-color: rgba(107, 95, 84, 0.55);
         }
 
         /* Override styles.css textarea for the coach prompt only */
@@ -330,7 +330,7 @@
             display: block;
             width: 100%;
             min-height: 80px;
-            max-height: 200px;
+            max-height: 220px;
             padding: 13px 52px 13px 16px;
             font-family: 'Lora', Georgia, serif;
             font-size: 1rem;

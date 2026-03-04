@@ -493,9 +493,9 @@ textarea {
 input:focus,
 textarea:focus {
     outline: none;
-    border-color: var(--green);
+    border-color: rgba(107, 95, 84, 0.55);
     background: #fff;
-    box-shadow: 0 0 0 3px rgba(45, 92, 65, 0.12);
+    box-shadow: none;
 }
 
 input.is-invalid,
