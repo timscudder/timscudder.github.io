@@ -172,6 +172,17 @@
         .msg-user-bubble li { margin-bottom: 0.15em; }
         .msg-user-bubble li:last-child { margin-bottom: 0; }
 
+        /* Sub-lists rendered as separate sequential elements with extra indent */
+        .msg-user-bubble ol[type="a"],
+        .msg-user-bubble ul.user-sub-ul {
+            padding-left: 2.8em;
+            margin-top: 0;
+        }
+
+        .msg-user-bubble ul.user-sub-ul {
+            list-style-type: circle;
+        }
+
         /* Collapsed state: extra bottom padding for button + fade overlay */
         .msg-user-bubble.has-overflow {
             padding-bottom: 56px;
@@ -476,6 +487,7 @@
         let currentScenario = null;
         let messages = [];
         let phase = 0;
+        let consecutiveEmptyListEnters = 0;
 
         /* ── Elements ── */
         const textarea            = document.getElementById('answer-textarea');
@@ -496,58 +508,144 @@
             submitBtn.classList.toggle('is-active', hasText);
         });
 
-        /* Enter submits; Shift+Enter inserts a newline (and auto-continues lists) */
+        /* Auto-replace "- " with "• " when typed at the start of a line */
+        textarea.addEventListener('input', function () {
+            var pos = textarea.selectionStart;
+            var val = textarea.value;
+            var lineStart = val.lastIndexOf('\n', pos - 1) + 1;
+            var linePrefix = val.substring(lineStart, pos);
+            if (linePrefix === '- ') {
+                textarea.value = val.substring(0, lineStart) + '• ' + val.substring(pos);
+                textarea.selectionStart = textarea.selectionEnd = lineStart + 2;
+            }
+        });
+
+        /* ── Keyboard handler ── */
         textarea.addEventListener('keydown', function (e) {
+
+            /* TAB — indent list item into sub-list */
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                var pos       = textarea.selectionStart;
+                var val       = textarea.value;
+                var lineStart = val.lastIndexOf('\n', pos - 1) + 1;
+                var lineEnd   = val.indexOf('\n', pos); if (lineEnd === -1) lineEnd = val.length;
+                var fullLine  = val.substring(lineStart, lineEnd);
+
+                var mo = /^(\d+)\. (.*)/.exec(fullLine);
+                var mu = /^• (.*)/.exec(fullLine);
+
+                if (mo || mu) {
+                    var content   = mo ? mo[2] : mu[1];
+                    var newPrefix = mo ? '   a. ' : '   ◦ ';
+                    var newLine   = newPrefix + content;
+                    textarea.value = val.substring(0, lineStart) + newLine + val.substring(lineEnd);
+                    textarea.selectionStart = textarea.selectionEnd = lineStart + newPrefix.length + content.length;
+                    consecutiveEmptyListEnters = 0;
+                    autoResize(textarea);
+                    textarea.dispatchEvent(new Event('input'));
+                }
+                /* Not on a list line: swallow Tab (avoids focus jump) */
+                return;
+            }
+
+            /* BACKSPACE on empty sub-list item — return to parent list */
+            if (e.key === 'Backspace') {
+                var pos       = textarea.selectionStart;
+                var val       = textarea.value;
+                var lineStart = val.lastIndexOf('\n', pos - 1) + 1;
+                var lineEnd   = val.indexOf('\n', pos); if (lineEnd === -1) lineEnd = val.length;
+                var fullLine  = val.substring(lineStart, lineEnd);
+
+                var soFull = /^   [a-z]\. (.*)/.exec(fullLine);
+                var suFull = /^   ◦ (.*)/.exec(fullLine);
+                var subIsEmpty = (soFull && soFull[1].trim() === '') ||
+                                 (suFull && suFull[1].trim() === '');
+
+                if (subIsEmpty) {
+                    e.preventDefault();
+                    var newPrefix;
+                    if (soFull) {
+                        /* Find last main ordered number to continue from */
+                        var before = val.substring(0, lineStart);
+                        var beforeLines = before.split('\n');
+                        var lastNum = 0;
+                        for (var j = beforeLines.length - 1; j >= 0; j--) {
+                            var nm = /^(\d+)\. /.exec(beforeLines[j]);
+                            if (nm) { lastNum = parseInt(nm[1], 10); break; }
+                            if (beforeLines[j].trim() === '') break;
+                        }
+                        newPrefix = (lastNum > 0 ? lastNum + 1 : 1) + '. ';
+                    } else {
+                        newPrefix = '• ';
+                    }
+                    textarea.value = val.substring(0, lineStart) + newPrefix + val.substring(lineEnd);
+                    textarea.selectionStart = textarea.selectionEnd = lineStart + newPrefix.length;
+                    consecutiveEmptyListEnters = 0;
+                    autoResize(textarea);
+                    textarea.dispatchEvent(new Event('input'));
+                    return;
+                }
+                /* else: normal backspace */
+                return;
+            }
+
+            /* ENTER (no shift) — submit */
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 if (!submitBtn.disabled) handleSubmit();
                 return;
             }
 
+            /* SHIFT+ENTER — newline, with list continuation logic */
             if (e.key === 'Enter' && e.shiftKey) {
                 var pos       = textarea.selectionStart;
                 var val       = textarea.value;
                 var lineStart = val.lastIndexOf('\n', pos - 1) + 1;
-                var currentLine = val.substring(lineStart, pos);
+                var cur       = val.substring(lineStart, pos);
 
-                var bulletMatch   = /^(- )(.*)/.exec(currentLine);
-                var numberedMatch = /^(\d+)\. (.*)/.exec(currentLine);
+                var mo = /^(\d+)\. (.*)/.exec(cur);
+                var mu = /^• (.*)/.exec(cur);
+                var so = /^   ([a-z])\. (.*)/.exec(cur);
+                var su = /^   ◦ (.*)/.exec(cur);
 
-                if (bulletMatch) {
+                if (mo || mu || so || su) {
                     e.preventDefault();
-                    if (bulletMatch[2].trim() === '') {
-                        /* Empty bullet — exit list */
-                        textarea.value = val.substring(0, lineStart) + val.substring(pos);
-                        textarea.selectionStart = textarea.selectionEnd = lineStart;
+                    var content = mo ? mo[2] : mu ? mu[1] : so ? so[2] : su[1];
+                    var isEmpty = content.trim() === '';
+
+                    if (isEmpty) {
+                        consecutiveEmptyListEnters++;
+                        if (consecutiveEmptyListEnters >= 2) {
+                            /* Exit list — strip the empty item prefix, leave a blank line */
+                            consecutiveEmptyListEnters = 0;
+                            textarea.value = val.substring(0, lineStart) + '\n' + val.substring(pos);
+                            textarea.selectionStart = textarea.selectionEnd = lineStart + 1;
+                        } else {
+                            /* First empty — add another empty item */
+                            var ins = '\n' + nextListPrefix(mo, mu, so, su);
+                            textarea.value = val.substring(0, pos) + ins + val.substring(pos);
+                            textarea.selectionStart = textarea.selectionEnd = pos + ins.length;
+                        }
                     } else {
-                        /* Continue bullet list */
-                        var ins = '\n- ';
+                        consecutiveEmptyListEnters = 0;
+                        var ins = '\n' + nextListPrefix(mo, mu, so, su);
                         textarea.value = val.substring(0, pos) + ins + val.substring(pos);
                         textarea.selectionStart = textarea.selectionEnd = pos + ins.length;
                     }
                     autoResize(textarea);
                     textarea.dispatchEvent(new Event('input'));
-
-                } else if (numberedMatch) {
-                    e.preventDefault();
-                    if (numberedMatch[2].trim() === '') {
-                        /* Empty numbered item — exit list */
-                        textarea.value = val.substring(0, lineStart) + val.substring(pos);
-                        textarea.selectionStart = textarea.selectionEnd = lineStart;
-                    } else {
-                        /* Continue numbered list */
-                        var nextNum = parseInt(numberedMatch[1], 10) + 1;
-                        var ins = '\n' + nextNum + '. ';
-                        textarea.value = val.substring(0, pos) + ins + val.substring(pos);
-                        textarea.selectionStart = textarea.selectionEnd = pos + ins.length;
-                    }
-                    autoResize(textarea);
-                    textarea.dispatchEvent(new Event('input'));
-
                 }
-                /* else: plain Shift+Enter newline — let browser handle it */
+                /* else: plain Shift+Enter newline — let browser handle */
             }
         });
+
+        function nextListPrefix(mo, mu, so, su) {
+            if (mo) return (parseInt(mo[1], 10) + 1) + '. ';
+            if (mu) return '• ';
+            if (so) return '   ' + String.fromCharCode(so[1].charCodeAt(0) + 1) + '. ';
+            return '   ◦ ';
+        }
 
         /* Back-to-bottom: show when not at bottom */
         chatArea.addEventListener('scroll', function () {
@@ -931,65 +1029,91 @@
         }
 
         /* ── User text formatter ───────────────────────────────────────────────────
-           Rules:
-             - Lines starting with "- " → <ul> bullet list
-             - Lines starting with "1. " / "2. " etc. → <ol> numbered list
-             - Blank lines end a paragraph
-             - Everything else → plain paragraph text
+           Handles:
+             • / -     → <ul> main bullet list
+             1. 2. …   → <ol> main numbered list
+             "   a. "  → <ol type="a"> sub-list (indented)
+             "   ◦ "   → <ul class="user-sub-ul"> sub-list (indented, hollow bullet)
+             blank     → paragraph break
+             other     → paragraph text
         ── */
         function formatUserText(rawText) {
-            var BULLET_LINE   = /^- (.+)/;       // "- item"
-            var NUMBERED_LINE = /^\d+\. (.+)/;   // "1. item", "2. item" …
+            var MAIN_ORDERED = /^(\d+)\. (.*)/;
+            var MAIN_BULLET  = /^(?:• |- )(.*)/;
+            var SUB_ORDERED  = /^   ([a-z])\. (.*)/;
+            var SUB_BULLET   = /^   ◦ (.*)/;
 
-            var lines = rawText.split('\n');
-            var outputHtml = '';
-            var inBulletList = false;
-            var inNumberedList = false;
-            var pendingParagraphLines = [];
+            var lines       = rawText.split('\n');
+            var html        = '';
+            var ctx         = null; /* { tag:'ol'|'ul', sub:boolean } */
+            var pendingPara = [];
 
-            function closeParagraph() {
-                if (pendingParagraphLines.length === 0) return;
-                outputHtml += '<p>' + pendingParagraphLines.map(escapeHtml).join('<br>') + '</p>';
-                pendingParagraphLines = [];
+            function flushPara() {
+                if (!pendingPara.length) return;
+                html += '<p>' + pendingPara.map(escapeHtml).join('<br>') + '</p>';
+                pendingPara = [];
             }
 
-            function closeBulletList()   { if (inBulletList)   { outputHtml += '</ul>'; inBulletList   = false; } }
-            function closeNumberedList() { if (inNumberedList) { outputHtml += '</ol>'; inNumberedList = false; } }
+            function closeList() {
+                if (!ctx) return;
+                html += '</' + ctx.tag + '>';
+                ctx = null;
+            }
 
             for (var i = 0; i < lines.length; i++) {
                 var line = lines[i];
-                var bulletMatch   = BULLET_LINE.exec(line);
-                var numberedMatch = NUMBERED_LINE.exec(line);
+                var mo = MAIN_ORDERED.exec(line);
+                var mb = MAIN_BULLET.exec(line);
+                var so = SUB_ORDERED.exec(line);
+                var sb = SUB_BULLET.exec(line);
 
-                if (bulletMatch) {
-                    closeParagraph();
-                    closeNumberedList();
-                    if (!inBulletList) { outputHtml += '<ul>'; inBulletList = true; }
-                    outputHtml += '<li>' + escapeHtml(bulletMatch[1]) + '</li>';
+                if (so) {
+                    flushPara();
+                    if (!ctx || ctx.tag !== 'ol' || !ctx.sub) {
+                        closeList();
+                        html += '<ol type="a">';
+                        ctx = { tag: 'ol', sub: true };
+                    }
+                    html += '<li>' + escapeHtml(so[2]) + '</li>';
 
-                } else if (numberedMatch) {
-                    closeParagraph();
-                    closeBulletList();
-                    if (!inNumberedList) { outputHtml += '<ol>'; inNumberedList = true; }
-                    outputHtml += '<li>' + escapeHtml(numberedMatch[1]) + '</li>';
+                } else if (sb) {
+                    flushPara();
+                    if (!ctx || ctx.tag !== 'ul' || !ctx.sub) {
+                        closeList();
+                        html += '<ul class="user-sub-ul">';
+                        ctx = { tag: 'ul', sub: true };
+                    }
+                    html += '<li>' + escapeHtml(sb[1]) + '</li>';
+
+                } else if (mo) {
+                    flushPara();
+                    if (ctx && (ctx.sub || ctx.tag !== 'ol')) closeList();
+                    if (!ctx) {
+                        var n = parseInt(mo[1], 10);
+                        html += n > 1 ? '<ol start="' + n + '">' : '<ol>';
+                        ctx = { tag: 'ol', sub: false };
+                    }
+                    html += '<li>' + escapeHtml(mo[2]) + '</li>';
+
+                } else if (mb) {
+                    flushPara();
+                    if (ctx && (ctx.sub || ctx.tag !== 'ul')) closeList();
+                    if (!ctx) { html += '<ul>'; ctx = { tag: 'ul', sub: false }; }
+                    html += '<li>' + escapeHtml(mb[1]) + '</li>';
+
+                } else if (line.trim() === '') {
+                    closeList();
+                    flushPara();
 
                 } else {
-                    closeBulletList();
-                    closeNumberedList();
-                    var isBlankLine = line.trim() === '';
-                    if (isBlankLine) {
-                        closeParagraph();
-                    } else {
-                        pendingParagraphLines.push(line);
-                    }
+                    closeList();
+                    pendingPara.push(line);
                 }
             }
 
-            closeBulletList();
-            closeNumberedList();
-            closeParagraph();
-
-            return outputHtml || escapeHtml(rawText);
+            closeList();
+            flushPara();
+            return html || escapeHtml(rawText);
         }
 
         /* ── Text helpers ── */
