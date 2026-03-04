@@ -329,8 +329,8 @@
         .prompt-box textarea {
             display: block;
             width: 100%;
-            min-height: 80px;
-            max-height: 220px;
+            min-height: 160px;
+            max-height: 280px;
             padding: 13px 52px 13px 16px;
             font-family: 'Lora', Georgia, serif;
             font-size: 1rem;
@@ -344,7 +344,7 @@
             scrollbar-width: none;
             -ms-overflow-style: none;
             /* reset styles.css overrides */
-            min-height: 80px;
+            min-height: 160px;
             box-shadow: none;
         }
 
@@ -642,7 +642,7 @@
 
         function clearInput() {
             textarea.value = '';
-            textarea.style.height = '80px';
+            textarea.style.height = '160px';
             submitBtn.disabled = true;
             submitBtn.classList.remove('is-active');
         }
@@ -769,9 +769,7 @@
                 for (var s = 0; s < sectionKeys.length; s++) {
                     (function (key, delay) {
                         setTimeout(function () {
-                            var sEl = sectionToEl(key, sections[key], fullText);
-                            msgEl.appendChild(sEl);
-                            sEl.scrollIntoView({ block: 'nearest' });
+                            msgEl.appendChild(sectionToEl(key, sections[key], fullText));
                         }, delay);
                     })(sectionKeys[s], s * STEP);
                 }
