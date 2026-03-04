@@ -154,12 +154,23 @@
             font-size: 0.95rem;
             line-height: 1.65;
             color: var(--ink);
-            white-space: pre-wrap;
             word-break: break-word;
             position: relative;
             max-height: 260px;
             overflow: hidden;
         }
+
+        .msg-user-bubble p { margin: 0; }
+        .msg-user-bubble p + p { margin-top: 0.5em; }
+
+        .msg-user-bubble ul,
+        .msg-user-bubble ol {
+            margin: 0.35em 0;
+            padding-left: 1.4em;
+        }
+
+        .msg-user-bubble li { margin-bottom: 0.15em; }
+        .msg-user-bubble li:last-child { margin-bottom: 0; }
 
         /* Collapsed state: extra bottom padding for button + fade overlay */
         .msg-user-bubble.has-overflow {
@@ -485,6 +496,14 @@
             submitBtn.classList.toggle('is-active', hasText);
         });
 
+        /* Enter submits; Shift+Enter inserts a newline */
+        textarea.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                if (!submitBtn.disabled) handleSubmit();
+            }
+        });
+
         /* Back-to-bottom: show when not at bottom */
         chatArea.addEventListener('scroll', function () {
             var atBottom = chatArea.scrollTop + chatArea.clientHeight >= chatArea.scrollHeight - 20;
@@ -596,7 +615,7 @@
             el.className = 'msg-user';
             var bubble = document.createElement('div');
             bubble.className = 'msg-user-bubble';
-            bubble.textContent = text;
+            bubble.innerHTML = formatUserText(text);
             el.appendChild(bubble);
             chatArea.appendChild(el);
             scrollToBottom();
@@ -864,6 +883,68 @@
             if (n >= 8) return 'is-green';
             if (n >= 5) return 'is-medium';
             return 'is-rust';
+        }
+
+        /* ── User text formatter ───────────────────────────────────────────────────
+           Rules:
+             - Lines starting with "- " → <ul> bullet list
+             - Lines starting with "1. " / "2. " etc. → <ol> numbered list
+             - Blank lines end a paragraph
+             - Everything else → plain paragraph text
+        ── */
+        function formatUserText(rawText) {
+            var BULLET_LINE   = /^- (.+)/;       // "- item"
+            var NUMBERED_LINE = /^\d+\. (.+)/;   // "1. item", "2. item" …
+
+            var lines = rawText.split('\n');
+            var outputHtml = '';
+            var inBulletList = false;
+            var inNumberedList = false;
+            var pendingParagraphLines = [];
+
+            function closeParagraph() {
+                if (pendingParagraphLines.length === 0) return;
+                outputHtml += '<p>' + pendingParagraphLines.map(escapeHtml).join('<br>') + '</p>';
+                pendingParagraphLines = [];
+            }
+
+            function closeBulletList()   { if (inBulletList)   { outputHtml += '</ul>'; inBulletList   = false; } }
+            function closeNumberedList() { if (inNumberedList) { outputHtml += '</ol>'; inNumberedList = false; } }
+
+            for (var i = 0; i < lines.length; i++) {
+                var line = lines[i];
+                var bulletMatch   = BULLET_LINE.exec(line);
+                var numberedMatch = NUMBERED_LINE.exec(line);
+
+                if (bulletMatch) {
+                    closeParagraph();
+                    closeNumberedList();
+                    if (!inBulletList) { outputHtml += '<ul>'; inBulletList = true; }
+                    outputHtml += '<li>' + escapeHtml(bulletMatch[1]) + '</li>';
+
+                } else if (numberedMatch) {
+                    closeParagraph();
+                    closeBulletList();
+                    if (!inNumberedList) { outputHtml += '<ol>'; inNumberedList = true; }
+                    outputHtml += '<li>' + escapeHtml(numberedMatch[1]) + '</li>';
+
+                } else {
+                    closeBulletList();
+                    closeNumberedList();
+                    var isBlankLine = line.trim() === '';
+                    if (isBlankLine) {
+                        closeParagraph();
+                    } else {
+                        pendingParagraphLines.push(line);
+                    }
+                }
+            }
+
+            closeBulletList();
+            closeNumberedList();
+            closeParagraph();
+
+            return outputHtml || escapeHtml(rawText);
         }
 
         /* ── Text helpers ── */
