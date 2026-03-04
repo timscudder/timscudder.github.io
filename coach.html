@@ -767,11 +767,14 @@
                 /* Reveal sections with staggered fade-ins */
                 var STEP = 280;
                 for (var s = 0; s < sectionKeys.length; s++) {
-                    (function (key, delay) {
+                    (function (key, delay, idx) {
                         setTimeout(function () {
                             msgEl.appendChild(sectionToEl(key, sections[key], fullText));
+                            /* On first section, scroll to the top of the response
+                               so the user reads from the beginning, not the bottom */
+                            if (idx === 0) msgEl.scrollIntoView({ block: 'start' });
                         }, delay);
-                    })(sectionKeys[s], s * STEP);
+                    })(sectionKeys[s], s * STEP, s);
                 }
 
                 /* Update phase after the last section has appeared */
