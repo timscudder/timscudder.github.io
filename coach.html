@@ -496,11 +496,56 @@
             submitBtn.classList.toggle('is-active', hasText);
         });
 
-        /* Enter submits; Shift+Enter inserts a newline */
+        /* Enter submits; Shift+Enter inserts a newline (and auto-continues lists) */
         textarea.addEventListener('keydown', function (e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 if (!submitBtn.disabled) handleSubmit();
+                return;
+            }
+
+            if (e.key === 'Enter' && e.shiftKey) {
+                var pos       = textarea.selectionStart;
+                var val       = textarea.value;
+                var lineStart = val.lastIndexOf('\n', pos - 1) + 1;
+                var currentLine = val.substring(lineStart, pos);
+
+                var bulletMatch   = /^(- )(.*)/.exec(currentLine);
+                var numberedMatch = /^(\d+)\. (.*)/.exec(currentLine);
+
+                if (bulletMatch) {
+                    e.preventDefault();
+                    if (bulletMatch[2].trim() === '') {
+                        /* Empty bullet — exit list */
+                        textarea.value = val.substring(0, lineStart) + val.substring(pos);
+                        textarea.selectionStart = textarea.selectionEnd = lineStart;
+                    } else {
+                        /* Continue bullet list */
+                        var ins = '\n- ';
+                        textarea.value = val.substring(0, pos) + ins + val.substring(pos);
+                        textarea.selectionStart = textarea.selectionEnd = pos + ins.length;
+                    }
+                    autoResize(textarea);
+                    textarea.dispatchEvent(new Event('input'));
+
+                } else if (numberedMatch) {
+                    e.preventDefault();
+                    if (numberedMatch[2].trim() === '') {
+                        /* Empty numbered item — exit list */
+                        textarea.value = val.substring(0, lineStart) + val.substring(pos);
+                        textarea.selectionStart = textarea.selectionEnd = lineStart;
+                    } else {
+                        /* Continue numbered list */
+                        var nextNum = parseInt(numberedMatch[1], 10) + 1;
+                        var ins = '\n' + nextNum + '. ';
+                        textarea.value = val.substring(0, pos) + ins + val.substring(pos);
+                        textarea.selectionStart = textarea.selectionEnd = pos + ins.length;
+                    }
+                    autoResize(textarea);
+                    textarea.dispatchEvent(new Event('input'));
+
+                }
+                /* else: plain Shift+Enter newline — let browser handle it */
             }
         });
 
