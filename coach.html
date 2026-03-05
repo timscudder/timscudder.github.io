@@ -298,11 +298,11 @@
             transform: none !important;
         }
 
-        /* ── Change scenario row (centred below prompt) ─────────────────────────── */
+        /* ── Scenario nav row (prev / next below prompt) ────────────────────────── */
 
         .scenario-change-row {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             margin-top: 16px;
         }
 
@@ -319,12 +319,16 @@
             cursor: pointer;
             padding: 4px 8px;
             border-radius: 4px;
-            transition: color 0.15s ease;
+            transition: color 0.15s ease, gap 0.15s ease;
             transform: none !important;
         }
 
+        #prev-scenario-btn::before { content: '←'; }
+        #next-scenario-btn::after  { content: '→'; }
+
         .scenario-change-btn:hover:not(:disabled) {
             color: var(--green);
+            gap: 10px;
             transform: none !important;
         }
 
@@ -468,13 +472,8 @@
                 </button>
             </div>
             <div class="scenario-change-row">
-                <button class="scenario-change-btn" id="new-scenario-btn" onclick="loadScenario()">
-                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M11 6.5A4.5 4.5 0 1 1 8.5 2.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        <path d="M11 2.5v3H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Change scenario
-                </button>
+                <button class="scenario-change-btn" id="prev-scenario-btn" onclick="navigateScenario(-1)">Previous scenario</button>
+                <button class="scenario-change-btn" id="next-scenario-btn" onclick="navigateScenario(1)">Next scenario</button>
             </div>
         </div>
     </div>
@@ -484,6 +483,8 @@
         const API_BASE = 'https://product-sense-coach-production.up.railway.app';
 
         /* ── State ── */
+        let allScenarios = [];
+        let currentScenarioIndex = -1;
         let currentScenario = null;
         let messages = [];
         let phase = 0;
@@ -495,10 +496,31 @@
         const inputDock           = document.getElementById('input-dock');
         const chatArea            = document.getElementById('chat-area');
         const scrollBottomWrapper = document.getElementById('scroll-bottom-wrapper');
-        const newScenarioBtn      = document.getElementById('new-scenario-btn');
+        const prevScenarioBtn     = document.getElementById('prev-scenario-btn');
+        const nextScenarioBtn     = document.getElementById('next-scenario-btn');
 
-        /* ── Boot ── */
-        loadScenario();
+        function setNavBusy(busy) {
+            prevScenarioBtn.disabled = busy;
+            nextScenarioBtn.disabled = busy;
+        }
+
+        /* ── Boot — fetch full list, start on a random scenario ── */
+        (async function boot() {
+            setNavBusy(true);
+            try {
+                var res = await fetch(API_BASE + '/api/scenarios');
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                allScenarios = await res.json();
+                currentScenarioIndex = Math.floor(Math.random() * allScenarios.length);
+                await loadScenario();
+            } catch (err) {
+                var errEl = document.createElement('div');
+                errEl.className = 'msg-coach';
+                errEl.innerHTML = '<div class="coach-error">Could not connect to server.</div>';
+                chatArea.appendChild(errEl);
+                setNavBusy(false);
+            }
+        })();
         wireAutoResize(textarea);
 
         /* Button activates only when textarea has content */
@@ -733,61 +755,52 @@
             }
         }
 
-        /* ── Load scenario ── */
+        /* ── Navigate to prev / next scenario (wraps around) ── */
+        function navigateScenario(dir) {
+            if (!allScenarios.length) return;
+            currentScenarioIndex = (currentScenarioIndex + dir + allScenarios.length) % allScenarios.length;
+            loadScenario();
+        }
+
+        /* ── Load the scenario at currentScenarioIndex ── */
         async function loadScenario() {
-            newScenarioBtn.disabled = true;
+            setNavBusy(true);
 
             /* Remove all chat content except the intro, which stays in place */
             Array.from(chatArea.children).forEach(function (child) {
                 if (!child.classList.contains('coach-intro')) child.remove();
             });
 
-            var excludeParam = currentScenario
-                ? '?exclude=' + encodeURIComponent(currentScenario.title)
-                : '';
+            var data = allScenarios[currentScenarioIndex];
+            currentScenario = data;
 
-            try {
-                var res = await fetch(API_BASE + '/api/scenario' + excludeParam);
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                var data = await res.json();
-                currentScenario = data;
+            phase = 0;
+            messages = [];
+            clearInput();
+            setInputBusy(false);
+            inputDock.style.display = '';
 
-                phase = 0;
-                messages = [];
-                clearInput();
-                setInputBusy(false);
-                inputDock.style.display = '';
-
-                /* Create intro only on first load */
-                if (!chatArea.querySelector('.coach-intro')) {
-                    var introEl = document.createElement('div');
-                    introEl.className = 'coach-intro';
-                    introEl.innerHTML =
-                        '<h1>Product Sense Coach</h1>' +
-                        '<p class="coach-intro-text">Use this coach to refine your ability to breakdown complex project scenarios. Good luck!</p>' +
-                        '<div class="scenario-head">The scenario</div>';
-                    chatArea.appendChild(introEl);
-                }
-
-                /* Scenario card — fades in on each load */
-                var msgEl = document.createElement('div');
-                msgEl.className = 'msg-coach coach-fade-in';
-                msgEl.innerHTML =
-                    '<div class="scenario-section-h2">' + escapeHtml(data.title) + '</div>' +
-                    '<div class="scenario-body">' + escapeHtml(data.scenario) + '</div>';
-                chatArea.appendChild(msgEl);
-
-                newScenarioBtn.disabled = false;
-                scrollToBottom();
-            } catch (err) {
-                var errEl = document.createElement('div');
-                errEl.className = 'msg-coach';
-                errEl.innerHTML =
-                    '<div class="coach-error">Could not connect. Make sure the server is running at localhost:3001.</div>';
-                chatArea.appendChild(errEl);
-                newScenarioBtn.disabled = false;
-                console.error(err);
+            /* Create intro only on first load */
+            if (!chatArea.querySelector('.coach-intro')) {
+                var introEl = document.createElement('div');
+                introEl.className = 'coach-intro';
+                introEl.innerHTML =
+                    '<h1>Product Sense Coach</h1>' +
+                    '<p class="coach-intro-text">Use this coach to refine your ability to breakdown complex project scenarios. Good luck!</p>' +
+                    '<div class="scenario-head">The scenario</div>';
+                chatArea.appendChild(introEl);
             }
+
+            /* Scenario card — fades in on each load */
+            var msgEl = document.createElement('div');
+            msgEl.className = 'msg-coach coach-fade-in';
+            msgEl.innerHTML =
+                '<div class="scenario-section-h2">' + escapeHtml(data.title) + '</div>' +
+                '<div class="scenario-body">' + escapeHtml(data.scenario) + '</div>';
+            chatArea.appendChild(msgEl);
+
+            setNavBusy(false);
+            scrollToBottom();
         }
 
         /* ── Chat helpers ── */
@@ -992,7 +1005,7 @@
                         inputDock.style.display = 'none';
                         var endEl = document.createElement('div');
                         endEl.className = 'session-end-row';
-                        endEl.innerHTML = '<button class="coach-btn-primary" onclick="loadScenario()">New Scenario &rarr;</button>';
+                        endEl.innerHTML = '<button class="coach-btn-primary" onclick="navigateScenario(1)">Next Scenario &rarr;</button>';
                         chatArea.appendChild(endEl);
                     }
                 }, sectionKeys.length * STEP);
