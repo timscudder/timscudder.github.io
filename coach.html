@@ -1062,7 +1062,7 @@
             function g(rx) { var m = text.match(rx); return m ? parseInt(m[1], 10) : 0; }
             var overallScore = g(/Overall:\s*\[?(\d+)\/40\]?/i);
             var gradeMatch   = text.match(/Grade:\s*([^\]\n\r]+)/i);
-            var grade        = gradeMatch ? gradeMatch[1].replace(/\]$/, '').trim() : '';
+            var grade        = gradeMatch ? gradeMatch[1].replace(/\]$/, '').replace(/\s*\([\d–\-]+\)$/, '').trim() : '';
             return {
                 problemFraming:      g(/Problem\s+Framing\s*\[?(\d+)\/10\]?/i),
                 userEmpathy:         g(/User\s+Empathy\s*\[?(\d+)\/10\]?/i),
