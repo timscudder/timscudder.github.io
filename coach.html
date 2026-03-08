@@ -885,7 +885,7 @@
                     '<div class="coach-rubric-denom">/10</div>' +
                     '<div class="coach-rubric-label">' + it.label + '</div>' +
                     '<div class="coach-score-bar-track">' +
-                    '<div class="coach-score-bar-fill ' + scoreColor(it.score) + '" style="width:' + ((it.score / 10) * 100) + '%"></div>' +
+                    '<div class="coach-score-bar-fill ' + scoreColor(it.score) + '" style="width:' + (it.score === 0 ? 2 : (it.score / 10) * 100) + '%"></div>' +
                     '</div></div>';
             }
             html += '</div>';
