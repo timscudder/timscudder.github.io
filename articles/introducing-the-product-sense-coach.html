@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducing the AI Product Sense Coach – Tim Scudder</title>
+    <link rel="icon" href="../favicon.ico?v=2" sizes="any">
+    <link rel="icon" href="../favicon.svg?v=2" type="image/svg+xml">
+    <link rel="icon" href="../favicon-32.png?v=2" type="image/png" sizes="32x32">
+    <link rel="icon" href="../favicon-16.png?v=2" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2" sizes="180x180">
+
+    <!-- SEO & Social Sharing -->
+    <meta name="description" content="I built an AI Product Sense Coach that presents realistic scenarios, evaluates responses, and gives honest structured feedback. Here's what the build taught me about AI agent design.">
+    <meta name="author" content="Tim Scudder">
+    <link rel="canonical" href="https://timscudderproduct.com/articles/introducing-the-product-sense-coach.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Introducing the AI Product Sense Coach – Tim Scudder">
+    <meta property="og:description" content="I built an AI Product Sense Coach that presents realistic scenarios, evaluates responses, and gives honest structured feedback. Here's what the build taught me about AI agent design.">
+    <meta property="og:url" content="https://timscudderproduct.com/articles/introducing-the-product-sense-coach.html">
+    <meta property="og:image" content="https://timscudderproduct.com/og-image.png">
+    <meta property="og:locale" content="en_GB">
+
+    <!-- Twitter/X Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Introducing the AI Product Sense Coach – Tim Scudder">
+    <meta name="twitter:description" content="I built an AI Product Sense Coach that presents realistic scenarios, evaluates responses, and gives honest structured feedback. Here's what the build taught me about AI agent design.">
+    <meta name="twitter:image" content="https://timscudderproduct.com/og-image.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="page-article">
+    <div class="page-decoration"></div>
+    <header class="site-header">
+        <div class="site-header-bar">
+            <a href="/" class="site-name">Tim Scudder, Thoughts on Product</a>
+            <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation">
+                <div class="nav-toggle-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+            <ul class="site-nav" id="site-nav">
+                <li><a href="/#writing">Writing</a></li>
+                <li><a href="/#contact">Contact</a></li>
+                <li><a href="https://www.linkedin.com/in/timothyscudder/" target="_blank" rel="noopener">LinkedIn</a></li>
+            </ul>
+        </div>
+    </header>
+    <main>
+    <article>
+        <div class="article-meta">March 2026<span class="article-tag">AI</span></div>
+        <h1>Introducing the AI Product Sense Coach</h1>
+        <div class="article-content">
+<p><strong>Product Sense is one of those skills that gets talked about constantly but is practised rarely. You can read the frameworks, study teardowns, and absorb other people's thinking. But it's ultimately a muscle developed through repeated application, honest feedback, and the discipline of working through hard problems you haven't seen before. For most Product Managers, that kind of structured practice simply isn't available.</strong></p>
+
+<p>But AI changes things.</p>
+
+<p>In the first in a series of AI-focused projects, I've built a Product Sense Coach that presents realistic scenarios, evaluates responses against a well-considered rubric, and tells you where your thinking holds up and where it doesn't. It's available on demand, doesn't need favours from anyone, and doesn't soften feedback out of politeness. Whether you're preparing for an interview or just building your critical thinking, it provides the opportunity for rigorous, repeatable practice.</p>
+
+<h2>The scope is the feature</h2>
+
+<p>The coach presents you with a product sense scenario, takes your response, and gives you structured feedback on the quality of your thinking. That's it.</p>
+
+<p>These constraints are deliberate. The coach doesn't handle questions about real product execution, strategy, or anything outside the product sense domain. The number of conversational turns is intentionally limited, because the point is to develop your initial thinking, not to simulate an extended discussion. So no file uploads, export functionality or model switching. Voice isn't supported so the focus is on the thinking, not the performance.</p>
+
+<h2>Behind the scenes</h2>
+
+<p>Like this website, I created the Product Sense Coach with Claude Code, largely with Sonnet 4.6. The coach is powered through the Anthropic API via Railway; deployments are managed via GitHub. This now standard set-up allowed me to ship fast, while demonstrating how different AI-assisted development layers produce working products. Beside the tech, product thinking, attention to the UX/UI and feedback from a small Beta group were all key.</p>
+
+<p>This is important. Current AI tools don't replace product craft: they depend on it. And you can't spec your way to a perfect product every time. In fact, testing revealed a problem that is unique to AI.</p>
+
+<h2>'A bit too strict'</h2>
+
+<p>From the off, I knew what the Product Sense Coach needed to do and was careful with the specifications. Multiple scenarios, two turns of Socratic questions, and a clean, familiar form factor. This helped get to a working prototype quickly. But when I started to test the coach's response to a range of inputs, I was surprised: it was mean and almost impossible to please. Why was this?</p>
+
+<p>The answer lay in the system prompt and in something that's hard for a human to intuit.</p>
+
+<p>The system prompt told the agent it was a "senior product leader with 15 years' experience, evaluating responses to product sense scenarios". It didn't specify a specific tone – and, at least with this combination of words, the model responded to sub-optimal responses in a tone that might politely be described as severe. I liked the intellectual honesty, but don't think people learn well when their spirits are crushed! So I specified an "encouraging" manner.</p>
+
+<p>But one reason for the coach's extremely high expectations was different. It related to form factor and embodiment. The Product Sense Coach asks for user inputs via a chat composer and, while I deliberately made the default state of this field larger than normal and enabled a degree of formatting to support complex entries, the written form naturally drives humans towards concision and clarity. I was looking for strong throughlines – with reasoning and logic – but not the expansive elaboration that comes through oral storytelling. I didn't tell the coach that its students would be typing their answers, because I forgot that it wouldn't know where it is. Having understood the issue, I clarified the system prompt further.</p>
+
+<p>This combination of tone calibration and context setting improved the experience without softening the substance. The lesson is clear: AI agents need to understand their operating environment, not just their role. Telling them what they are isn't enough. You must tell them where they are.</p>
+
+<h2>What's next?</h2>
+
+<p>I'm about to start my next project, with the same intention: build something useful to others, while sharing the principles and nuances this process exposes.</p>
+
+<p>If you try the Product Sense Coach, I'd welcome your feedback. If a scenario doesn't feel right, if the feedback misses the mark, or if there's something you think should work differently, please let me know. You can reach me via the contact form or find me on LinkedIn.</p>
+        </div>
+        <div class="article-contact-prompt">
+            <p class="contact-prompt-heading">Thanks for reading!</p>
+            <p class="contact-prompt-text">Want to chat about product? I'd love to hear from you.</p>
+            <a href="/#contact" class="contact-prompt-button">Get in touch</a>
+        </div>
+        <div class="article-footer">
+  <a href="turning-build-speed-into-product-progress.html">Previous article</a>
+</div>
+    </article>
+</main>
+    <footer>
+        <p>&copy; Tim Scudder</p>
+    </footer>
+    <script src="/nav.js"></script>
+</body>
+</html>
