@@ -939,7 +939,11 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ messages: messages }),
                 });
-                if (!res.ok) throw new Error('HTTP ' + res.status);
+                if (!res.ok) {
+                    var errBody;
+                    try { errBody = await res.json(); } catch (e) { errBody = null; }
+                    throw new Error(errBody && errBody.error ? errBody.error : 'HTTP ' + res.status);
+                }
 
                 /* Buffer the full SSE stream */
                 var reader = res.body.getReader();
