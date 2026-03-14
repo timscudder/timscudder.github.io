@@ -1144,12 +1144,16 @@ footer {
     padding: 0 2rem 4.5rem;
 }
 
-.coach-intro-text {
+.page-subtitle {
     font-family: 'Lora', Georgia, serif;
     font-size: 1rem;
     line-height: 1.85;
     color: var(--ink);
     margin-top: 1.5rem;
+}
+
+.page-article .page-subtitle {
+    margin-bottom: 2rem;
 }
 
 /* ── Scenario card ── */
