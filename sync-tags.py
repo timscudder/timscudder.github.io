@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Reads the article tag from each article file and syncs it to the
-matching card in index.html. Run this before committing whenever
+matching card in articles/index.html. Run this before committing whenever
 you change a tag in an article.
 
 Usage: python3 sync-tags.py
@@ -12,7 +12,7 @@ import re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 ARTICLES_DIR = os.path.join(ROOT, 'articles')
-INDEX_FILE = os.path.join(ROOT, 'index.html')
+INDEX_FILE = os.path.join(ROOT, 'articles', 'index.html')
 
 
 def get_article_tag(filepath):
@@ -29,7 +29,7 @@ def sync_tags():
     changed = []
 
     for filename in sorted(os.listdir(ARTICLES_DIR)):
-        if not filename.endswith('.html'):
+        if not filename.endswith('.html') or filename == 'index.html':
             continue
 
         tag = get_article_tag(os.path.join(ARTICLES_DIR, filename))
@@ -40,7 +40,7 @@ def sync_tags():
         pattern = re.compile(
             r'(<div class="article-card">\s*<span class="article-tag">)'
             r'([^<]+)'
-            r'(</span>\s*<h3><a href="articles/' + re.escape(filename) + r'")',
+            r'(</span>\s*<h3><a href="' + re.escape(filename) + r'")',
             re.DOTALL
         )
 
