@@ -468,6 +468,8 @@ h2.section-title {
     width: 100%;
     aspect-ratio: 3 / 2;
     background: var(--cream-dark);
+    display: block;
+    object-fit: cover;
 }
 
 .feature-card-body {
