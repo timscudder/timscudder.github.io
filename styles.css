@@ -457,7 +457,7 @@ h2.section-title {
     border-radius: 4px;
     overflow: hidden;
     background: var(--surface);
-    transition: border-color 0.2s ease;
+    transition: border-color 0.3s ease;
 }
 
 .feature-card:hover {
@@ -481,7 +481,7 @@ h2.section-title {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-    transition: background 0.2s ease;
+    transition: background 0.3s ease;
 }
 
 .feature-card-title {
