@@ -464,6 +464,10 @@ h2.section-title {
     border-color: rgba(107, 95, 84, 0.55);
 }
 
+.feature-card:hover .feature-card-body {
+    background: #fff;
+}
+
 .feature-card-image {
     width: 100%;
     aspect-ratio: 3 / 2;
@@ -477,6 +481,7 @@ h2.section-title {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
+    transition: background 0.2s ease;
 }
 
 .feature-card-title {
