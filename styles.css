@@ -457,18 +457,16 @@ h2.section-title {
     border-radius: 4px;
     overflow: hidden;
     background: var(--surface);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    transition: border-color 0.2s ease;
 }
 
 .feature-card:hover {
-    border-color: var(--green);
-    box-shadow: 0 4px 20px rgba(45, 92, 65, 0.1);
-    transform: translateY(-2px);
+    border-color: rgba(107, 95, 84, 0.55);
 }
 
 .feature-card-image {
     width: 100%;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 3 / 2;
     background: var(--cream-dark);
 }
 
