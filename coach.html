@@ -390,6 +390,16 @@
             cursor: not-allowed;
         }
 
+        @media (max-width: 640px) {
+            .prompt-box textarea {
+                min-height: 56px;
+                transition: min-height 0.25s ease;
+            }
+            .prompt-box.is-expanded textarea {
+                min-height: 160px;
+            }
+        }
+
         /* Circle submit button */
         .prompt-submit {
             position: absolute;
@@ -523,6 +533,16 @@
             }
         })();
         wireAutoResize(textarea);
+
+        /* Mobile expand / collapse */
+        textarea.addEventListener('focus', function () {
+            textarea.closest('.prompt-box').classList.add('is-expanded');
+        });
+        textarea.addEventListener('blur', function () {
+            if (!textarea.value.trim()) {
+                textarea.closest('.prompt-box').classList.remove('is-expanded');
+            }
+        });
 
         /* Button activates only when textarea has content */
         textarea.addEventListener('input', function () {
@@ -859,6 +879,7 @@
             textarea.style.height = '160px';
             submitBtn.disabled = true;
             submitBtn.classList.remove('is-active');
+            textarea.closest('.prompt-box').classList.remove('is-expanded');
         }
 
         function setInputBusy(busy) {
