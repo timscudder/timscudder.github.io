@@ -20,6 +20,12 @@
   </url>
 
   <url>
+    <loc>https://timscudderproduct.com/articles/context-and-constraints.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+    <url>
     <loc>https://timscudderproduct.com/articles/introducing-the-product-sense-coach.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.7</priority>
