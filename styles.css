@@ -883,14 +883,14 @@ textarea {
     font-style: italic;
 }
 
-/* Blockquote: warm cream-dark background — harmonises with green left border */
+/* Blockquote: matches article background */
 .article-content blockquote {
     border-left: 3px solid var(--green);
     padding: 1.1rem 1.5rem 1.1rem 1.75rem;
     margin: 1.75rem 0;
     font-style: italic;
     color: var(--ink-medium);
-    background: var(--cream-dark);
+    background: var(--cream);
     border-radius: 0 3px 3px 0;
 }
 
