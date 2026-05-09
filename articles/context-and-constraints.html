@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Context and Constraints &ndash; how product coherence survives AI-powered development &ndash; Tim Scudder</title>
+    <link rel="icon" href="../favicon.ico?v=2" sizes="any">
+    <link rel="icon" href="../favicon.svg?v=2" type="image/svg+xml">
+    <link rel="icon" href="../favicon-32.png?v=2" type="image/png" sizes="32x32">
+    <link rel="icon" href="../favicon-16.png?v=2" type="image/png" sizes="16x16">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2" sizes="180x180">
+
+    <!-- SEO & Social Sharing -->
+    <meta name="description" content="AI-powered development removes the friction that once held products together. How product teams can maintain coherence when agents build at speed.">
+    <meta name="author" content="Tim Scudder">
+    <link rel="canonical" href="https://timscudderproduct.com/articles/context-and-constraints.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Context and Constraints &ndash; how product coherence survives AI-powered development &ndash; Tim Scudder">
+    <meta property="og:description" content="AI-powered development removes the friction that once held products together. How product teams can maintain coherence when agents build at speed.">
+    <meta property="og:url" content="https://timscudderproduct.com/articles/context-and-constraints.html">
+    <meta property="og:image" content="https://timscudderproduct.com/context-and-constraints-card.png">
+    <meta property="og:locale" content="en_GB">
+
+    <!-- Twitter/X Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Context and Constraints &ndash; how product coherence survives AI-powered development &ndash; Tim Scudder">
+    <meta name="twitter:description" content="AI-powered development removes the friction that once held products together. How product teams can maintain coherence when agents build at speed.">
+    <meta name="twitter:image" content="https://timscudderproduct.com/context-and-constraints-card.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Serif+Display:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XH1NVWMY9E"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XH1NVWMY9E');
+    </script>
+</head>
+<body class="page-article">
+    <div class="page-decoration"></div>
+    <header class="site-header">
+        <div class="site-header-bar">
+            <a href="/" class="site-name">Tim Scudder, Thoughts on Product</a>
+            <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation">
+                <div class="nav-toggle-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+            <ul class="site-nav" id="site-nav">
+                <li><a href="/articles">Articles</a></li>
+                <li><a href="/coach.html">Product Sense Coach</a></li>
+                <li><a href="/#contact">Contact</a></li>
+                <li><a href="https://www.linkedin.com/in/timothyscudder/" target="_blank" rel="noopener">LinkedIn</a></li>
+            </ul>
+        </div>
+    </header>
+    <main>
+    <article>
+        <div class="article-meta">March 2026<span class="article-tag">AI</span></div>
+        <h1>Context and Constraints</h1>
+        <div class="article-content">
+<p><strong>You open an app and something is off. Not broken, exactly; but the settings page works differently from the onboarding flow; copy shifts tone between screens; tables look and behave like they were built by different people in different time zones. The product feels assembled rather than designed.</strong></p>
+
+<p>This fragmentation has always been a risk when products are built across multiple teams, over time, without shared constraints. What held things together (just) was friction. Design reviews caught inconsistencies, standups surfaced conflicts, and the seasoned tech lead remembered why things were done a certain way.</p>
+
+<p>AI-powered development compresses the opportunity for friction. When features are built in hours rather than weeks, informal coordination doesn&rsquo;t have time to operate. Agents don&rsquo;t necessarily build badly but products are more likely to become unmoored. Like a kid&rsquo;s game where each person draws a piece of a body without seeing what came before, the head doesn&rsquo;t match the torso, which doesn&rsquo;t fit the legs. Every contributor might produce competent work, but nobody sees the whole picture.</p>
+
+<p>I <a href="turning-build-speed-into-product-progress.html">recently argued</a> that AI-powered development compresses execution risk while leaving direction risk intact. This article explores a companion problem: how products maintain coherence when the friction that used to enforce consistency disappears. Ambient alignment &ndash; the tacit coordination that compensated for underspecified product decisions &ndash; breaks down when speed removes the human interactions it depends on. In response, context and constraints must move from tacit to explicit, from narrative to structured form. Get this right, and speed becomes an advantage. Get things wrong and speed accelerates drift.</p>
+
+<h2>Context engineering has a product dimension</h2>
+
+<p>Conversation around spec-driven development is growing fast. Tools like Cursor and Claude Code are making specification quality a practical concern for every development team. But the conversation is overwhelmingly framed as an engineering discipline: how to structure prompts, manage context windows, decompose technical tasks. This is incomplete. The choices that specifications encode are frequently product choices, like:</p>
+
+<ul>
+<li>What problem are we solving and for whom?</li>
+<li>What are our boundaries?</li>
+<li>What does success look like?</li>
+</ul>
+
+<p>Product Managers have always defined intent, constraints, and trade-offs. Historically, these were communicated through narrative: PRDs, user stories, decks, conversations. These were created for humans who could fill gaps through judgement. But now we&rsquo;re writing for agents too. And agents don&rsquo;t fill gaps with judgement: they fill gaps with plausible inference. For them, ambiguous requirements can lead to plausible and wholly incorrect interpretations, applied consistently and at great pace. This changing audience requires PMs to extend beyond persuasive narratives and into structured plans and requirements that an agent can act on without guessing.</p>
+
+<p>None of this means PMs should commandeer the technical specification process. But it&rsquo;s imperative that we express product thinking with enough clarity in ways agents understand. In this light, a PM&rsquo;s ability to wield language to deliver outcomes becomes even more valuable. Providing context and constraints is part of the job.</p>
+
+<h2>Context: what agents need to aim for</h2>
+
+<p>Context tells agents what to aim for and why: product strategy, customer understanding, brand positioning, and the choices the organisation has already made. It is the difference between &lsquo;build a settings page&rsquo; and &lsquo;build a settings page for time-poor mid-market ops managers, using a task-focused interaction model, that prioritises clarity over configurability.&rsquo;</p>
+
+<p>This goes beyond what is typically meant by &lsquo;context engineering,&rsquo; which centres on technical information: architecture decisions, API schemas, coding conventions. In fact, there is an entire layer of context that is not technical at all, but it does provide a crucial frame of reference to guide decision making.</p>
+
+<p>Think of it like this: a new (human!) team member might intuit things like product positioning and tone from their interactions with the company and brand. Even without formal onboarding, they could use this implicit understanding to make reasonable choices. On the other hand, agents lack this ambient understanding. They need explicit guidance to tell them where they are and what they are trying to achieve. Without clear specifications, they&rsquo;ll produce work that is competent but unmoored. So context should be precise, concise, and stored where agents can reference it automatically, while success criteria should be testable.</p>
+
+<h2>Constraints: what holds the product together</h2>
+
+<p>Think of constraints as what agents should not do and instructions for how things should be done. They are decisions already taken, applied consistently across features.</p>
+
+<p>Some constraints are global: design system connections, accessibility standards, brand guidelines, data handling patterns, API design conventions. These form a foundation layer. Others are feature-specific: scope boundaries, interaction requirements, performance targets. The foundations maintain coherence. The feature layer makes things easy to use, practical and, hopefully, even delightful.</p>
+
+<p>In practice, many teams maintain foundation constraints as structured markdown files in the codebase. Claude Code uses CLAUDE.md, Cursor uses its own Rules format, and AGENTS.md has emerged as a cross-platform standard backed by the Agentic AI Foundation under the Linux Foundation. The naming and mechanics differ, but the principle has clearly stabilised: persistent, structured files that agents reference automatically.</p>
+
+<p>I learned the value of defining constraints the hard way. On a recent project, tables across the same application had disparate styles and behaviours: different sorting, different pagination, different empty states. Not because the agents produced bad work, but because each table was generated as a fresh interpretation from different prompts before design rules had been established. Individually, the outputs were fine. But together, the product felt disjointed.</p>
+
+<p>After a period of consolidation and review, we extracted the common patterns into a shared table specification covering layout, interactions, responsive behaviour, and data display conventions, similar to this:</p>
+
+<pre><code>## Tables
+### Appearance
+- All data tables use the shared &lt;DataTable&gt; component from `src/components/ui/DataTable.tsx`. Never implement ad hoc table markup.
+- Tables have a 1px border in `border-default` (CSS variable), rounded corners (`rounded-lg`), and a white background on light mode / `surface-secondary` on dark mode.
+- Column headers use `text-xs font-semibold uppercase tracking-wide text-secondary`. They have a bottom border and a light `bg-surface-subtle` background.
+- Rows alternate background colours using the `striped` prop (odd rows: transparent; even rows: `bg-surface-subtle`).
+- All cell padding is `px-4 py-3`. Do not override this per-cell.
+- The last column is always right-aligned if it contains a numeric value or an action button.
+### Behaviour
+- All tables are sortable by default. Clicking a column header sorts ascending; clicking again sorts descending. Indicate sort direction with a Chevron icon from the icon library.
+- If a table has more than 10 rows, pagination is required. Default page size is 10. The user may select 10, 25, or 50 rows per page using the PageSizeSelector component.
+- Tables with more than 5 columns must support horizontal scrolling on viewports below 1024px. Use `overflow-x-auto` on the wrapper div.
+- Empty states: if the data array is empty, render the &lt;EmptyState&gt; component inside the table body, centred, with a contextually appropriate message passed via the `message` prop.
+- Loading states: use the &lt;TableSkeleton&gt; component while data is fetching. Never show a spinner inside a cell.
+- Row selection: if the `selectable` prop is passed, render a checkbox in the first column. A "select all" checkbox appears in the header. Selected rows highlight with `bg-primary-subtle`.
+### Do Not
+- Do not use raw `&lt;table&gt;` elements outside of the DataTable component.
+- Do not hardcode colours, padding, or font sizes on table elements.
+- Do not implement custom sorting or pagination logic inline; use the hooks provided in `src/hooks/useTableState.ts`.</code></pre>
+
+<p>With neat, clear specifications, the agent was able to one-shot a strong approach to tables and could apply this standard consistently throughout the application. The product started to feel like one product. But time was wasted along the way.</p>
+
+<p>And this principle applies to code conventions too. Without shared constraints, data models fragment across features and metric definitions contradict each other, creating poor performance and hard-to-manage backends.</p>
+
+<p>To be clear, not everything should be tightly specified. Early exploration and prototyping still benefit from looseness. But once work moves towards production, precision pays for itself many times over.</p>
+
+<h2>How solid are your specs?</h2>
+
+<p>There is an active debate in the spec-driven development community about whether specifications are disposable intermediates or persistent sources of truth. Some treat them as scaffolding: use them to prompt the agent, then discard them once the code exists. Others argue that the spec is the product, and code is merely its current expression.</p>
+
+<p>This all gets a bit philosophical, but I broadly side with persistence. If specifications are disposable, the product has no stable anchor. Every feature becomes a fresh interpretation of intent, and interpretations drift. But while specifications should evolve as the product evolves, this process must be deliberate.</p>
+
+<p>There&rsquo;s evidence to support this view too. Teams that invest in specification quality see rework rates around 10&ndash;20%, while teams that skip it see 50&ndash;60%. OpenAI&rsquo;s engineering team treats its repository knowledge base as a structured system of record because documentation alone doesn&rsquo;t keep a fully agent-generated codebase coherent. And data from LinearB shows AI-generated pull requests face rejection rates of 67%, compared to 16% for manually written code, much of it from coherence failures.</p>
+
+<p>The objection is real: specs go stale, they create overhead. But specifications go stale when nobody owns them. The answer is ownership and cadence, not abandonment.</p>
+
+<h2>Putting it into practice</h2>
+
+<p>The architecture of how we manage agents echoes best practice in other areas of software development: the core discipline is decomposition. Breaking ambiguous product goals into precise units wards against context rot and drives clean execution.</p>
+            <p>For example:  &lsquo;Improve the onboarding experience&rsquo; is a goal, not a specification.</p>
+
+<p>Decomposed, it might become: &lsquo;reduce the signup flow from seven screens to four, use progressive disclosure to defer non-essential profile fields, maintain the existing brand voice and visual style, and meet WCAG 2.1 AA accessibility standards.&rsquo;</p>
+
+<p>Each statement is something an agent can act on. The original goal is not.</p>
+
+<p>This applies to both context and constraints:</p>
+
+<ul>
+<li><strong>On the context side,</strong> define who a feature serves in terms specific enough to inform design decisions. Make trade-offs explicit. An agent that knows the product prioritises task completion over discoverability will make different choices than one working from a blank slate.</li>
+<li><strong>On the constraints side,</strong> foundation-level specifications should persist across features as structured files that agents reference automatically. Feature specifications point to the foundation layer, not duplicate it.</li>
+</ul>
+
+<p>This does require a shift in how product teams work: structured artefact conventions, explicit ownership, a review cadence. Yet the increase is in rigour, not bureaucracy.</p>
+
+<h2>Familiar discipline, new mechanism</h2>
+
+<p>Product coherence was never free. It was always the result of deliberate choices, consistently applied. AI-powered development hasn&rsquo;t changed that. The audience now includes agents and the format demands more structure than narrative alone. But the underlying discipline is the same: understand the problem, define what &lsquo;right&rsquo; looks like, and give the people and systems building it enough clarity to get there without guessing.</p>
+
+<div><hr></div>
+
+<h2>Sources</h2>
+
+<ul>
+<li>David Lapsley, &ldquo;Specifications Are the New API&rdquo; (February 2026)</li>
+<li>OpenAI, &ldquo;Harness Engineering: Leveraging Codex in an Agent-First World&rdquo; (2026) &ndash; <a href="https://openai.com/index/harness-engineering/" target="_blank" rel="noopener">https://openai.com/index/harness-engineering/</a></li>
+<li>Mike Mason, &ldquo;AI Coding Agents in 2026: Coherence Through Orchestration, Not Autonomy&rdquo; &ndash; <a href="https://mikemason.ca/writing/ai-coding-agents-jan-2026/" target="_blank" rel="noopener">https://mikemason.ca/writing/ai-coding-agents-jan-2026/</a></li>
+<li>InfoQ, &ldquo;Spec Driven Development: When Architecture Becomes Executable&rdquo; (January 2026) &ndash; <a href="https://www.infoq.com/articles/spec-driven-development/" target="_blank" rel="noopener">https://www.infoq.com/articles/spec-driven-development/</a></li>
+<li>Anthropic, &ldquo;Effective Context Engineering for AI Agents&rdquo; &ndash; <a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener">https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents</a></li>
+<li>Thoughtworks Technology Radar / Liu Shangqi on spec-driven development as an emerging practice (2025)</li>
+<li>Agentic AI Foundation / AGENTS.md, &ldquo;A simple, open format for guiding coding agents&rdquo; &ndash; <a href="https://agents.md/" target="_blank" rel="noopener">https://agents.md/</a></li>
+</ul>
+
+        </div>
+        <div class="article-contact-prompt">
+            <p class="contact-prompt-heading">Thanks for reading!</p>
+            <p class="contact-prompt-text">Want to chat about product? I&rsquo;d love to hear from you.</p>
+            <a href="/#contact" class="contact-prompt-button">Get in touch</a>
+        </div>
+        <div class="article-footer">
+  <a href="introducing-the-product-sense-coach.html">Previous article</a>
+</div>
+    </article>
+</main>
+    <footer>
+        <p>&copy; Tim Scudder</p>
+    </footer>
+    <script src="/nav.js"></script>
+</body>
+</html>

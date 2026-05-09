@@ -1,4 +1,9 @@
 (function () {
+    // Single source of truth for the site name displayed in every header
+    var SITE_NAME = 'Tim Scudder, On Product';
+    var siteName = document.querySelector('.site-name');
+    if (siteName) siteName.textContent = SITE_NAME;
+
     var navToggle = document.querySelector('.nav-toggle');
     var siteNav = document.getElementById('site-nav');
     if (!navToggle || !siteNav) return;

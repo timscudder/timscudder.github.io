@@ -440,6 +440,73 @@ h2.section-title {
     gap: 0.6rem;
 }
 
+/* ── Feature cards (homepage) ── */
+
+.feature-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.feature-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: var(--ink);
+    border: 1px solid var(--ink-light);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--surface);
+    transition: border-color 0.3s ease;
+}
+
+.feature-card:hover {
+    border-color: rgba(107, 95, 84, 0.55);
+}
+
+.feature-card:hover .feature-card-body {
+    background: #fff;
+}
+
+.feature-card-image {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    background: var(--cream-dark);
+    display: block;
+    object-fit: cover;
+}
+
+.feature-card-body {
+    padding: 1.25rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    transition: background 0.3s ease;
+}
+
+.feature-card-title {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 1.45rem;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.2;
+    margin: 0;
+}
+
+.feature-card-description {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 0.95rem;
+    color: var(--ink-medium);
+    line-height: 1.55;
+    margin: 0;
+}
+
+@media (max-width: 560px) {
+    .feature-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* ── Contact form ── */
 
 .contact-intro {
@@ -1077,12 +1144,16 @@ footer {
     padding: 0 2rem 4.5rem;
 }
 
-.coach-intro-text {
+.page-subtitle {
     font-family: 'Lora', Georgia, serif;
     font-size: 1rem;
     line-height: 1.85;
     color: var(--ink);
     margin-top: 1.5rem;
+}
+
+.page-article .page-subtitle {
+    margin-bottom: 2rem;
 }
 
 /* ── Scenario card ── */
